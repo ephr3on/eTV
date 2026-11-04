@@ -308,3 +308,72 @@ class DotsView(context: Context) : View(context) {
         }
     }
 }
+
+// ---------- settings-style rows (Customise and Home setup) ----------
+
+/** A small spaced-out section heading. */
+fun sectionLabel(context: Context, pal: Palette, text: String): TextView = TextView(context).apply {
+    this.text = text.uppercase()
+    typeface = Fonts.body(context, 500)
+    sp(11f)
+    letterSpacing = 0.18f
+    setTextColor(pal.muted)
+}
+
+/** Quiet explanatory text. */
+fun noteText(context: Context, pal: Palette, text: String): TextView = TextView(context).apply {
+    this.text = text
+    typeface = Fonts.body(context, 300)
+    sp(12.5f)
+    setTextColor(pal.muted)
+    setLineSpacing(0f, 1.3f)
+}
+
+/** A focusable row: label on the left, current value on the right. Caller sets the click. */
+fun settingRow(
+    context: Context,
+    pal: Palette,
+    accent: Int,
+    label: String,
+    value: String,
+    swatch: Int? = null,
+): LinearLayout {
+    val row = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        setPadding(context.dpi(18f), 0, context.dpi(18f), 0)
+        isFocusable = true
+        isClickable = true
+        background = pillBackground(context, 14f, Color.TRANSPARENT, pal.tile, accent)
+    }
+    val name = TextView(context).apply {
+        text = label
+        typeface = Fonts.body(context, 400)
+        sp(15f)
+        setTextColor(pal.text)
+    }
+    row.addView(name, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+    if (swatch != null) {
+        val dot = View(context).apply {
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(swatch)
+                setStroke(context.dpi(1f), pal.tileStroke)
+            }
+        }
+        row.addView(dot, LinearLayout.LayoutParams(context.dpi(14f), context.dpi(14f)).apply {
+            marginEnd = context.dpi(10f)
+        })
+    }
+    if (value.isNotEmpty()) {
+        val v = TextView(context).apply {
+            text = value
+            typeface = Fonts.body(context, 400)
+            sp(14f)
+            setTextColor(focusColors(accent, pal.muted))
+            isDuplicateParentStateEnabled = true
+        }
+        row.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+    }
+    return row
+}

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.GridLayout
@@ -21,6 +22,7 @@ class AppsActivity : Activity() {
     private lateinit var subtitle: TextView
     private lateinit var toggle: TextView
     private lateinit var grid: GridLayout
+    private lateinit var scroll: ScrollView
     private var showHidden = false
     private var lastPkg: String? = null
 
@@ -29,7 +31,7 @@ class AppsActivity : Activity() {
         prefs = Prefs(this)
 
         root = FrameLayout(this)
-        val scroll = ScrollView(this).apply {
+        scroll = ScrollView(this).apply {
             isFillViewport = true
             isVerticalScrollBarEnabled = false
             clipChildren = false
@@ -147,6 +149,24 @@ class AppsActivity : Activity() {
 
         val target = focusTarget ?: grid.getChildAt(0) ?: toggle
         target.post { target.requestFocus() }
+    }
+
+    /** Options/Info opens the selected app's options; channel and page keys jump a screen at a time. */
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_INFO -> {
+                val tile = currentFocus as? ArchTile ?: return super.onKeyDown(keyCode, event)
+                showOptions(tile.app, tile.app.pkg in prefs.favourites, tile.app.pkg in prefs.hidden)
+                return true
+            }
+            KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_PAGE_DOWN -> {
+                scroll.pageScroll(View.FOCUS_DOWN); return true
+            }
+            KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_PAGE_UP -> {
+                scroll.pageScroll(View.FOCUS_UP); return true
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     private fun showOptions(app: AppEntry, inHome: Boolean, isHidden: Boolean) {

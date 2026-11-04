@@ -18,7 +18,16 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
 
       - name: Build release APK
+        env:
+          ETV_KEYSTORE_BASE64: ${{ secrets.ETV_KEYSTORE_BASE64 }}
+          ETV_KEYSTORE_PASSWORD: ${{ secrets.ETV_KEYSTORE_PASSWORD }}
         run: |
+          if [ -n "$ETV_KEYSTORE_BASE64" ]; then
+            echo "$ETV_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/etv-release.jks"
+            export ETV_KEYSTORE="$RUNNER_TEMP/etv-release.jks"
+          else
+            echo "::warning::Signing secrets not set; using a temporary key, so this APK won't install over a previous one."
+          fi
           chmod +x gradlew
           ./gradlew --no-daemon assembleRelease
 

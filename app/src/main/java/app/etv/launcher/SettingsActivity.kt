@@ -3,9 +3,7 @@ package app.etv.launcher
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Gravity
@@ -68,6 +66,11 @@ class SettingsActivity : Activity() {
         title.setTextColor(pal.text)
         list.removeAllViews()
 
+        section("Home button")
+        row("home", "Home button opens eTV", if (HomeSetup.homeHandled(this)) "Yes" else "Set up", rerender = false) {
+            startActivity(Intent(this, SetupActivity::class.java))
+        }
+
         section("Look")
         val accentName = Look.accents[prefs.accent.coerceIn(0, Look.accents.size - 1)].first
         row("accent", "Highlight colour", accentName, swatch = accent) {
@@ -76,7 +79,7 @@ class SettingsActivity : Activity() {
         row("palette", "Background", pal.name, swatch = pal.tile) {
             prefs.palette = next(Look.palettes, prefs.palette)
         }
-        row("arches", "Arches in the background", onOff(prefs.arches)) { prefs.arches = !prefs.arches }
+        row("arches", "Arches in the background", if (prefs.arches) "On" else "Off") { prefs.arches = !prefs.arches }
 
         section("Top of the screen")
         val greetings = listOf("Arabic and English", "Arabic", "English", "Off")
@@ -101,24 +104,29 @@ class SettingsActivity : Activity() {
         }
         row("reset", "Reset the home row", "", rerender = false) { confirmReset() }
 
+        section("Remote shortcuts on the home screen")
+        val shortcuts = listOf(
+            "1 – 9" to "Open the app in that spot on the home row",
+            "0  or  Red" to "All apps",
+            "Green  or  Sources" to "Inputs",
+            "Yellow" to "Search",
+            "Blue" to "This page",
+            "Options  or  Info" to "Options for the selected app",
+            "Hold OK" to "Options for the selected app",
+            "Home" to "Back to the first app",
+        )
+        for ((key, what) in shortcuts) shortcutLine(key, what)
+
         section("System")
-        row("default", "Default home app", if (isDefaultHome()) "eTV" else "Not eTV yet", rerender = false) {
-            val ok = AppRepo.tryStart(this, Intent(Settings.ACTION_HOME_SETTINGS)) ||
-                AppRepo.tryStart(this, Intent(Settings.ACTION_SETTINGS))
-            if (!ok) showDefaultHelp()
-        }
         row("system", "Android TV settings", "", rerender = false) {
             AppRepo.tryStart(this, Intent(Settings.ACTION_SETTINGS))
         }
 
-        val footer = TextView(this).apply {
-            text = "eTV 1.0\nOn the home screen: hold OK on an app to move or remove it. Press Menu to come here."
-            typeface = Fonts.body(this@SettingsActivity, 300)
-            sp(12f)
-            setTextColor(pal.muted)
-            setLineSpacing(0f, 1.3f)
-        }
-        list.addView(footer, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(28f) })
+        val footer = noteText(this, pal, "eTV 1.1")
+        list.addView(footer, LinearLayout.LayoutParams(-1, -2).apply {
+            topMargin = dpi(24f)
+            marginStart = dpi(18f)
+        })
 
         // Keep the remote's focus on the row that was just changed.
         val target = (0 until list.childCount).map { list.getChildAt(it) }
@@ -127,21 +135,34 @@ class SettingsActivity : Activity() {
         target?.post { target.requestFocus() }
     }
 
-    private fun onOff(b: Boolean) = if (b) "On" else "Off"
-
     private fun section(text: String) {
-        val t = TextView(this).apply {
-            this.text = text.uppercase()
-            typeface = Fonts.body(this@SettingsActivity, 500)
-            sp(11f)
-            letterSpacing = 0.18f
-            setTextColor(pal.muted)
-        }
-        list.addView(t, LinearLayout.LayoutParams(-1, -2).apply {
+        list.addView(sectionLabel(this, pal, text), LinearLayout.LayoutParams(-1, -2).apply {
             topMargin = dpi(22f)
             bottomMargin = dpi(6f)
             marginStart = dpi(18f)
         })
+    }
+
+    private fun shortcutLine(key: String, what: String) {
+        val line = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(dpi(18f), dpi(3f), dpi(18f), dpi(3f))
+        }
+        val k = TextView(this).apply {
+            text = key
+            typeface = Fonts.body(this@SettingsActivity, 500)
+            sp(13f)
+            setTextColor(accent)
+        }
+        val w = TextView(this).apply {
+            text = what
+            typeface = Fonts.body(this@SettingsActivity, 300)
+            sp(13f)
+            setTextColor(pal.label)
+        }
+        line.addView(k, LinearLayout.LayoutParams(dpi(170f), -2))
+        line.addView(w, LinearLayout.LayoutParams(0, -2, 1f))
+        list.addView(line, LinearLayout.LayoutParams(-1, -2))
     }
 
     private fun row(
@@ -152,45 +173,13 @@ class SettingsActivity : Activity() {
         rerender: Boolean = true,
         onPress: () -> Unit,
     ) {
-        val r = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            setPadding(dpi(18f), 0, dpi(18f), 0)
-            isFocusable = true
-            isClickable = true
-            tag = key
-            background = pillBackground(this@SettingsActivity, 14f, android.graphics.Color.TRANSPARENT, pal.tile, accent)
-            setOnClickListener {
-                focusKey = key
-                onPress()
-                if (rerender) render()
-            }
+        val r = settingRow(this, pal, accent, label, value, swatch)
+        r.tag = key
+        r.setOnClickListener {
+            focusKey = key
+            onPress()
+            if (rerender) render()
         }
-        val name = TextView(this).apply {
-            text = label
-            typeface = Fonts.body(this@SettingsActivity, 400)
-            sp(15f)
-            setTextColor(pal.text)
-        }
-        r.addView(name, LinearLayout.LayoutParams(0, -2, 1f))
-        if (swatch != null) {
-            val dot = View(this).apply {
-                background = GradientDrawable().apply {
-                    shape = GradientDrawable.OVAL
-                    setColor(swatch)
-                    setStroke(dpi(1f), pal.tileStroke)
-                }
-            }
-            r.addView(dot, LinearLayout.LayoutParams(dpi(14f), dpi(14f)).apply { marginEnd = dpi(10f) })
-        }
-        val v = TextView(this).apply {
-            text = value
-            typeface = Fonts.body(this@SettingsActivity, 400)
-            sp(14f)
-            setTextColor(focusColors(accent, pal.muted))
-            isDuplicateParentStateEnabled = true
-        }
-        r.addView(v, LinearLayout.LayoutParams(-2, -2))
         list.addView(r, LinearLayout.LayoutParams(-1, dpi(52f)).apply { topMargin = dpi(4f) })
     }
 
@@ -227,23 +216,6 @@ class SettingsActivity : Activity() {
             .setMessage("Your home row goes back to the first TV apps on this device.")
             .setPositiveButton("Reset") { _, _ -> prefs.resetHomeRow() }
             .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun isDefaultHome(): Boolean {
-        val home = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
-        val info = packageManager.resolveActivity(home, PackageManager.MATCH_DEFAULT_ONLY)
-        return info?.activityInfo?.packageName == packageName
-    }
-
-    private fun showDefaultHelp() {
-        AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-            .setTitle("Make eTV the default")
-            .setMessage(
-                "This TV has no option for choosing a home app. Press the Home button and pick eTV if asked. " +
-                    "On Google TV, see the README for the one-time adb step.",
-            )
-            .setPositiveButton("OK", null)
             .show()
     }
 }

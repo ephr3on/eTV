@@ -35,6 +35,11 @@ if [ -z "$JAVA_HOME" ]; then
   done
 fi
 
+if [ -f app/etv-release.jks ] && [ -z "$ETV_KEYSTORE_PASSWORD" ]; then
+  read -r -s -p "Password for app/etv-release.jks (Enter to skip): " ETV_KEYSTORE_PASSWORD; echo
+  export ETV_KEYSTORE_PASSWORD
+fi
+
 echo "==> Building eTV (the first build downloads Gradle and takes a few minutes)"
 chmod +x gradlew
 ./gradlew --no-daemon -q assembleRelease
@@ -54,6 +59,16 @@ if [ "$STATE" != "device" ]; then
 fi
 
 echo "==> Installing"
-"$ADB" -s "$TV" install -r "$APK"
-"$ADB" -s "$TV" shell am start -n app.etv.launcher/.MainActivity >/dev/null
-echo "==> Done. eTV is open on your TV. Press Home and choose eTV > Always to make it the default."
+if ! OUT="$("$ADB" -s "$TV" install -r "$APK" 2>&1)"; then
+  if echo "$OUT" | grep -q "UPDATE_INCOMPATIBLE\|signatures do not match"; then
+    # An older eTV build was signed with a different key: replace it once.
+    echo "    replacing an older eTV build (your eTV settings start fresh this once)"
+    "$ADB" -s "$TV" uninstall app.etv.launcher >/dev/null
+    "$ADB" -s "$TV" install "$APK"
+  else
+    echo "$OUT"
+    exit 1
+  fi
+fi
+
+bash "$(dirname "$0")/make-default.sh" "$1"

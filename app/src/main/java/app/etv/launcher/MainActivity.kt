@@ -30,6 +30,11 @@ import java.util.Locale
 /** The home screen. */
 class MainActivity : Activity() {
 
+    companion object {
+        /** Set when the Home button helper brought us back. */
+        const val EXTRA_FROM_HOME_KEY = "app.etv.launcher.FROM_HOME_KEY"
+    }
+
     private lateinit var prefs: Prefs
     private lateinit var root: FrameLayout
     private lateinit var arches: ArchBackgroundView
@@ -89,6 +94,17 @@ class MainActivity : Activity() {
         // Settings may have changed while we were away; re-applying is cheap.
         render()
         needsRender = false
+
+        // Back home normally: nothing left to learn about the TV's own home screen.
+        if (prefs.learningHome) prefs.learnUntil = 0L
+
+        // First run: offer the Home button setup once, only if Home doesn't reach eTV yet.
+        if (!prefs.setupShown) {
+            prefs.setupShown = true
+            if (!HomeSetup.homeHandled(this)) {
+                startActivity(Intent(this, SetupActivity::class.java))
+            }
+        }
     }
 
     override fun onPause() {
@@ -106,7 +122,9 @@ class MainActivity : Activity() {
     /** Pressing Home while already home brings you back to the first app. */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         if (movingPkg != null) endMove()
+        lastFocusedPkg = null
         rowScroll.smoothScrollTo(0, 0)
         (row.getChildAt(0) ?: dock.getChildAt(0))?.requestFocus()
     }
@@ -256,12 +274,8 @@ class MainActivity : Activity() {
         }
         addDock(dockButton("Search", R.drawable.ic_search) { openSearch() })
         addDock(dockButton("Inputs", R.drawable.ic_inputs) { showInputs() })
-        addDock(dockButton("All apps", R.drawable.ic_apps) {
-            startActivity(Intent(this, AppsActivity::class.java))
-        })
-        addDock(dockButton("Settings", R.drawable.ic_settings) {
-            startActivity(Intent(this, SettingsActivity::class.java))
-        })
+        addDock(dockButton("All apps", R.drawable.ic_apps) { openAllApps() })
+        addDock(dockButton("Settings", R.drawable.ic_settings) { openCustomise() })
 
         updateClock()
         rebuildRow()
@@ -392,16 +406,38 @@ class MainActivity : Activity() {
         return super.dispatchKeyEvent(event)
     }
 
+    /**
+     * Remote keys (Philips layout in mind):
+     * 1–9 open the app in that spot, 0 opens All apps, Options/Menu or Info opens the selected
+     * app's options (or Customise), the colour keys are shortcuts, Sources opens Inputs.
+     */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_BACK -> true // a launcher has nowhere to go back to
-            KeyEvent.KEYCODE_MENU -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-                true
-            }
-            else -> super.onKeyDown(keyCode, event)
+        if (keyCode == KeyEvent.KEYCODE_BACK) return true // a launcher has nowhere to go back to
+        if (event.repeatCount > 0 && keyCode != KeyEvent.KEYCODE_DPAD_LEFT && keyCode != KeyEvent.KEYCODE_DPAD_RIGHT) {
+            return super.onKeyDown(keyCode, event)
         }
+        when (keyCode) {
+            in KeyEvent.KEYCODE_1..KeyEvent.KEYCODE_9 -> {
+                val tile = tiles().getOrNull(keyCode - KeyEvent.KEYCODE_1) ?: return true
+                tile.requestFocus()
+                AppRepo.launch(this, tile.app)
+                return true
+            }
+            KeyEvent.KEYCODE_0, KeyEvent.KEYCODE_PROG_RED -> { openAllApps(); return true }
+            KeyEvent.KEYCODE_PROG_GREEN, KeyEvent.KEYCODE_TV_INPUT -> { showInputs(); return true }
+            KeyEvent.KEYCODE_PROG_YELLOW, KeyEvent.KEYCODE_SEARCH -> { openSearch(); return true }
+            KeyEvent.KEYCODE_PROG_BLUE -> { openCustomise(); return true }
+            KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_INFO -> {
+                val tile = currentFocus as? ArchTile
+                if (tile != null) showTileOptions(tile.app) else openCustomise()
+                return true
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
+
+    private fun openAllApps() = startActivity(Intent(this, AppsActivity::class.java))
+    private fun openCustomise() = startActivity(Intent(this, SettingsActivity::class.java))
 
     // ---------------- dock actions ----------------
 

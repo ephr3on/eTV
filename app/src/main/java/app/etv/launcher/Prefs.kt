@@ -78,4 +78,30 @@ class Prefs(context: Context) {
     fun resetHomeRow() {
         sp.edit().remove("favs").apply()
     }
+
+    /** The Home setup screen has been offered once. */
+    var setupShown: Boolean
+        get() = bool("setupShown", false)
+        set(v) = putBool("setupShown", v)
+
+    /** The Home button helper is allowed to switch back to eTV (it can be paused). */
+    var homeHelper: Boolean
+        get() = bool("homeHelper", true)
+        set(v) = putBool("homeHelper", v)
+
+    /**
+     * Until this time (ms), the next screen that isn't eTV is remembered as the TV's own home
+     * screen. It runs out quickly so an ordinary app can never be mistaken for one.
+     */
+    var learnUntil: Long
+        get() = sp.getLong("learnUntil", 0L)
+        set(v) = sp.edit().putLong("learnUntil", v).apply()
+
+    val learningHome: Boolean
+        get() = System.currentTimeMillis() < learnUntil
+
+    /** Home screens learnt on this TV, on top of the ones Android reports. */
+    var extraHomes: Set<String>
+        get() = HashSet(sp.getStringSet("extraHomes", emptySet()) ?: emptySet())
+        set(v) = sp.edit().putStringSet("extraHomes", HashSet(v)).apply()
 }
