@@ -75,6 +75,20 @@ class SettingsActivity : EtvActivity() {
             startActivity(Intent(this, SetupActivity::class.java))
         }
 
+        section("Now playing")
+        val npAccess = NowPlayingWatcher.hasAccess(this)
+        val npValue = when {
+            !prefs.nowPlaying -> "Off"
+            !npAccess -> "Needs one permission"
+            else -> "On"
+        }
+        row("nowplaying", "Card for music and videos playing in the background", npValue, rerender = false) {
+            if (prefs.nowPlaying && !npAccess) explainNowPlayingAccess() else {
+                prefs.nowPlaying = !prefs.nowPlaying
+                render()
+            }
+        }
+
         section("Updates")
         val release = Updater.available
         val updateValue = when {
@@ -235,6 +249,31 @@ class SettingsActivity : EtvActivity() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+    }
+
+    /** The card needs notification access; TVs hide that switch, so offer both ways to give it. */
+    private fun explainNowPlayingAccess() {
+        val canOpen = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+            .resolveActivity(packageManager) != null
+        val msg = "To show what's playing, Android needs to let eTV see media from other apps " +
+            "(\"notification access\"). eTV only reads what's playing; it ignores every notification.\n\n" +
+            (if (canOpen) "Choose Open settings and switch on \"eTV Now playing\".\n\nOr, from your Mac:\n"
+            else "This TV hides that switch, so give it once from your Mac:\n") +
+            "adb shell cmd notification allow_listener app.etv.launcher/app.etv.launcher.MediaListener"
+        val b = AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+            .setTitle("One permission for Now playing")
+            .setMessage(msg)
+            .setNegativeButton("Turn the card off") { _, _ ->
+                prefs.nowPlaying = false
+                render()
+            }
+            .setNeutralButton("Close", null)
+        if (canOpen) {
+            b.setPositiveButton("Open settings") { _, _ ->
+                AppRepo.tryStart(this, Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+            }
+        }
+        b.show()
     }
 
     private fun confirmReset() {

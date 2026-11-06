@@ -86,6 +86,10 @@ if [ "$MODE" = "--replace" ]; then
   done
 fi
 
+echo "==> Letting eTV show what's playing (Now playing card)"
+tv cmd notification allow_listener app.etv.launcher/app.etv.launcher.MediaListener >/dev/null 2>&1 \
+  && echo "    done" || echo "    this TV doesn't accept that; see eTV > Settings > Now playing"
+
 echo "==> Pressing Home to check"
 tv input keyevent KEYCODE_HOME
 echo "==> Done. Press Home on the remote: it should open eTV."

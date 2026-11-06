@@ -132,8 +132,13 @@ class Prefs(context: Context) {
 
     private val LOOK_KEYS = setOf(
         "accent", "palette", "greeting", "clock24", "showDate", "tileSize", "nameMode", "iconStyle",
-        "arches", "favs", "hidden", "updateCode",
+        "arches", "favs", "hidden", "updateCode", "nowPlaying",
     )
+
+    /** Show the "now playing" card when another app plays in the background. */
+    var nowPlaying: Boolean
+        get() = bool("nowPlaying", true)
+        set(v) = putBool("nowPlaying", v)
 
     // ---- Updates from GitHub (see Updater) ----
 

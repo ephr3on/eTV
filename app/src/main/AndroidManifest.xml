@@ -33,6 +33,9 @@
         <intent>
             <action android:name="android.settings.ACCESSIBILITY_SETTINGS" />
         </intent>
+        <intent>
+            <action android:name="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS" />
+        </intent>
     </queries>
 
     <application
@@ -103,6 +106,18 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+
+        <!-- "Now playing" card: Android only shares what other apps are playing with apps that have
+             notification access. eTV ignores every notification and keeps nothing. -->
+        <service
+            android:name=".MediaListener"
+            android:exported="true"
+            android:label="@string/media_label"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
 
         <!-- Hears back from Android's installer during an update. -->
         <receiver

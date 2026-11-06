@@ -62,6 +62,9 @@ class MainActivity : EtvActivity() {
     private lateinit var emptyHint: TextView
     private lateinit var moveHint: TextView
     private lateinit var dock: LinearLayout
+    private lateinit var nowCard: NowPlayingCard
+    private lateinit var nowWatcher: NowPlayingWatcher
+    private var nowPlaying: NowPlaying? = null
 
     private var pal: Palette = Look.palettes[0]
     private var accent: Int = Look.accents[0].second
@@ -178,6 +181,9 @@ class MainActivity : EtvActivity() {
 
         // Only redraw when something actually changed, so coming back is instant and nothing jumps.
         if (needsRender || renderedAppsVersion != AppRepo.version) render() else updateClock()
+        // Before choosing the selection, so "where you were" can be on the card.
+        if (prefs.nowPlaying) nowWatcher.start() else showNowPlaying(null)
+        nowCard.resume()
         applyFocus()
 
         // Look for a new version on GitHub now and then; the Settings button says when there is one.
@@ -204,6 +210,9 @@ class MainActivity : EtvActivity() {
         super.onPause()
         isResumedNow = false
         try { unregisterReceiver(timeReceiver) } catch (_: Exception) {}
+        // Nothing to watch while an app is in front; the card catches up on return.
+        nowWatcher.stop()
+        nowCard.pause()
         if (movingPkg != null) endMove()
     }
 
@@ -306,6 +315,19 @@ class MainActivity : EtvActivity() {
             clipToPadding = false
         }
         root.addView(dock, FrameLayout.LayoutParams(-1, dpi(64f), Gravity.BOTTOM).apply { bottomMargin = dpi(28f) })
+
+        // "Now playing": appears in the top corner when another app plays in the background.
+        nowCard = NowPlayingCard(this)
+        root.addView(nowCard, FrameLayout.LayoutParams(dpi(284f), -2, Gravity.TOP or Gravity.END).apply {
+            topMargin = dpi(26f)
+            marginEnd = dpi(28f)
+        })
+        nowWatcher = NowPlayingWatcher(this) { np -> showNowPlaying(np) }
+        nowCard.onOpen = { nowPlaying?.let { nowWatcher.open(it) } }
+        nowCard.onPlayPause = { nowPlaying?.let { nowWatcher.playPause(it) } }
+        nowCard.onPrev = { nowPlaying?.let { nowWatcher.previous(it) } }
+        nowCard.onNext = { nowPlaying?.let { nowWatcher.next(it) } }
+        nowCard.onFocused = { v, key -> remember(v, key) }
     }
 
     private fun dockButton(index: Int, text: String, iconRes: Int, onClick: () -> Unit): TextView {
@@ -347,7 +369,38 @@ class MainActivity : EtvActivity() {
         key == null -> null
         key.startsWith("app:") -> tiles().firstOrNull { it.app.pkg == key.substring(4) }
         key.startsWith("dock:") -> dock.getChildAt(key.substring(5).toIntOrNull() ?: -1)
+        key.startsWith("media:") -> nowCard.viewFor(key)
         else -> null
+    }
+
+    /** The row app to return to from the dock or the card. */
+    private fun rowTarget(): View? =
+        tiles().firstOrNull { it.app.pkg == lastRowPkg } ?: middleView()
+
+    /** Shows, updates or hides the "now playing" card. */
+    private fun showNowPlaying(np: NowPlaying?) {
+        nowPlaying = np
+        if (np != null) {
+            nowCard.show(np)
+            return
+        }
+        if (!nowCard.isShowing) return
+        // Never leave the selection on a card that's fading away.
+        val f = currentFocus
+        if (f != null && isInside(f, nowCard)) {
+            Nav.homeKey = null
+            rowTarget()?.let { select(it) }
+        }
+        nowCard.hide()
+    }
+
+    private fun isInside(v: View, parent: View): Boolean {
+        var p: View? = v
+        while (p != null) {
+            if (p === parent) return true
+            p = p.parent as? View
+        }
+        return false
     }
 
     /** The app in the middle of the row (left of the two middle ones when the count is even). */
@@ -400,6 +453,8 @@ class MainActivity : EtvActivity() {
             dots.invalidate()
             emptyHint.setTextColor(pal.muted)
             moveHint.setTextColor(accent)
+
+            nowCard.applyTheme(pal, accent)
 
             dock.removeAllViews()
             val gap = dpi(14f)
@@ -589,10 +644,11 @@ class MainActivity : EtvActivity() {
             else -> return false
         }
         val f = currentFocus ?: return false
+        if (event.action != KeyEvent.ACTION_DOWN) return false
+        if (nowCard.isShowing && isInside(f, nowCard)) return moveInCard(f, dir)
         val inRow = f.parent === row
         val inDock = f.parent === dock
         if (!inRow && !inDock) return false
-        if (event.action != KeyEvent.ACTION_DOWN) return false
 
         return when (dir) {
             View.FOCUS_LEFT, View.FOCUS_RIGHT -> {
@@ -601,8 +657,10 @@ class MainActivity : EtvActivity() {
             }
             View.FOCUS_UP -> {
                 if (inDock) {
-                    val back = tiles().firstOrNull { it.app.pkg == lastRowPkg } ?: tiles().firstOrNull()
-                    back?.let { select(it) }
+                    rowTarget()?.let { select(it) }
+                } else if (nowCard.isShowing) {
+                    // Up from the apps reaches the "now playing" card.
+                    select(nowCard.play)
                 }
                 true
             }
@@ -616,6 +674,26 @@ class MainActivity : EtvActivity() {
                 true
             }
         }
+    }
+
+    /**
+     * Inside the card: Left / Right move between the controls, Up goes from the controls to the
+     * artwork (OK there opens the app), Down goes from the artwork to the controls and from the
+     * controls back to the apps.
+     */
+    private fun moveInCard(f: View, dir: Int): Boolean {
+        val onOpen = f === nowCard.openArea
+        when (dir) {
+            View.FOCUS_LEFT, View.FOCUS_RIGHT -> {
+                if (!onOpen) {
+                    val next = FocusFinder.getInstance().findNextFocus(f.parent as ViewGroup, f, dir)
+                    next?.let { select(it) }
+                }
+            }
+            View.FOCUS_UP -> if (!onOpen) select(nowCard.openArea)
+            View.FOCUS_DOWN -> if (onOpen) select(nowCard.play) else rowTarget()?.let { select(it) }
+        }
+        return true
     }
 
     @Deprecated("Deprecated in Java")

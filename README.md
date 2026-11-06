@@ -33,6 +33,26 @@ background (Sea blue, Night, Dusk), background arches, greeting (Arabic and Engl
 12- or 24-hour clock, date, arch size, app icon or letter inside each arch, when app names show, hidden apps,
 and resetting the home row. It also lists the remote shortcuts and opens the Home button setup.
 
+## Now playing
+
+When another app plays in the background (say you press Home while a SmartTube video is running), a small card
+fades in at the top right of the home screen: the artwork, the app, the title, how far along it is, and
+previous / play-pause / next. Press **Up** from the apps to reach it, **Left / Right** between the controls,
+**Up** again for the artwork (**OK** there opens the app on its player), **Down** to go back to the apps.
+
+It stays while something plays, and for 2 minutes after you pause (15 seconds after it stops), so you can
+still resume from home. Then it fades away, and it disappears as soon as the app closes its player.
+
+Android only shares what other apps are playing with apps that have *notification access*. eTV uses it for
+nothing else: it ignores every notification and keeps nothing. TVs often hide that switch, so give it once
+from your Mac (`make-default.sh` does this too):
+
+```sh
+adb shell cmd notification allow_listener app.etv.launcher/app.etv.launcher.MediaListener
+```
+
+Customise → Now playing shows whether it's set up, and turns the card off.
+
 ## Making the Home button open eTV
 
 Philips and many other TVs open their own home screen when you press Home, even after you choose another
@@ -141,6 +161,7 @@ app/src/main/java/app/etv/launcher/
   HomeButtonService.kt  the Home button helper (accessibility service)
   HomeSetup.kt          who answers Home, and whether eTV is in charge
   Nav.kt                where you were, so Home can bring you back there
+  NowPlaying.kt         the Now playing card and how it picks what to show
   Updater.kt            checks GitHub releases, downloads and installs new versions
   BootReceiver.kt       opens eTV when the TV starts
   Views.kt              arch shape, arch tile, background arches, door studs, rows, focus helpers
