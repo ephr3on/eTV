@@ -338,7 +338,7 @@ class ArchArtView(context: Context) : View(context) {
 }
 
 /**
- * The "now playing" bar. It sits between the doors and the dock, a soft pill with no outline: a small
+ * The "now playing" bar. It sits between the doors and the dock, with no container around it: a small
  * arched window with the artwork, the app and title, the time, and three round controls.
  * The door studs under the date show how far along it is ([onProgress]).
  *
@@ -460,11 +460,8 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
         this.pal = pal
         this.accent = accent
         val d = context.dp(1f)
-        // A soft pill with no outline, so it rests between the doors and the dock.
-        background = GradientDrawable().apply {
-            cornerRadius = 22 * d
-            setColor(Look.withAlpha(pal.tile, 150))
-        }
+        // No container: just the artwork, text and controls resting between the doors and the dock.
+        background = null
         openArea.background = StateListDrawable().apply {
             addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply {
                 cornerRadius = 19 * d
