@@ -4,6 +4,22 @@ A home screen with arched-door app tiles, a quiet clock and greeting, and nothin
 No libraries, no ads, no autoplaying previews. The only thing it ever connects to is this repository on GitHub,
 to look for a new version of itself (you can switch that off).
 
+## Themes
+
+Customise → Theme switches the whole home screen, not just its colours. Each has its own highlight colours;
+your apps, home row and settings stay the same.
+
+| Theme | What it's like |
+|---|---|
+| **Classic** | Today's eTV: the arched doors in a row, greeting and clock above, the dock at the bottom |
+| **Doorway** | Calmer: Search / Inputs / All apps / Settings as round buttons in the top corner, the selected app named under the doors, Now playing at the foot |
+| **Riad** | Daylight: blue doors with brass studs on a whitewashed wall, tabs along the top, an **Inputs** row (Live TV, HDMI) on the home screen, a band of blue-and-white tiles |
+| **Cartouche** | Pharaonic: lapis and gold, apps as cartouches, the clock in a cartouche, a side rail for the sections, a papyrus frieze (Reem Kufi type) |
+| **Lantern** | One door at a time: the selected app large and lit in the middle, its neighbours fading away; All apps is a calm list |
+
+The remote works the same everywhere: arrows move within the doors, buttons, inputs or Now playing, stop at the
+ends of a row, and moving back into the doors returns to the app you were on.
+
 ## Using it with the remote
 
 Made with the Philips remote in mind (works with any Android TV remote).
@@ -169,7 +185,7 @@ app/src/main/java/app/etv/launcher/
   AppRepo.kt            lists, caches and launches apps
   Look.kt               colour palettes and fonts
   Prefs.kt              all saved options
-app/src/main/assets/fonts/   El Messiri and Readex Pro (SIL Open Font License, see OFL files)
+app/src/main/assets/fonts/   El Messiri, Reem Kufi and Readex Pro (SIL Open Font License, see OFL files)
 install.sh, make-default.sh  one-command install and Home setup from a Mac
 ```
 
