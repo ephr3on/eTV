@@ -27,6 +27,21 @@ object Nav {
     /** True once eTV has gone behind another app or screen (until you're back in eTV). */
     var away = false
 
+    /** An eTV screen is in front right now (resumed). */
+    @Volatile var onScreen = false
+        private set
+    private var resumedCount = 0
+
+    fun onScreenResume() {
+        resumedCount++
+        onScreen = true
+    }
+
+    fun onScreenPause() {
+        resumedCount = (resumedCount - 1).coerceAtLeast(0)
+        onScreen = resumedCount > 0
+    }
+
     /** When eTV last went behind something else (elapsed ms). */
     var leftAt = 0L
 
@@ -71,6 +86,16 @@ abstract class EtvActivity : Activity() {
     override fun onStart() {
         super.onStart()
         Nav.onScreenStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Nav.onScreenResume()
+    }
+
+    override fun onPause() {
+        Nav.onScreenPause()
+        super.onPause()
     }
 
     override fun onStop() {

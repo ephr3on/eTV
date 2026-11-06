@@ -84,15 +84,33 @@ class MainActivity : EtvActivity() {
         override fun onReceive(context: Context, intent: Intent) = updateClock()
     }
 
+    /** Apps installed, updated or removed since the last refresh (their icons may have changed). */
+    private val iconChanges = HashSet<String>()
+    private val handler = android.os.Handler(android.os.Looper.getMainLooper())
+
+    /**
+     * Android TV announces package changes constantly (Google services switching their own parts on
+     * and off, often every minute). Wait for a quiet moment, then only redraw the row if the apps
+     * you can see actually changed.
+     */
     private val packageReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            AppRepo.invalidate()
-            if (isResumedNow) {
-                render()
-                applyFocus()
-            } else {
-                needsRender = true
-            }
+            val pkg = intent.data?.schemeSpecificPart
+            if (pkg != null && intent.action != Intent.ACTION_PACKAGE_CHANGED) iconChanges.add(pkg)
+            handler.removeCallbacks(refreshApps)
+            handler.postDelayed(refreshApps, 1_500L)
+        }
+    }
+
+    private val refreshApps = Runnable {
+        val changed = AppRepo.refresh(this, iconChanges)
+        iconChanges.clear()
+        if (!changed) return@Runnable
+        if (isResumedNow && movingPkg == null) {
+            rebuildRow()
+            applyFocus()
+        } else {
+            needsRender = true
         }
     }
 
@@ -191,6 +209,7 @@ class MainActivity : EtvActivity() {
 
     override fun onDestroy() {
         try { unregisterReceiver(packageReceiver) } catch (_: Exception) {}
+        handler.removeCallbacks(refreshApps)
         prefsListener?.let { prefs.unlisten(it) }
         super.onDestroy()
     }
@@ -227,6 +246,7 @@ class MainActivity : EtvActivity() {
             sp(58f)
             includeFontPadding = false
             gravity = Gravity.CENTER
+            fontFeatureSettings = "tnum" // equal-width digits, so the clock doesn't shuffle sideways
         }
         date = TextView(this).apply {
             typeface = Fonts.body(this@MainActivity, 300)
@@ -234,9 +254,10 @@ class MainActivity : EtvActivity() {
             gravity = Gravity.CENTER
         }
         dots = DotsView(this)
-        header.addView(greeting, LinearLayout.LayoutParams(-2, -2))
-        header.addView(clock, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dpi(4f) })
-        header.addView(date, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dpi(6f) })
+        // Full-width lines: when the time changes only the text redraws; nothing else moves.
+        header.addView(greeting, LinearLayout.LayoutParams(-1, -2))
+        header.addView(clock, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(4f) })
+        header.addView(date, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(6f) })
         header.addView(dots, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dpi(16f) })
         root.addView(header, FrameLayout.LayoutParams(-1, -2, Gravity.TOP).apply { topMargin = dpi(70f) })
 
@@ -410,16 +431,24 @@ class MainActivity : EtvActivity() {
             in 12..16 -> "Good afternoon"
             else -> "Good evening"
         }
-        when (prefs.greeting) {
-            0 -> greeting.text = "$ar  ·  $en"
-            1 -> greeting.text = ar
-            2 -> greeting.text = en
+        val g = when (prefs.greeting) {
+            0 -> "$ar  ·  $en"
+            1 -> ar
+            2 -> en
+            else -> ""
         }
-        greeting.visibility = if (prefs.greeting == 3) View.GONE else View.VISIBLE
+        val gv = if (prefs.greeting == 3) View.GONE else View.VISIBLE
+        if (greeting.visibility != gv) greeting.visibility = gv
 
         val locale = Locale.getDefault()
-        clock.text = SimpleDateFormat(if (prefs.clock24) "HH:mm" else "h:mm", locale).format(now)
-        date.text = SimpleDateFormat("EEEE, d MMMM", locale).format(now)
+        // Only touch what changed: setting the same text still makes Android redo the layout.
+        setIfChanged(greeting, g)
+        setIfChanged(clock, SimpleDateFormat(if (prefs.clock24) "HH:mm" else "h:mm", locale).format(now))
+        setIfChanged(date, SimpleDateFormat("EEEE, d MMMM", locale).format(now))
+    }
+
+    private fun setIfChanged(view: TextView, text: String) {
+        if (view.text?.toString() != text) view.text = text
     }
 
     private fun tiles(): List<ArchTile> =

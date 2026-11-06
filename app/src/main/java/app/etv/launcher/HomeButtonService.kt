@@ -2,6 +2,8 @@ package app.etv.launcher
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 
@@ -23,6 +25,10 @@ class HomeButtonService : AccessibilityService() {
     private var homesLoadedAt = 0L
     private var lastSwitch = 0L
 
+    /** The app whose screen opened most recently. */
+    private var lastWindowPkg: String? = null
+    private val main = Handler(Looper.getMainLooper())
+
     override fun onServiceConnected() {
         super.onServiceConnected()
         homesLoadedAt = 0L
@@ -38,12 +44,16 @@ class HomeButtonService : AccessibilityService() {
         if (event == null || event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
         val pkg = event.packageName?.toString() ?: return
         if (pkg == packageName || pkg == "com.android.systemui") return
+        // Toasts, pop-ups and dialogs aren't screens; the TV's own home app shows these in the
+        // background now and then, and switching "back" to eTV then would make it jump.
+        if (isKeyboardOrDialog(event)) return
+        lastWindowPkg = pkg
 
         val prefs = Prefs(this)
 
         // "Teach eTV": the next full screen that isn't eTV is the TV's own home.
         if (prefs.learningHome) {
-            if (HomeSetup.isSettingsLike(pkg) || isKeyboardOrDialog(event)) return
+            if (HomeSetup.isSettingsLike(pkg)) return
             prefs.extraHomes = prefs.extraHomes + pkg
             prefs.learnUntil = 0L
             homesLoadedAt = 0L
@@ -58,15 +68,29 @@ class HomeButtonService : AccessibilityService() {
         val now = SystemClock.elapsedRealtime()
         if (pkg == AppRepo.lastLaunchPkg && now - AppRepo.lastLaunchAt < 4_000L) return
 
+        if (Nav.onScreen) {
+            // eTV is still in front, so this is most likely something the TV's home app did in the
+            // background. If it really took over (Home pressed in eTV), eTV will have stepped back
+            // by the time we look again.
+            main.postDelayed({
+                if (!Nav.onScreen && lastWindowPkg == pkg) switchBack(prefs)
+            }, 700L)
+            return
+        }
+        switchBack(prefs)
+    }
+
+    private fun switchBack(prefs: Prefs) {
         // A short pause stops eTV and the TV's own home screen from bouncing between each other.
-        if (now - lastSwitch < 350L) return
+        if (SystemClock.elapsedRealtime() - lastSwitch < 350L) return
         switchToEtv()
         prefs.lastHomeVia = Prefs.HOME_VIA_SCREEN
     }
 
     private fun isKeyboardOrDialog(event: AccessibilityEvent): Boolean {
         val cls = event.className?.toString() ?: return false
-        return cls.contains("Dialog") || cls.contains("InputMethod") || cls.contains("Toast")
+        return cls.contains("Dialog") || cls.contains("InputMethod") || cls.contains("Toast") ||
+            cls.contains("PopupWindow") || cls.contains("Notification")
     }
 
     private fun currentHomes(): Set<String> {

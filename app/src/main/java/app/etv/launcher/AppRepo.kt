@@ -38,6 +38,26 @@ object AppRepo {
         icons.clear()
     }
 
+    /**
+     * Re-reads the list of apps. Returns true only when something eTV shows changed: an app added or
+     * removed, renamed, or (for packages in [updated]) possibly a new icon.
+     */
+    fun refresh(context: Context, updated: Set<String>): Boolean {
+        val old = cache
+        cache = null
+        val fresh = all(context)
+        val same = old != null && old.size == fresh.size && old.indices.all { i ->
+            val a = old[i]
+            val b = fresh[i]
+            a.pkg == b.pkg && a.cls == b.cls && a.label == b.label && a.isTv == b.isTv
+        }
+        val newIcons = updated.filter { pkg -> fresh.any { it.pkg == pkg } }
+        newIcons.forEach { icons.remove(it) }
+        if (same && newIcons.isEmpty()) return false
+        version++
+        return true
+    }
+
     fun all(context: Context): List<AppEntry> {
         cache?.let { return it }
         val pm = context.packageManager
