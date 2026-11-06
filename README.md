@@ -1,7 +1,8 @@
 # eTV — a calm Sidi Bou Said launcher for Android TV
 
 A home screen with arched-door app tiles, a quiet clock and greeting, and nothing that moves on its own.
-No libraries, no ads, no autoplaying previews, no network access.
+No libraries, no ads, no autoplaying previews. The only thing it ever connects to is this repository on GitHub,
+to look for a new version of itself (you can switch that off).
 
 ## Using it with the remote
 
@@ -71,21 +72,38 @@ eTV also opens by itself when the TV starts.
 
 ## Getting the APK
 
-Every push to GitHub builds it: open the repository's **Actions** tab, click the latest run and download
-**eTV-apk** under Artifacts. Unzip it to get `app-release.apk`.
+Every push to `main` builds eTV and, once the signing key below is set up, publishes it as a
+[GitHub release](../../releases) named `build-<number>` with `eTV.apk` attached. The TV updates itself from these
+(see *Updates*). Builds of other branches are under the **Actions** tab, as the **eTV-apk** artifact.
 
 Or open this folder in Android Studio and run `./gradlew assembleRelease`
 (the APK is in `app/build/outputs/apk/release/`).
 
+### The signing key
+
 Builds are signed with one fixed key, so a new version installs over the old one and keeps your settings.
+Android refuses an update signed with a different key, so without it there are no updates.
 The key is never stored in the repository. GitHub reads it from two repository secrets
-(Settings → Secrets and variables → Actions):
+(Settings → Secrets and variables → Actions → New repository secret):
 
 - `ETV_KEYSTORE_BASE64`: the key file in base64 (`base64 -i etv-release.jks | pbcopy` on a Mac)
 - `ETV_KEYSTORE_PASSWORD`: its password
 
-To build on your Mac with the same key, put `etv-release.jks` in `app/` (git ignores it) and `install.sh` asks for
-the password. Without the key, builds fall back to a temporary one.
+Keep a copy of `etv-release.jks` and its password somewhere safe: losing them means uninstalling eTV once to
+move to a new key. To build on your Mac with the same key, put `etv-release.jks` in `app/` (git ignores it) and
+`install.sh` asks for the password. Without the key, builds fall back to a temporary one and aren't published.
+
+## Updates
+
+eTV looks for a new release on GitHub twice a day. When there is one, the Settings button on the home screen
+says **Settings · Update**. Open it and choose **New version from GitHub → Install**: eTV downloads it, Android
+asks you to confirm, and eTV comes back as the new version with all your settings. You can also check by hand
+there, or turn the automatic check off.
+
+The first time, Android asks whether eTV may install apps (on Philips: allow eTV under Unknown sources). eTV
+opens that switch for you; turn it on, press Back and choose Install again.
+
+The repository has to be public for the TV to see the releases.
 
 ## Installing on the TV
 
@@ -96,8 +114,8 @@ the password. Without the key, builds fall back to a temporary one.
    `make-default.sh`. Accept the "Allow debugging?" prompt on the TV.
 3. Or by hand with the APK from GitHub: `adb connect <TV-IP>`, then `adb install -r app-release.apk`.
 
-Updating from version 1.0: that build was signed with a temporary key, so uninstall it once first
-(`adb uninstall app.etv.launcher`, or uninstall eTV on the TV). `install.sh` does this for you.
+Moving to the fixed key: builds made before the signing key was set up (everything up to 1.3.1) used a
+temporary key, so uninstall eTV once before installing the first signed release. From then on it updates itself.
 
 ## Last resort: switching off the stock launcher
 
@@ -123,6 +141,7 @@ app/src/main/java/app/etv/launcher/
   HomeButtonService.kt  the Home button helper (accessibility service)
   HomeSetup.kt          who answers Home, and whether eTV is in charge
   Nav.kt                where you were, so Home can bring you back there
+  Updater.kt            checks GitHub releases, downloads and installs new versions
   BootReceiver.kt       opens eTV when the TV starts
   Views.kt              arch shape, arch tile, background arches, door studs, rows, focus helpers
   AppRepo.kt            lists, caches and launches apps
