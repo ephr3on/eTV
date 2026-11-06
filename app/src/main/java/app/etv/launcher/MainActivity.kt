@@ -19,6 +19,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -34,8 +35,8 @@ import java.util.Locale
  * How Home behaves:
  * - Coming back from another app, Home returns you to exactly where you were in eTV
  *   (the same app on the row, the same dock button, or the same app in All apps).
- * - Pressing Home again while you're already in eTV goes to the first app.
- * The selected app always sits in the middle of the screen; the row slides under it.
+ * - Pressing Home again while you're already in eTV goes to the app in the middle of the row,
+ *   which is also what's selected when eTV first opens.
  */
 class MainActivity : EtvActivity() {
 
@@ -56,7 +57,7 @@ class MainActivity : EtvActivity() {
     private lateinit var clock: TextView
     private lateinit var date: TextView
     private lateinit var dots: DotsView
-    private lateinit var rowScroll: CentreScrollView
+    private lateinit var rowScroll: HorizontalScrollView
     private lateinit var row: LinearLayout
     private lateinit var emptyHint: TextView
     private lateinit var moveHint: TextView
@@ -72,14 +73,10 @@ class MainActivity : EtvActivity() {
     private var isResumedNow = false
     private var needsRender = true
     private var renderedAppsVersion = -1
-    private var tileW = 0
 
     /** A view eTV is about to select itself; focus changes on the way there aren't "where you were". */
     private var pendingFocus: View? = null
     private var rebuilding = false
-
-    /** The next row selection should snap to the middle at once instead of gliding there. */
-    private var snapNext = false
 
     private var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
@@ -136,7 +133,7 @@ class MainActivity : EtvActivity() {
             // Back from another app: exactly where you were.
             if (Nav.screen == Nav.SCREEN_APPS) openAllApps(Nav.appsPkg, instant = true)
         } else {
-            // Already in eTV: Home goes to the first app.
+            // Already in eTV: Home goes to the app in the middle of the row.
             Nav.screen = Nav.SCREEN_HOME
             Nav.homeKey = null
         }
@@ -231,14 +228,15 @@ class MainActivity : EtvActivity() {
         header.addView(dots, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dpi(16f) })
         root.addView(header, FrameLayout.LayoutParams(-1, -2, Gravity.TOP).apply { topMargin = dpi(70f) })
 
-        // The row of arched apps. The selected one stays in the middle; the row slides under it.
+        // The row of arched apps, centred on the screen.
         row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.BOTTOM
+            gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
             clipChildren = false
             clipToPadding = false
+            setPadding(dpi(48f), dpi(24f), dpi(48f), dpi(4f))
         }
-        rowScroll = CentreScrollView(this).apply {
+        rowScroll = HorizontalScrollView(this).apply {
             isFillViewport = true
             isHorizontalScrollBarEnabled = false
             clipChildren = false
@@ -246,12 +244,8 @@ class MainActivity : EtvActivity() {
             isFocusable = false
             descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
             overScrollMode = View.OVER_SCROLL_NEVER
-            isSmoothScrollingEnabled = true
         }
         rowScroll.addView(row, FrameLayout.LayoutParams(-2, -1))
-        rowScroll.addOnLayoutChangeListener { _, l, _, r, _, oldL, _, oldR, _ ->
-            if (r - l != oldR - oldL) updateRowPadding()
-        }
         root.addView(rowScroll, FrameLayout.LayoutParams(-1, dpi(190f), Gravity.TOP).apply { topMargin = dpi(250f) })
 
         emptyHint = TextView(this).apply {
@@ -323,30 +317,26 @@ class MainActivity : EtvActivity() {
         else -> null
     }
 
-    private fun firstView(): View? = row.getChildAt(0) ?: dock.getChildAt(DOCK_APPS)
+    /** The app in the middle of the row (left of the two middle ones when the count is even). */
+    private fun middleView(): View? =
+        row.getChildAt((row.childCount - 1) / 2) ?: dock.getChildAt(DOCK_APPS)
 
-    /** Selects the remembered item (or the first app), centring it on the row. */
+    /** Selects the remembered item, or the app in the middle of the row. */
     private fun applyFocus() {
-        val target = viewFor(Nav.homeKey) ?: firstView() ?: return
+        val target = viewFor(Nav.homeKey) ?: middleView() ?: return
         select(target)
     }
 
     private fun select(target: View) {
         pendingFocus = target
         target.post {
-            if (target.isFocused) {
-                if (target.parent === row) rowScroll.centreOn(target, smooth = false)
-            } else {
-                snapNext = true
-                target.requestFocus()
-                snapNext = false
-            }
+            if (!target.isFocused) target.requestFocus()
             if (pendingFocus === target) pendingFocus = null
         }
     }
 
-    /** Back (and Home while already in eTV) goes to the first app. */
-    private fun goToFirstApp() {
+    /** Back (and Home while already in eTV) goes to the app in the middle of the row. */
+    private fun goToMiddleApp() {
         if (movingPkg != null) endMove()
         Nav.homeKey = null
         applyFocus()
@@ -450,30 +440,17 @@ class MainActivity : EtvActivity() {
         val gap = dpi(15f * scale)
         for ((i, app) in apps.withIndex()) {
             val t = ArchTile(this, app, pal, accent, scale, prefs.iconStyle, prefs.nameMode)
-            tileW = t.tileW
             val lp = LinearLayout.LayoutParams(t.tileW, t.tileH)
             if (i > 0) lp.marginStart = gap
             t.setOnClickListener { AppRepo.launch(this, app) }
             t.setOnLongClickListener { showTileOptions(app); true }
             t.onFocusChangeListener = View.OnFocusChangeListener { v, has ->
-                if (has) {
-                    // Glide to the middle when moving with the remote; snap when eTV selects it.
-                    rowScroll.centreOn(v, smooth = !snapNext && !rebuilding)
-                    remember(v, "app:${app.pkg}")
-                }
+                if (has) remember(v, "app:${app.pkg}")
             }
             if (app.pkg == movingPkg) t.moving = true
             row.addView(t, lp)
         }
-        if (tileW == 0) tileW = dpi(96f * scale)
-        updateRowPadding()
         emptyHint.visibility = if (apps.isEmpty()) View.VISIBLE else View.GONE
-    }
-
-    /** Half a screen of space at each end, so the first and last apps can reach the middle. */
-    private fun updateRowPadding() {
-        val side = rowScroll.centrePadding(tileW)
-        row.setPaddingRelative(side, dpi(24f), side, dpi(4f))
     }
 
     // ---------------- app options & moving ----------------
@@ -588,7 +565,7 @@ class MainActivity : EtvActivity() {
                 true
             }
             else -> {
-                // Down from the row lands on the dock button under the middle of the screen.
+                // Down from the row lands on the nearest dock button.
                 if (inRow && dock.childCount > 0) {
                     val middle = dock.getChildAt(DOCK_APPS) ?: dock.getChildAt(0)
                     val fromNearest = FocusFinder.getInstance().findNextFocus(root, f, View.FOCUS_DOWN)
@@ -602,7 +579,7 @@ class MainActivity : EtvActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         // A launcher has nowhere to go back to.
-        goToFirstApp()
+        goToMiddleApp()
     }
 
     /**
@@ -613,7 +590,7 @@ class MainActivity : EtvActivity() {
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            goToFirstApp() // a launcher has nowhere to go back to
+            goToMiddleApp() // a launcher has nowhere to go back to
             return true
         }
         if (event.repeatCount > 0) return super.onKeyDown(keyCode, event)

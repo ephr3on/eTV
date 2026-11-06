@@ -9,7 +9,7 @@ Made with the Philips remote in mind (works with any Android TV remote).
 
 | On the home screen | What it does |
 |---|---|
-| Left / Right | Move between apps. The selected app always sits in the middle; the row slides under it |
+| Left / Right | Move between apps (the selected arch fills with your highlight colour). The app in the middle of the row is selected when you arrive |
 | OK | Open the app |
 | Hold OK, or Options / Info | Options for the selected app: Open, Move, Remove from home, App info |
 | Move → Left / Right → OK | Re-order the home row |
@@ -20,7 +20,7 @@ Made with the Philips remote in mind (works with any Android TV remote).
 | Blue, or Options with nothing selected | Customise |
 | Down | Dock: Search, Inputs, All apps, Settings |
 | Home, from another app | Back to exactly where you were: the same app on the row, dock button, or place in All apps |
-| Home again (already in eTV), or Back | The first app |
+| Home again (already in eTV), or Back | The app in the middle of the row |
 
 Left / Right stop at the ends of the home row and the dock, and Up from the dock returns to the app you were on.
 

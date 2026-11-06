@@ -111,7 +111,7 @@ class SettingsActivity : EtvActivity() {
             "Options  or  Info" to "Options for the selected app",
             "Hold OK" to "Options for the selected app",
             "Home (from another app)" to "Back to exactly where you were",
-            "Home again,  or  Back" to "The first app",
+            "Home again,  or  Back" to "The app in the middle of the row",
         )
         for ((key, what) in shortcuts) shortcutLine(key, what)
 
@@ -120,7 +120,7 @@ class SettingsActivity : EtvActivity() {
             AppRepo.tryStart(this, Intent(Settings.ACTION_SETTINGS))
         }
 
-        val footer = noteText(this, pal, "eTV 1.3")
+        val footer = noteText(this, pal, "eTV 1.3.1")
         list.addView(footer, LinearLayout.LayoutParams(-1, -2).apply {
             topMargin = dpi(24f)
             marginStart = dpi(18f)

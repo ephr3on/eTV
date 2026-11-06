@@ -9,7 +9,7 @@ import android.os.SystemClock
  *
  * Coming back with Home from another app returns you to exactly that place (the same app on the
  * home row or in All apps, or the same dock button). Pressing Home again, while already in eTV,
- * goes to the first app on the home screen.
+ * goes to the app in the middle of the home row.
  */
 object Nav {
     const val SCREEN_HOME = 0
@@ -18,7 +18,7 @@ object Nav {
     /** The eTV screen you were last on. */
     var screen = SCREEN_HOME
 
-    /** What was selected on the home screen: "app:<package>", "dock:<n>", or null for the first app. */
+    /** What was selected on the home screen: "app:<package>", "dock:<n>", or null for the app in the middle of the row. */
     var homeKey: String? = null
 
     /** The app selected in All apps. */

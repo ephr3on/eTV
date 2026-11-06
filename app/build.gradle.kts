@@ -11,8 +11,8 @@ android {
         applicationId = "app.etv.launcher"
         minSdk = 21
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.3"
+        versionCode = 5
+        versionName = "1.3.1"
     }
 
     // One fixed key, so every new build installs over the previous one.
