@@ -20,6 +20,9 @@ Made with the Philips remote in mind (works with any Android TV remote).
 | Blue, or Options with nothing selected | Customise |
 | Down | Dock: Search, Inputs, All apps, Settings |
 | Home | Opens eTV; pressed in eTV, jumps back to the first app |
+| Back | Back to the first app |
+
+Left / Right stop at the ends of the home row and the dock, and Up from the dock returns to the app you were on.
 
 In **All apps**: hold OK or press Options on an app to add it to home, hide it, open its info or uninstall it.
 Channel + / − (or Page Up / Down) jump a screen at a time.
@@ -37,9 +40,15 @@ one. eTV handles this three ways; any one is enough.
 **1. The Home button helper (on the TV, no computer).**
 The first time eTV opens, it shows the **Home button** screen (later: Settings → Home button).
 Choose *Turn on the Home button helper*, pick **eTV Home button** in the Accessibility list that opens
-(on Philips usually under Accessibility → Services), switch it on and confirm. From then on, whenever the TV opens
-its own home screen, eTV switches straight back. The helper only sees which app is opening, never what's on
-screen or what you type. You can pause it from the same screen.
+(on Philips usually under Accessibility → Services), switch it on and confirm.
+
+From then on the helper catches the Home button before the TV does and opens eTV, so the TV's own home screen
+never opens. Every other button goes straight through. As a backup, on TVs that don't hand Home to helpers,
+it switches straight back whenever the TV's own home screen opens. It never reads what's on screen, and it keeps
+and sends nothing. You can pause it from the same screen, which also shows how your last Home press was caught.
+
+Updating from 1.1: if Home still flashes the TV's home screen after updating, switch the helper off and on
+once in Accessibility so the TV picks up its new Home button permission.
 
 If Home still lands somewhere else, choose *Teach eTV your TV's home screen* and press Home within 45 seconds.
 eTV remembers that screen and switches away from it from then on.

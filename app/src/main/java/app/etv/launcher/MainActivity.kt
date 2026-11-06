@@ -12,6 +12,7 @@ import android.media.tv.TvInputManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.FocusFinder
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -123,10 +124,7 @@ class MainActivity : Activity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        if (movingPkg != null) endMove()
-        lastFocusedPkg = null
-        rowScroll.smoothScrollTo(0, 0)
-        (row.getChildAt(0) ?: dock.getChildAt(0))?.requestFocus()
+        goToFirstApp()
     }
 
     private fun registerSystemReceiver(r: BroadcastReceiver, f: IntentFilter) {
@@ -403,7 +401,57 @@ class MainActivity : Activity() {
             }
             return true
         }
+        if (keepFocusInPlace(event)) return true
         return super.dispatchKeyEvent(event)
+    }
+
+    /**
+     * Keeps the remote predictable: Left / Right stop at the ends of the home row and the dock
+     * instead of jumping to the other one, Up from the dock returns to the app you were on, and
+     * Up from the row / Down from the dock do nothing.
+     */
+    private fun keepFocusInPlace(event: KeyEvent): Boolean {
+        val dir = when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
+            KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
+            KeyEvent.KEYCODE_DPAD_UP -> View.FOCUS_UP
+            KeyEvent.KEYCODE_DPAD_DOWN -> View.FOCUS_DOWN
+            else -> return false
+        }
+        val f = currentFocus ?: return false
+        val inRow = f.parent === row
+        val inDock = f.parent === dock
+        if (!inRow && !inDock) return false
+        if (event.action != KeyEvent.ACTION_DOWN) return false
+
+        return when (dir) {
+            View.FOCUS_LEFT, View.FOCUS_RIGHT -> {
+                val group = if (inRow) row else dock
+                FocusFinder.getInstance().findNextFocus(group, f, dir) == null // at the end: stay put
+            }
+            View.FOCUS_UP -> {
+                if (inDock) {
+                    val back = tiles().firstOrNull { it.app.pkg == lastFocusedPkg } ?: tiles().firstOrNull()
+                    back?.requestFocus()
+                }
+                true
+            }
+            else -> inDock // Down: from the row, the normal move into the dock
+        }
+    }
+
+    /** Back (and Home while already home) returns to the first app. */
+    private fun goToFirstApp() {
+        if (movingPkg != null) endMove()
+        lastFocusedPkg = null
+        rowScroll.smoothScrollTo(0, 0)
+        (row.getChildAt(0) ?: dock.getChildAt(0))?.requestFocus()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        // A launcher has nowhere to go back to.
+        goToFirstApp()
     }
 
     /**
@@ -412,7 +460,10 @@ class MainActivity : Activity() {
      * app's options (or Customise), the colour keys are shortcuts, Sources opens Inputs.
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) return true // a launcher has nowhere to go back to
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            goToFirstApp() // a launcher has nowhere to go back to
+            return true
+        }
         if (event.repeatCount > 0 && keyCode != KeyEvent.KEYCODE_DPAD_LEFT && keyCode != KeyEvent.KEYCODE_DPAD_RIGHT) {
             return super.onKeyDown(keyCode, event)
         }

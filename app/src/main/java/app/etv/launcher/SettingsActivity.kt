@@ -113,7 +113,7 @@ class SettingsActivity : Activity() {
             "Blue" to "This page",
             "Options  or  Info" to "Options for the selected app",
             "Hold OK" to "Options for the selected app",
-            "Home" to "Back to the first app",
+            "Home  or  Back" to "Back to the first app",
         )
         for ((key, what) in shortcuts) shortcutLine(key, what)
 
@@ -122,7 +122,7 @@ class SettingsActivity : Activity() {
             AppRepo.tryStart(this, Intent(Settings.ACTION_SETTINGS))
         }
 
-        val footer = noteText(this, pal, "eTV 1.1")
+        val footer = noteText(this, pal, "eTV 1.2")
         list.addView(footer, LinearLayout.LayoutParams(-1, -2).apply {
             topMargin = dpi(24f)
             marginStart = dpi(18f)

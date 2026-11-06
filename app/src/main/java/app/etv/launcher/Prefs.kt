@@ -100,6 +100,19 @@ class Prefs(context: Context) {
     val learningHome: Boolean
         get() = System.currentTimeMillis() < learnUntil
 
+    /** How the last Home press reached eTV: one of the HOME_VIA_ values. */
+    var lastHomeVia: Int
+        get() = int("homeVia", HOME_VIA_NONE)
+        set(v) = putInt("homeVia", v)
+
+    companion object {
+        const val HOME_VIA_NONE = 0
+        /** The helper caught the Home button itself: the TV's home screen never opened. */
+        const val HOME_VIA_KEY = 1
+        /** The TV's home screen opened and the helper switched back. */
+        const val HOME_VIA_SCREEN = 2
+    }
+
     /** Home screens learnt on this TV, on top of the ones Android reports. */
     var extraHomes: Set<String>
         get() = HashSet(sp.getStringSet("extraHomes", emptySet()) ?: emptySet())

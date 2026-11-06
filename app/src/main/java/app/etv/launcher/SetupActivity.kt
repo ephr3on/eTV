@@ -74,12 +74,27 @@ class SetupActivity : Activity() {
         }
         list.addView(status, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(6f) })
 
+        // How the last Home press actually reached eTV: the quickest way to see what's going on.
+        if (helperOn && prefs.homeHelper) {
+            val how = when (prefs.lastHomeVia) {
+                Prefs.HOME_VIA_KEY ->
+                    "The helper catches Home as soon as you press it, so the TV's own home screen never opens."
+                Prefs.HOME_VIA_SCREEN ->
+                    "This TV doesn't hand the Home button to the helper, so its own home screen can show for a " +
+                        "moment before eTV comes back. If Home ever stays there, try Step 2 below, or " +
+                        "turn the helper off and on again in Accessibility."
+                else -> "Press Home on the remote once to test it."
+            }
+            add(noteText(this, pal, how), top = 6f)
+        }
+
         add(
             noteText(
                 this, pal,
                 "Philips and many other TVs open their own home screen when you press Home, even after you " +
-                    "choose another one. The eTV Home button helper notices that and switches straight back " +
-                    "to eTV. It only sees which app is opening. It never reads what's on screen or what you type.",
+                    "choose another one. The eTV Home button helper catches the Home button before the TV does " +
+                    "and opens eTV. Every other button goes straight through. It never reads what's on screen, " +
+                    "and it keeps and sends nothing.",
             ),
             top = 14f,
         )

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.SystemClock
 import android.provider.Settings
 import android.widget.Toast
 
@@ -71,7 +72,15 @@ object AppRepo {
         return d
     }
 
+    /** The app eTV opened last, so the Home button helper never switches away from it by mistake. */
+    @Volatile var lastLaunchPkg: String? = null
+        private set
+    @Volatile var lastLaunchAt = 0L
+        private set
+
     fun launch(context: Context, app: AppEntry) {
+        lastLaunchPkg = app.pkg
+        lastLaunchAt = SystemClock.elapsedRealtime()
         val category = if (app.isTv) Intent.CATEGORY_LEANBACK_LAUNCHER else Intent.CATEGORY_LAUNCHER
         val intent = Intent(Intent.ACTION_MAIN)
             .addCategory(category)

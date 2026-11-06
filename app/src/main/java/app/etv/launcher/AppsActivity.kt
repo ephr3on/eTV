@@ -3,6 +3,7 @@ package app.etv.launcher
 import android.app.Activity
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.FocusFinder
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -149,6 +150,22 @@ class AppsActivity : Activity() {
 
         val target = focusTarget ?: grid.getChildAt(0) ?: toggle
         target.post { target.requestFocus() }
+    }
+
+    /** Left / Right stop at the ends of a row of apps instead of jumping to the button at the top. */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        val dir = when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
+            KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
+            else -> 0
+        }
+        val f = currentFocus
+        if (dir != 0 && event.action == KeyEvent.ACTION_DOWN && f != null && f.parent === grid &&
+            FocusFinder.getInstance().findNextFocus(grid, f, dir) == null
+        ) {
+            return true
+        }
+        return super.dispatchKeyEvent(event)
     }
 
     /** Options/Info opens the selected app's options; channel and page keys jump a screen at a time. */
