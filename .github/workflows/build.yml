@@ -4,6 +4,10 @@ on:
   push:
   workflow_dispatch:
 
+# Publishing a release needs write access to the repository's contents.
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -18,20 +22,42 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
 
       - name: Build release APK
+        id: build
         env:
           ETV_KEYSTORE_BASE64: ${{ secrets.ETV_KEYSTORE_BASE64 }}
           ETV_KEYSTORE_PASSWORD: ${{ secrets.ETV_KEYSTORE_PASSWORD }}
         run: |
-          if [ -n "$ETV_KEYSTORE_BASE64" ]; then
+          # Every build gets a higher version code, so the TV always sees it as newer.
+          export ETV_VERSION_CODE=$((100 + GITHUB_RUN_NUMBER))
+          echo "code=$ETV_VERSION_CODE" >> "$GITHUB_OUTPUT"
+          if [ -n "$ETV_KEYSTORE_BASE64" ] && [ -n "$ETV_KEYSTORE_PASSWORD" ]; then
             echo "$ETV_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/etv-release.jks"
             export ETV_KEYSTORE="$RUNNER_TEMP/etv-release.jks"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::warning::Signing secrets not set; using a temporary key, so this APK won't install over a previous one."
+            echo "::warning::Signing secrets not set; using a temporary key. This APK won't install over a previous one and won't be published as an update."
+            echo "signed=false" >> "$GITHUB_OUTPUT"
           fi
           chmod +x gradlew
           ./gradlew --no-daemon assembleRelease
+          cp app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/eTV.apk"
 
       - uses: actions/upload-artifact@v7
         with:
           name: eTV-apk
           path: app/build/outputs/apk/release/*.apk
+
+      # Builds of main signed with the eTV key become releases; the TV's updater installs the latest one.
+      - name: Publish update
+        if: github.ref == 'refs/heads/main' && steps.build.outputs.signed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CODE: ${{ steps.build.outputs.code }}
+        run: |
+          NAME=$(sed -n 's/.*versionName = "\(.*\)".*/\1/p' app/build.gradle.kts | head -1)
+          git log -1 --format=%B > "$RUNNER_TEMP/notes.txt"
+          gh release create "build-$CODE" "$RUNNER_TEMP/eTV.apk" \
+            --target "$GITHUB_SHA" \
+            --title "eTV $NAME (build $CODE)" \
+            --notes-file "$RUNNER_TEMP/notes.txt" \
+            --latest

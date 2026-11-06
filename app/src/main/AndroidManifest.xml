@@ -6,6 +6,10 @@
 
     <!-- Lets the "Uninstall" option hand off to the system uninstaller. -->
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!-- Updates: asks GitHub for new versions of eTV and downloads them (nothing else). -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Hands a downloaded update to Android's installer (you confirm it on screen). -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- Opens eTV when the TV starts. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -96,7 +100,13 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+
+        <!-- Hears back from Android's installer during an update. -->
+        <receiver
+            android:name=".UpdateReceiver"
+            android:exported="false" />
     </application>
 </manifest>

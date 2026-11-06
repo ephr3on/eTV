@@ -110,7 +110,7 @@ class MainActivity : EtvActivity() {
         }
         registerSystemReceiver(packageReceiver, pkgFilter)
         // Customise and All apps change options while this screen is hidden; redraw on return.
-        prefsListener = prefs.listen { if (!isResumedNow) needsRender = true }
+        prefsListener = prefs.listen { needsRender = true }
 
         handleHome(intent)
     }
@@ -154,9 +154,21 @@ class MainActivity : EtvActivity() {
         }
         registerSystemReceiver(timeReceiver, f)
 
+        // Back after an update (or the update was installed some other way): drop the hint.
+        prefs.justUpdated = false
+        if (prefs.updateCode in 1..Updater.installedCode(this)) prefs.updateCode = 0L
+
         // Only redraw when something actually changed, so coming back is instant and nothing jumps.
         if (needsRender || renderedAppsVersion != AppRepo.version) render() else updateClock()
         applyFocus()
+
+        // Look for a new version on GitHub now and then; the Settings button says when there is one.
+        Updater.checkIfDue(this) {
+            if (isResumedNow && needsRender) {
+                render()
+                applyFocus()
+            }
+        }
 
         // Back home normally: nothing left to learn about the TV's own home screen.
         if (prefs.learningHome) prefs.learnUntil = 0L
@@ -378,7 +390,8 @@ class MainActivity : EtvActivity() {
             addDock(dockButton(DOCK_SEARCH, "Search", R.drawable.ic_search) { openSearch() })
             addDock(dockButton(DOCK_INPUTS, "Inputs", R.drawable.ic_inputs) { showInputs() })
             addDock(dockButton(DOCK_APPS, "All apps", R.drawable.ic_apps) { openAllApps() })
-            addDock(dockButton(DOCK_SETTINGS, "Settings", R.drawable.ic_settings) { openCustomise() })
+            val settingsLabel = if (prefs.updateCode > 0) "Settings  ·  Update" else "Settings"
+            addDock(dockButton(DOCK_SETTINGS, settingsLabel, R.drawable.ic_settings) { openCustomise() })
 
             updateClock()
             buildRow()

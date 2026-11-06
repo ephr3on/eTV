@@ -11,8 +11,9 @@ android {
         applicationId = "app.etv.launcher"
         minSdk = 21
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.3.1"
+        // GitHub sets ETV_VERSION_CODE (100 + the build number) so every build counts as newer.
+        versionCode = System.getenv("ETV_VERSION_CODE")?.toIntOrNull() ?: 5
+        versionName = "1.4"
     }
 
     // One fixed key, so every new build installs over the previous one.

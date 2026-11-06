@@ -132,8 +132,29 @@ class Prefs(context: Context) {
 
     private val LOOK_KEYS = setOf(
         "accent", "palette", "greeting", "clock24", "showDate", "tileSize", "nameMode", "iconStyle",
-        "arches", "favs", "hidden",
+        "arches", "favs", "hidden", "updateCode",
     )
+
+    // ---- Updates from GitHub (see Updater) ----
+
+    /** Check GitHub for a new version twice a day. */
+    var autoUpdate: Boolean
+        get() = bool("autoUpdate", true)
+        set(v) = putBool("autoUpdate", v)
+
+    var lastUpdateCheck: Long
+        get() = sp.getLong("lastUpdateCheck", 0L)
+        set(v) = sp.edit().putLong("lastUpdateCheck", v).apply()
+
+    /** Version code of a newer release found on GitHub, or 0. Shown as a hint on the Settings button. */
+    var updateCode: Long
+        get() = sp.getLong("updateCode", 0L)
+        set(v) = sp.edit().putLong("updateCode", v).apply()
+
+    /** An update was just handed to Android: reopen eTV once it's installed. */
+    var justUpdated: Boolean
+        get() = bool("justUpdated", false)
+        set(v) = putBool("justUpdated", v)
 
     /** Home screens learnt on this TV, on top of the ones Android reports. */
     var extraHomes: Set<String>

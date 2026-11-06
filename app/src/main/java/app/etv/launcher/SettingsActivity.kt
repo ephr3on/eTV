@@ -50,7 +50,14 @@ class SettingsActivity : EtvActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Show the updater's progress as it happens.
+        Updater.onChange = { render() }
         render()
+    }
+
+    override fun onPause() {
+        Updater.onChange = null
+        super.onPause()
     }
 
     private fun <T> next(options: List<T>, current: Int): Int = (current + 1) % options.size
@@ -66,6 +73,28 @@ class SettingsActivity : EtvActivity() {
         section("Home button")
         row("home", "Home button opens eTV", if (HomeSetup.homeHandled(this)) "Yes" else "Set up", rerender = false) {
             startActivity(Intent(this, SetupActivity::class.java))
+        }
+
+        section("Updates")
+        val release = Updater.available
+        val updateValue = when {
+            Updater.busy -> Updater.status
+            release != null && (Updater.status.isEmpty() || Updater.status.endsWith("is ready")) ->
+                "Install ${release.title}"
+            release != null -> Updater.status // a failed download or install says to try again
+            Updater.status.isNotEmpty() -> "${Updater.status}  ·  Check again"
+            prefs.updateCode > 0 -> "A new version is ready  ·  Check"
+            else -> "Check now"
+        }
+        row("update", "New version from GitHub", updateValue, rerender = false) {
+            when {
+                Updater.busy -> Unit
+                release != null -> Updater.install(this, release)
+                else -> Updater.check(this)
+            }
+        }
+        row("autoupdate", "Look for new versions by itself", if (prefs.autoUpdate) "Twice a day" else "Off") {
+            prefs.autoUpdate = !prefs.autoUpdate
         }
 
         section("Look")
@@ -120,7 +149,7 @@ class SettingsActivity : EtvActivity() {
             AppRepo.tryStart(this, Intent(Settings.ACTION_SETTINGS))
         }
 
-        val footer = noteText(this, pal, "eTV 1.3.1")
+        val footer = noteText(this, pal, "eTV ${Updater.installedName(this)}  ·  build ${Updater.installedCode(this)}")
         list.addView(footer, LinearLayout.LayoutParams(-1, -2).apply {
             topMargin = dpi(24f)
             marginStart = dpi(18f)

@@ -30,6 +30,8 @@ class HomeButtonService : AccessibilityService() {
         // The helper is allowed to, so it does it here.
         val prefs = Prefs(this)
         if (prefs.homeHelper && SystemClock.elapsedRealtime() < 4 * 60_000L) switchToEtv()
+        // eTV just updated itself: bring it back (Android restarts the helper after an update).
+        if (prefs.justUpdated) switchToEtv()
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
