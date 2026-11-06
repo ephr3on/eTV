@@ -36,10 +36,10 @@ and resetting the home row. It also lists the remote shortcuts and opens the Hom
 ## Now playing
 
 When another app plays in the background (say you press Home while a SmartTube video is running), a slim bar
-fades in between the clock and the doors, styled like the dock: the artwork in a small arched window, the app
+fades in between the doors and the dock buttons: the artwork in a small arched window, the app
 and title, the time, and round previous / play-pause / next studs. The door studs under the date light up one
-by one as it plays. Press **Up** from the apps to reach it, **Left / Right** to move along it (**OK** on the
-artwork opens the app on its player), **Down** to go back to the apps.
+by one as it plays. Press **Down** from the apps (or **Up** from the dock) to reach it, **Left / Right** to move along it (**OK** on
+the artwork opens the app on its player), **Up** for the apps and **Down** for the dock.
 
 It stays while something plays, and for 2 minutes after you pause (15 seconds after it stops), so you can
 still resume from home. Then it fades away, and it disappears as soon as the app closes its player.

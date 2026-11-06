@@ -45,7 +45,7 @@ class MainActivity : EtvActivity() {
         const val EXTRA_FROM_HOME_KEY = "app.etv.launcher.FROM_HOME_KEY"
 
         /** Height of the "now playing" bar. */
-        private const val NOW_BAR_DP = 48f
+        private const val NOW_BAR_DP = 44f
 
         /** Dock button order. */
         private const val DOCK_SEARCH = 0
@@ -273,7 +273,6 @@ class MainActivity : EtvActivity() {
         header.addView(date, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(6f) })
         header.addView(dots, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dpi(16f) })
         root.addView(header, FrameLayout.LayoutParams(-1, -2, Gravity.TOP).apply { topMargin = dpi(70f) })
-        header.addOnLayoutChangeListener { v, _, _, _, b, _, _, _, oldB -> if (b != oldB) v.post { placeNowBar() } }
 
         // The row of arched apps, centred on the screen.
         row = LinearLayout(this).apply {
@@ -293,7 +292,7 @@ class MainActivity : EtvActivity() {
             overScrollMode = View.OVER_SCROLL_NEVER
         }
         rowScroll.addView(row, FrameLayout.LayoutParams(-2, -1))
-        root.addView(rowScroll, FrameLayout.LayoutParams(-1, dpi(190f), Gravity.TOP).apply { topMargin = dpi(250f) })
+        root.addView(rowScroll, FrameLayout.LayoutParams(-1, dpi(190f), Gravity.TOP).apply { topMargin = dpi(232f) })
 
         emptyHint = TextView(this).apply {
             typeface = Fonts.body(this@MainActivity, 300)
@@ -302,7 +301,7 @@ class MainActivity : EtvActivity() {
             text = "Your home row is empty.\nOpen All apps and hold OK on an app to add it here."
             visibility = View.GONE
         }
-        root.addView(emptyHint, FrameLayout.LayoutParams(-1, -2, Gravity.TOP).apply { topMargin = dpi(320f) })
+        root.addView(emptyHint, FrameLayout.LayoutParams(-1, -2, Gravity.TOP).apply { topMargin = dpi(302f) })
 
         moveHint = TextView(this).apply {
             typeface = Fonts.body(this@MainActivity, 400)
@@ -310,7 +309,7 @@ class MainActivity : EtvActivity() {
             gravity = Gravity.CENTER
             visibility = View.GONE
         }
-        root.addView(moveHint, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { bottomMargin = dpi(96f) })
+        root.addView(moveHint, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { bottomMargin = dpi(86f) })
 
         // Dock.
         dock = LinearLayout(this).apply {
@@ -319,9 +318,11 @@ class MainActivity : EtvActivity() {
             clipChildren = false
             clipToPadding = false
         }
-        root.addView(dock, FrameLayout.LayoutParams(-1, dpi(64f), Gravity.BOTTOM).apply { bottomMargin = dpi(28f) })
+        root.addView(dock, FrameLayout.LayoutParams(-1, dpi(56f), Gravity.BOTTOM).apply { bottomMargin = dpi(18f) })
+        // The "now playing" bar sits between the doors and the dock; re-place it when either moves.
+        root.addOnLayoutChangeListener { v, _, t, _, b, _, oldT, _, oldB -> if (b - t != oldB - oldT) v.post { placeNowBar() } }
 
-        // "Now playing": a slim bar between the clock and the doors when another app plays in the
+        // "Now playing": a slim bar between the doors and the dock when another app plays in the
         // background. The door studs under the date show how far along it is.
         nowCard = NowPlayingCard(this)
         root.addView(nowCard, FrameLayout.LayoutParams(-2, dpi(NOW_BAR_DP), Gravity.TOP or Gravity.CENTER_HORIZONTAL))
@@ -381,18 +382,13 @@ class MainActivity : EtvActivity() {
     private fun rowTarget(): View? =
         tiles().firstOrNull { it.app.pkg == lastRowPkg } ?: middleView()
 
-    /**
-     * Puts the "now playing" bar in the middle of the gap between the date and the tops of the
-     * doors (a selected door grows a little, so that's allowed for), whatever the arch size.
-     */
+    /** Puts the "now playing" bar in the middle of the gap between the doors and the dock buttons. */
     private fun placeNowBar() {
-        if (!::nowCard.isInitialized) return
-        val scale = prefs.tileScale
-        val rowBottom = dpi(250f) + dpi(190f) - dpi(4f)
-        val doorTop = rowBottom - (dpi(126f * scale) * 1.12f).toInt()
-        val headerBottom = if (header.height > 0) header.bottom else dpi(220f)
+        if (!::nowCard.isInitialized || root.height == 0) return
+        val doorsBottom = rowScroll.bottom - dpi(4f)
+        val buttonsTop = dock.top + (dock.height - dpi(44f)) / 2
         val barH = dpi(NOW_BAR_DP)
-        val top = ((headerBottom + doorTop - barH) / 2).coerceAtLeast(headerBottom + dpi(4f))
+        val top = (doorsBottom + buttonsTop - barH) / 2
         val lp = nowCard.layoutParams as FrameLayout.LayoutParams
         if (lp.topMargin != top) {
             lp.topMargin = top
@@ -571,7 +567,6 @@ class MainActivity : EtvActivity() {
             row.addView(t, lp)
         }
         emptyHint.visibility = if (apps.isEmpty()) View.VISIBLE else View.GONE
-        placeNowBar()
     }
 
     // ---------------- app options & moving ----------------
@@ -607,6 +602,7 @@ class MainActivity : EtvActivity() {
         }
         moveHint.text = "Moving ${app.label}   ·   Left / Right to place it, OK when done"
         moveHint.visibility = View.VISIBLE
+        nowCard.animate().alpha(0f).setDuration(150).start()
     }
 
     private fun shift(delta: Int) {
@@ -627,6 +623,7 @@ class MainActivity : EtvActivity() {
         movingPkg = null
         tiles().firstOrNull { it.app.pkg == m }?.moving = false
         moveHint.visibility = View.GONE
+        if (nowCard.isShowing) nowCard.animate().alpha(1f).setDuration(200).start()
     }
 
     // ---------------- remote ----------------
@@ -681,16 +678,17 @@ class MainActivity : EtvActivity() {
             }
             View.FOCUS_UP -> {
                 if (inDock) {
-                    rowTarget()?.let { select(it) }
-                } else if (nowCard.isShowing) {
-                    // Up from the apps reaches the "now playing" card.
-                    select(nowCard.play)
+                    // Up from the dock reaches the "now playing" bar, then the apps.
+                    if (nowCard.isShowing) select(nowCard.play) else rowTarget()?.let { select(it) }
                 }
                 true
             }
             else -> {
-                // Down from the row lands on the nearest dock button.
-                if (inRow && dock.childCount > 0) {
+                if (inRow && nowCard.isShowing) {
+                    // Down from the apps reaches the "now playing" bar first.
+                    select(nowCard.play)
+                } else if (inRow && dock.childCount > 0) {
+                    // Down from the row lands on the nearest dock button.
                     val middle = dock.getChildAt(DOCK_APPS) ?: dock.getChildAt(0)
                     val fromNearest = FocusFinder.getInstance().findNextFocus(root, f, View.FOCUS_DOWN)
                     select(if (fromNearest?.parent === dock) fromNearest else middle)
@@ -702,13 +700,14 @@ class MainActivity : EtvActivity() {
 
     /**
      * Inside the "now playing" bar: Left / Right move between the artwork (OK opens the app) and
-     * the controls, stopping at the ends; Down goes back to the apps; Up stays put.
+     * the controls, stopping at the ends; Up goes back to the apps, Down to the dock.
      */
     private fun moveInCard(f: View, dir: Int): Boolean {
         when (dir) {
             View.FOCUS_LEFT, View.FOCUS_RIGHT ->
                 FocusFinder.getInstance().findNextFocus(nowCard, f, dir)?.let { select(it) }
-            View.FOCUS_DOWN -> rowTarget()?.let { select(it) }
+            View.FOCUS_UP -> rowTarget()?.let { select(it) }
+            View.FOCUS_DOWN -> (dock.getChildAt(DOCK_APPS) ?: dock.getChildAt(0))?.let { select(it) }
         }
         return true
     }

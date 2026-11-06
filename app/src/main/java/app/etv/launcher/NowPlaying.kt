@@ -338,7 +338,7 @@ class ArchArtView(context: Context) : View(context) {
 }
 
 /**
- * The "now playing" bar. It sits between the clock and the doors, styled like the dock: a small
+ * The "now playing" bar. It sits between the doors and the dock, a soft pill with no outline: a small
  * arched window with the artwork, the app and title, the time, and three round controls.
  * The door studs under the date show how far along it is ([onProgress]).
  *
@@ -399,7 +399,7 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
         openArea.setPadding(context.dpi(4f), 0, context.dpi(12f), 0)
         openArea.setOnClickListener { onOpen?.invoke() }
         openArea.setOnFocusChangeListener { v, has -> if (has) onFocused?.invoke(v, "media:open") }
-        openArea.addView(art, LayoutParams(context.dpi(30f), context.dpi(38f)))
+        openArea.addView(art, LayoutParams(context.dpi(28f), context.dpi(35f)))
 
         val text = LinearLayout(context).apply {
             orientation = VERTICAL
@@ -418,7 +418,7 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
         title.includeFontPadding = false
         text.addView(title, LayoutParams(-1, -2).apply { topMargin = context.dpi(2f) })
         openArea.addView(text, LayoutParams(context.dpi(196f), -2).apply { marginStart = context.dpi(10f) })
-        addView(openArea, LayoutParams(-2, context.dpi(42f)))
+        addView(openArea, LayoutParams(-2, context.dpi(38f)))
 
         time.typeface = Fonts.body(context, 300)
         time.sp(10.5f)
@@ -441,9 +441,9 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
             val sz = context.dpi(size)
             addView(v, LayoutParams(sz, sz).apply { marginStart = context.dpi(5f) })
         }
-        button(prev, R.drawable.ic_prev, 32f, "media:prev") { onPrev?.invoke() }
-        button(play, R.drawable.ic_pause, 38f, "media:play") { onPlayPause?.invoke() }
-        button(next, R.drawable.ic_next, 32f, "media:next") { onNext?.invoke() }
+        button(prev, R.drawable.ic_prev, 30f, "media:prev") { onPrev?.invoke() }
+        button(play, R.drawable.ic_pause, 36f, "media:play") { onPlayPause?.invoke() }
+        button(next, R.drawable.ic_next, 30f, "media:next") { onNext?.invoke() }
     }
 
     fun viewFor(key: String): View? = if (!showing) null else when (key) {
@@ -460,15 +460,14 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
         this.pal = pal
         this.accent = accent
         val d = context.dp(1f)
-        // The same pill as the dock buttons, a little fuller.
+        // A soft pill with no outline, so it rests between the doors and the dock.
         background = GradientDrawable().apply {
-            cornerRadius = 24 * d
-            setColor(Look.withAlpha(pal.tile, 200))
-            setStroke(context.dpi(1f), pal.tileStroke)
+            cornerRadius = 22 * d
+            setColor(Look.withAlpha(pal.tile, 150))
         }
         openArea.background = StateListDrawable().apply {
             addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply {
-                cornerRadius = 21 * d
+                cornerRadius = 19 * d
                 setColor(Look.withAlpha(accent, 34))
                 setStroke(context.dpi(1.5f), accent)
             })
