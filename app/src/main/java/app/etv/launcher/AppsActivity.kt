@@ -1,6 +1,6 @@
 package app.etv.launcher
 
-import android.app.Activity
+import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.FocusFinder
@@ -15,9 +15,13 @@ import android.widget.TextView
 import kotlin.math.max
 
 /** Every installed app, as smaller arches. Hold OK on one for options. */
-class AppsActivity : Activity() {
+class AppsActivity : EtvActivity() {
 
-    private lateinit var prefs: Prefs
+    companion object {
+        /** Package to select when the screen opens (used when Home brings you back here). */
+        const val EXTRA_FOCUS = "app.etv.launcher.FOCUS"
+    }
+
     private lateinit var root: FrameLayout
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
@@ -26,10 +30,15 @@ class AppsActivity : Activity() {
     private lateinit var scroll: ScrollView
     private var showHidden = false
     private var lastPkg: String? = null
+    private var needsRender = true
+    private var renderedAppsVersion = -1
+    private var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = Prefs(this)
+        lastPkg = intent.getStringExtra(EXTRA_FOCUS)
+        Nav.appsPkg = lastPkg
+        prefsListener = prefs.listen { needsRender = true }
 
         root = FrameLayout(this)
         scroll = ScrollView(this).apply {
@@ -95,7 +104,14 @@ class AppsActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        render()
+        Nav.screen = Nav.SCREEN_APPS
+        // Only rebuild when apps or options changed, so coming back keeps your place without a flicker.
+        if (needsRender || renderedAppsVersion != AppRepo.version) render()
+    }
+
+    override fun onDestroy() {
+        prefsListener?.let { prefs.unlisten(it) }
+        super.onDestroy()
     }
 
     private fun render() {
@@ -107,6 +123,8 @@ class AppsActivity : Activity() {
         subtitle.setTextColor(pal.muted)
 
         val all = AppRepo.all(this)
+        renderedAppsVersion = AppRepo.version
+        needsRender = false
         val hidden = prefs.hidden
         val favs = prefs.favourites.toSet()
         val list = if (showHidden) all else all.filter { it.pkg !in hidden }
@@ -143,13 +161,18 @@ class AppsActivity : Activity() {
                 showOptions(app, app.pkg in favs, app.pkg in hidden)
                 true
             }
-            t.onFocusChangeListener = View.OnFocusChangeListener { _, has -> if (has) lastPkg = app.pkg }
+            t.onFocusChangeListener = View.OnFocusChangeListener { _, has ->
+                if (has) {
+                    lastPkg = app.pkg
+                    Nav.appsPkg = app.pkg
+                }
+            }
             grid.addView(t, lp)
             if (app.pkg == lastPkg) focusTarget = t
         }
 
         val target = focusTarget ?: grid.getChildAt(0) ?: toggle
-        target.post { target.requestFocus() }
+        target.post { target.requestFocus() } // the list scrolls to it by itself
     }
 
     /** Left / Right stop at the ends of a row of apps instead of jumping to the button at the top. */

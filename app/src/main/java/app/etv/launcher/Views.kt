@@ -22,6 +22,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -376,4 +377,41 @@ fun settingRow(
         row.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
     }
     return row
+}
+
+/**
+ * The home row's scroller. Whatever is selected always sits in the middle of the screen and the row
+ * slides underneath it. The row needs half a screen of padding at each end so the first and last
+ * apps can reach the middle too ([centrePadding]).
+ *
+ * HorizontalScrollView's own "keep the focused item visible" scrolling is switched off (it jumps
+ * instantly and fights a smooth glide); [centreOn] does all the scrolling instead.
+ */
+class CentreScrollView(context: Context) : HorizontalScrollView(context) {
+
+    private val tmp = Rect()
+
+    override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect): Int = 0
+
+    /** Puts [child] in the middle: gliding there when [smooth], otherwise at once. */
+    fun centreOn(child: View, smooth: Boolean, attempt: Int = 0) {
+        val content = if (childCount > 0) getChildAt(0) else return
+        if (width == 0 || child.width == 0 || isLayoutRequested || content.isLayoutRequested) {
+            // Not laid out yet (e.g. the row was just rebuilt): try again after layout.
+            if (attempt < 8) post { centreOn(child, false, attempt + 1) }
+            return
+        }
+        child.getDrawingRect(tmp)
+        offsetDescendantRectToMyCoords(child, tmp)
+        val maxScroll = (content.width - width).coerceAtLeast(0)
+        val target = (tmp.centerX() - width / 2).coerceIn(0, maxScroll)
+        if (target == scrollX) return
+        if (smooth) smoothScrollTo(target, 0) else scrollTo(target, 0)
+    }
+
+    /** Padding for each end of the row so an item [itemWidth] wide can sit in the middle. */
+    fun centrePadding(itemWidth: Int): Int {
+        val w = if (width > 0) width else resources.displayMetrics.widthPixels
+        return ((w - itemWidth) / 2).coerceAtLeast(0)
+    }
 }

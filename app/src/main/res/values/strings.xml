@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">eTV</string>
     <string name="helper_label">eTV Home button</string>
-    <string name="helper_description">Makes the Home button on your remote open eTV. It catches Home before the TV does and passes every other button straight on. As a backup, when the TV opens its own home screen, eTV switches straight back. It never reads what is on screen, and it keeps and sends nothing.</string>
+    <string name="helper_description">Makes the Home button on your remote open eTV. When the TV opens its own home screen, eTV switches straight back. It only sees which app is opening. It never reads what is on screen or what you press, and it keeps and sends nothing.</string>
 </resources>

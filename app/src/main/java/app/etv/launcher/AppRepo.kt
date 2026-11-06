@@ -28,7 +28,12 @@ object AppRepo {
     private var cache: List<AppEntry>? = null
     private val icons = HashMap<String, Drawable>()
 
+    /** Goes up whenever apps are installed, removed or changed, so screens know to refresh. */
+    @Volatile var version = 0
+        private set
+
     fun invalidate() {
+        version++
         cache = null
         icons.clear()
     }

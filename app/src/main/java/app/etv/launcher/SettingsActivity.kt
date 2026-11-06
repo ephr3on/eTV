@@ -1,6 +1,5 @@
 package app.etv.launcher
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -14,9 +13,8 @@ import android.widget.ScrollView
 import android.widget.TextView
 
 /** "Customise": every option changes with a single press of OK and shows instantly. */
-class SettingsActivity : Activity() {
+class SettingsActivity : EtvActivity() {
 
-    private lateinit var prefs: Prefs
     private lateinit var root: FrameLayout
     private lateinit var list: LinearLayout
     private lateinit var title: TextView
@@ -26,7 +24,6 @@ class SettingsActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = Prefs(this)
         root = FrameLayout(this)
         val scroll = ScrollView(this).apply {
             isFillViewport = true
@@ -113,7 +110,8 @@ class SettingsActivity : Activity() {
             "Blue" to "This page",
             "Options  or  Info" to "Options for the selected app",
             "Hold OK" to "Options for the selected app",
-            "Home  or  Back" to "Back to the first app",
+            "Home (from another app)" to "Back to exactly where you were",
+            "Home again,  or  Back" to "The first app",
         )
         for ((key, what) in shortcuts) shortcutLine(key, what)
 
@@ -122,7 +120,7 @@ class SettingsActivity : Activity() {
             AppRepo.tryStart(this, Intent(Settings.ACTION_SETTINGS))
         }
 
-        val footer = noteText(this, pal, "eTV 1.2")
+        val footer = noteText(this, pal, "eTV 1.3")
         list.addView(footer, LinearLayout.LayoutParams(-1, -2).apply {
             topMargin = dpi(24f)
             marginStart = dpi(18f)

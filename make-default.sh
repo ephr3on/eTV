@@ -1,13 +1,14 @@
 #!/bin/bash
 # Makes eTV the Home app on your TV and turns on the eTV Home button helper.
 # Usage:  bash make-default.sh <TV-IP>
+#         bash make-default.sh <TV-IP> --replace  (also switch the TV's own home screen off: no flash on Home)
 #         bash make-default.sh <TV-IP> --undo     (give Home back to the TV's own launcher)
 set -e
 
 TV="$1"
 MODE="$2"
 if [ -z "$TV" ]; then
-  echo "Usage: bash make-default.sh <TV-IP> [--undo]"
+  echo "Usage: bash make-default.sh <TV-IP> [--replace | --undo]"
   exit 1
 fi
 case "$TV" in *:*) ;; *) TV="$TV:5555" ;; esac
@@ -38,10 +39,14 @@ if ! tv pm list packages app.etv.launcher | grep -q "app.etv.launcher"; then
 fi
 
 SVC="app.etv.launcher/app.etv.launcher.HomeButtonService"
+# The TV's own home screens: Android TV (Philips, Sony, ...) and Google TV.
+STOCK="com.google.android.tvlauncher com.google.android.apps.tv.launcherx"
 CUR="$(tv settings get secure enabled_accessibility_services)"
 [ "$CUR" = "null" ] && CUR=""
 
 if [ "$MODE" = "--undo" ]; then
+  echo "==> Switching the TV's own home screen back on"
+  for P in $STOCK; do tv pm enable "$P" >/dev/null 2>&1 || true; done
   echo "==> Turning the eTV Home button helper off"
   NEW="$(echo "$CUR" | tr ':' '\n' | grep -v "^$SVC\$" | paste -sd: -)"
   if [ -z "$NEW" ]; then
@@ -71,6 +76,15 @@ else
 fi
 tv settings put secure enabled_accessibility_services "$NEW"
 tv settings put secure accessibility_enabled 1
+
+if [ "$MODE" = "--replace" ]; then
+  echo "==> Switching the TV's own home screen off (undo any time with --undo)"
+  for P in $STOCK; do
+    if tv pm list packages "$P" | grep -q "package:$P\$"; then
+      tv pm disable-user --user 0 "$P" >/dev/null && echo "    $P is off"
+    fi
+  done
+fi
 
 echo "==> Pressing Home to check"
 tv input keyevent KEYCODE_HOME

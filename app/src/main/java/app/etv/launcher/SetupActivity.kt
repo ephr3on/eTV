@@ -1,6 +1,5 @@
 package app.etv.launcher
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -14,16 +13,14 @@ import android.widget.TextView
 import android.widget.Toast
 
 /** "Home button": makes the remote's Home key open eTV, with the TV's own status shown live. */
-class SetupActivity : Activity() {
+class SetupActivity : EtvActivity() {
 
-    private lateinit var prefs: Prefs
     private lateinit var root: FrameLayout
     private lateinit var list: LinearLayout
     private var focusKey: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = Prefs(this)
         root = FrameLayout(this)
         val scroll = ScrollView(this).apply {
             isFillViewport = true
@@ -76,14 +73,11 @@ class SetupActivity : Activity() {
 
         // How the last Home press actually reached eTV: the quickest way to see what's going on.
         if (helperOn && prefs.homeHelper) {
-            val how = when (prefs.lastHomeVia) {
-                Prefs.HOME_VIA_KEY ->
-                    "The helper catches Home as soon as you press it, so the TV's own home screen never opens."
-                Prefs.HOME_VIA_SCREEN ->
-                    "This TV doesn't hand the Home button to the helper, so its own home screen can show for a " +
-                        "moment before eTV comes back. If Home ever stays there, try Step 2 below, or " +
-                        "turn the helper off and on again in Accessibility."
-                else -> "Press Home on the remote once to test it."
+            val how = if (prefs.lastHomeVia == Prefs.HOME_VIA_SCREEN) {
+                "Working: when the TV opens its own home screen, eTV switches straight back. It can show " +
+                    "for a moment first. For no flash at all, switch the TV's own home screen off (see the README)."
+            } else {
+                "Press Home on the remote once to test it."
             }
             add(noteText(this, pal, how), top = 6f)
         }
@@ -92,9 +86,9 @@ class SetupActivity : Activity() {
             noteText(
                 this, pal,
                 "Philips and many other TVs open their own home screen when you press Home, even after you " +
-                    "choose another one. The eTV Home button helper catches the Home button before the TV does " +
-                    "and opens eTV. Every other button goes straight through. It never reads what's on screen, " +
-                    "and it keeps and sends nothing.",
+                    "choose another one. The eTV Home button helper notices that and switches straight back " +
+                    "to eTV. It only sees which app is opening. It never reads what's on screen or what you " +
+                    "press, and it keeps and sends nothing.",
             ),
             top = 14f,
         )

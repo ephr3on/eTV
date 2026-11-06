@@ -1,16 +1,17 @@
 package app.etv.launcher
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
 import android.media.tv.TvContract
 import android.media.tv.TvInputInfo
 import android.media.tv.TvInputManager
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.FocusFinder
 import android.view.Gravity
@@ -18,7 +19,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -28,22 +28,35 @@ import java.util.Collections
 import java.util.Date
 import java.util.Locale
 
-/** The home screen. */
-class MainActivity : Activity() {
+/**
+ * The home screen.
+ *
+ * How Home behaves:
+ * - Coming back from another app, Home returns you to exactly where you were in eTV
+ *   (the same app on the row, the same dock button, or the same app in All apps).
+ * - Pressing Home again while you're already in eTV goes to the first app.
+ * The selected app always sits in the middle of the screen; the row slides under it.
+ */
+class MainActivity : EtvActivity() {
 
     companion object {
         /** Set when the Home button helper brought us back. */
         const val EXTRA_FROM_HOME_KEY = "app.etv.launcher.FROM_HOME_KEY"
+
+        /** Dock button order. */
+        private const val DOCK_SEARCH = 0
+        private const val DOCK_INPUTS = 1
+        private const val DOCK_APPS = 2
+        private const val DOCK_SETTINGS = 3
     }
 
-    private lateinit var prefs: Prefs
     private lateinit var root: FrameLayout
     private lateinit var arches: ArchBackgroundView
     private lateinit var greeting: TextView
     private lateinit var clock: TextView
     private lateinit var date: TextView
     private lateinit var dots: DotsView
-    private lateinit var rowScroll: HorizontalScrollView
+    private lateinit var rowScroll: CentreScrollView
     private lateinit var row: LinearLayout
     private lateinit var emptyHint: TextView
     private lateinit var moveHint: TextView
@@ -52,9 +65,23 @@ class MainActivity : Activity() {
     private var pal: Palette = Look.palettes[0]
     private var accent: Int = Look.accents[0].second
     private var movingPkg: String? = null
-    private var lastFocusedPkg: String? = null
+
+    /** The app last selected on the row: Up from the dock goes back to it. */
+    private var lastRowPkg: String? = null
+
     private var isResumedNow = false
     private var needsRender = true
+    private var renderedAppsVersion = -1
+    private var tileW = 0
+
+    /** A view eTV is about to select itself; focus changes on the way there aren't "where you were". */
+    private var pendingFocus: View? = null
+    private var rebuilding = false
+
+    /** The next row selection should snap to the middle at once instead of gliding there. */
+    private var snapNext = false
+
+    private var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
     private val timeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) = updateClock()
@@ -63,13 +90,17 @@ class MainActivity : Activity() {
     private val packageReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             AppRepo.invalidate()
-            if (isResumedNow) rebuildRow() else needsRender = true
+            if (isResumedNow) {
+                render()
+                applyFocus()
+            } else {
+                needsRender = true
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = Prefs(this)
         buildViews()
         setContentView(root)
 
@@ -81,20 +112,54 @@ class MainActivity : Activity() {
             addDataScheme("package")
         }
         registerSystemReceiver(packageReceiver, pkgFilter)
+        // Customise and All apps change options while this screen is hidden; redraw on return.
+        prefsListener = prefs.listen { if (!isResumedNow) needsRender = true }
+
+        handleHome(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleHome(intent)
+    }
+
+    /** Home was pressed (or eTV was opened): decide where to land. */
+    private fun handleHome(intent: Intent?) {
+        if (movingPkg != null) endMove()
+        // On TVs that open their own home screen first (Philips), Home pressed in eTV also makes eTV
+        // leave for a moment before the helper brings it back. That's "Home again", not a return.
+        val bounced = intent?.getBooleanExtra(EXTRA_FROM_HOME_KEY, false) == true &&
+            SystemClock.elapsedRealtime() - Nav.leftAt < 2_000L &&
+            SystemClock.elapsedRealtime() - AppRepo.lastLaunchAt > 2_000L // not an app you just opened
+        if (Nav.away && !bounced) {
+            // Back from another app: exactly where you were.
+            if (Nav.screen == Nav.SCREEN_APPS) openAllApps(Nav.appsPkg, instant = true)
+        } else {
+            // Already in eTV: Home goes to the first app.
+            Nav.screen = Nav.SCREEN_HOME
+            Nav.homeKey = null
+        }
+        Nav.away = false
+        if (isResumedNow) applyFocus()
     }
 
     override fun onResume() {
         super.onResume()
         isResumedNow = true
+        Nav.away = false
+        Nav.screen = Nav.SCREEN_HOME
+
         val f = IntentFilter().apply {
             addAction(Intent.ACTION_TIME_TICK)
             addAction(Intent.ACTION_TIME_CHANGED)
             addAction(Intent.ACTION_TIMEZONE_CHANGED)
         }
         registerSystemReceiver(timeReceiver, f)
-        // Settings may have changed while we were away; re-applying is cheap.
-        render()
-        needsRender = false
+
+        // Only redraw when something actually changed, so coming back is instant and nothing jumps.
+        if (needsRender || renderedAppsVersion != AppRepo.version) render() else updateClock()
+        applyFocus()
 
         // Back home normally: nothing left to learn about the TV's own home screen.
         if (prefs.learningHome) prefs.learnUntil = 0L
@@ -117,14 +182,8 @@ class MainActivity : Activity() {
 
     override fun onDestroy() {
         try { unregisterReceiver(packageReceiver) } catch (_: Exception) {}
+        prefsListener?.let { prefs.unlisten(it) }
         super.onDestroy()
-    }
-
-    /** Pressing Home while already home brings you back to the first app. */
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        goToFirstApp()
     }
 
     private fun registerSystemReceiver(r: BroadcastReceiver, f: IntentFilter) {
@@ -172,15 +231,14 @@ class MainActivity : Activity() {
         header.addView(dots, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dpi(16f) })
         root.addView(header, FrameLayout.LayoutParams(-1, -2, Gravity.TOP).apply { topMargin = dpi(70f) })
 
-        // The row of arched apps.
+        // The row of arched apps. The selected one stays in the middle; the row slides under it.
         row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
+            gravity = Gravity.BOTTOM
             clipChildren = false
             clipToPadding = false
-            setPadding(dpi(48f), dpi(24f), dpi(48f), dpi(4f))
         }
-        rowScroll = HorizontalScrollView(this).apply {
+        rowScroll = CentreScrollView(this).apply {
             isFillViewport = true
             isHorizontalScrollBarEnabled = false
             clipChildren = false
@@ -188,8 +246,12 @@ class MainActivity : Activity() {
             isFocusable = false
             descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
             overScrollMode = View.OVER_SCROLL_NEVER
+            isSmoothScrollingEnabled = true
         }
         rowScroll.addView(row, FrameLayout.LayoutParams(-2, -1))
+        rowScroll.addOnLayoutChangeListener { _, l, _, r, _, oldL, _, oldR, _ ->
+            if (r - l != oldR - oldL) updateRowPadding()
+        }
         root.addView(rowScroll, FrameLayout.LayoutParams(-1, dpi(190f), Gravity.TOP).apply { topMargin = dpi(250f) })
 
         emptyHint = TextView(this).apply {
@@ -219,7 +281,7 @@ class MainActivity : Activity() {
         root.addView(dock, FrameLayout.LayoutParams(-1, dpi(64f), Gravity.BOTTOM).apply { bottomMargin = dpi(28f) })
     }
 
-    private fun dockButton(text: String, iconRes: Int, onClick: () -> Unit): TextView {
+    private fun dockButton(index: Int, text: String, iconRes: Int, onClick: () -> Unit): TextView {
         val colors = focusColors(pal.bg, pal.label)
         val icon = getDrawable(iconRes)?.mutate()?.apply { setTintList(colors) }
         return TextView(this).apply {
@@ -235,48 +297,105 @@ class MainActivity : Activity() {
             isFocusable = true
             isClickable = true
             setOnClickListener { onClick() }
-            setOnFocusChangeListener { v, has -> v.softScale(if (has) 1.06f else 1f) }
+            setOnFocusChangeListener { v, has ->
+                v.softScale(if (has) 1.06f else 1f)
+                if (has) remember(v, "dock:$index")
+            }
         }
+    }
+
+    // ---------------- where you are ----------------
+
+    /** Records the selected item as "where you were", unless eTV is moving the selection itself. */
+    private fun remember(v: View, key: String) {
+        if (rebuilding) return
+        val p = pendingFocus
+        if (p != null && p !== v) return
+        pendingFocus = null
+        Nav.homeKey = key
+        if (key.startsWith("app:")) lastRowPkg = key.substring(4)
+    }
+
+    private fun viewFor(key: String?): View? = when {
+        key == null -> null
+        key.startsWith("app:") -> tiles().firstOrNull { it.app.pkg == key.substring(4) }
+        key.startsWith("dock:") -> dock.getChildAt(key.substring(5).toIntOrNull() ?: -1)
+        else -> null
+    }
+
+    private fun firstView(): View? = row.getChildAt(0) ?: dock.getChildAt(DOCK_APPS)
+
+    /** Selects the remembered item (or the first app), centring it on the row. */
+    private fun applyFocus() {
+        val target = viewFor(Nav.homeKey) ?: firstView() ?: return
+        select(target)
+    }
+
+    private fun select(target: View) {
+        pendingFocus = target
+        target.post {
+            if (target.isFocused) {
+                if (target.parent === row) rowScroll.centreOn(target, smooth = false)
+            } else {
+                snapNext = true
+                target.requestFocus()
+                snapNext = false
+            }
+            if (pendingFocus === target) pendingFocus = null
+        }
+    }
+
+    /** Back (and Home while already in eTV) goes to the first app. */
+    private fun goToFirstApp() {
+        if (movingPkg != null) endMove()
+        Nav.homeKey = null
+        applyFocus()
     }
 
     // ---------------- rendering ----------------
 
     private fun render() {
-        pal = Look.palette(prefs)
-        accent = Look.accent(prefs)
+        rebuilding = true
+        try {
+            pal = Look.palette(prefs)
+            accent = Look.accent(prefs)
 
-        window.setBackgroundDrawable(ColorDrawable(pal.bg))
-        root.setBackgroundColor(pal.bg)
+            window.setBackgroundDrawable(ColorDrawable(pal.bg))
+            root.setBackgroundColor(pal.bg)
 
-        arches.visibility = if (prefs.arches) View.VISIBLE else View.GONE
-        arches.outer = pal.frame1
-        arches.innerColor = pal.frame2
-        arches.invalidate()
+            arches.visibility = if (prefs.arches) View.VISIBLE else View.GONE
+            arches.outer = pal.frame1
+            arches.innerColor = pal.frame2
+            arches.invalidate()
 
-        greeting.setTextColor(accent)
-        clock.setTextColor(pal.text)
-        date.setTextColor(pal.muted)
-        date.visibility = if (prefs.showDate) View.VISIBLE else View.GONE
-        dots.dot = pal.dot
-        dots.accent = accent
-        dots.invalidate()
-        emptyHint.setTextColor(pal.muted)
-        moveHint.setTextColor(accent)
+            greeting.setTextColor(accent)
+            clock.setTextColor(pal.text)
+            date.setTextColor(pal.muted)
+            date.visibility = if (prefs.showDate) View.VISIBLE else View.GONE
+            dots.dot = pal.dot
+            dots.accent = accent
+            dots.invalidate()
+            emptyHint.setTextColor(pal.muted)
+            moveHint.setTextColor(accent)
 
-        dock.removeAllViews()
-        val gap = dpi(14f)
-        fun addDock(v: View) {
-            val lp = LinearLayout.LayoutParams(-2, dpi(44f))
-            if (dock.childCount > 0) lp.marginStart = gap
-            dock.addView(v, lp)
+            dock.removeAllViews()
+            val gap = dpi(14f)
+            fun addDock(v: View) {
+                val lp = LinearLayout.LayoutParams(-2, dpi(44f))
+                if (dock.childCount > 0) lp.marginStart = gap
+                dock.addView(v, lp)
+            }
+            addDock(dockButton(DOCK_SEARCH, "Search", R.drawable.ic_search) { openSearch() })
+            addDock(dockButton(DOCK_INPUTS, "Inputs", R.drawable.ic_inputs) { showInputs() })
+            addDock(dockButton(DOCK_APPS, "All apps", R.drawable.ic_apps) { openAllApps() })
+            addDock(dockButton(DOCK_SETTINGS, "Settings", R.drawable.ic_settings) { openCustomise() })
+
+            updateClock()
+            buildRow()
+        } finally {
+            rebuilding = false
         }
-        addDock(dockButton("Search", R.drawable.ic_search) { openSearch() })
-        addDock(dockButton("Inputs", R.drawable.ic_inputs) { showInputs() })
-        addDock(dockButton("All apps", R.drawable.ic_apps) { openAllApps() })
-        addDock(dockButton("Settings", R.drawable.ic_settings) { openCustomise() })
-
-        updateClock()
-        rebuildRow()
+        needsRender = false
     }
 
     private fun updateClock() {
@@ -303,8 +422,19 @@ class MainActivity : Activity() {
     private fun tiles(): List<ArchTile> =
         (0 until row.childCount).mapNotNull { row.getChildAt(it) as? ArchTile }
 
-    private fun rebuildRow(focusPkg: String? = lastFocusedPkg) {
+    /** Rebuilds the row of apps. Callers choose what to select afterwards. */
+    private fun rebuildRow() {
+        rebuilding = true
+        try {
+            buildRow()
+        } finally {
+            rebuilding = false
+        }
+    }
+
+    private fun buildRow() {
         val all = AppRepo.all(this)
+        renderedAppsVersion = AppRepo.version
         val byPkg = all.associateBy { it.pkg }
 
         if (!prefs.hasFavourites) {
@@ -320,19 +450,30 @@ class MainActivity : Activity() {
         val gap = dpi(15f * scale)
         for ((i, app) in apps.withIndex()) {
             val t = ArchTile(this, app, pal, accent, scale, prefs.iconStyle, prefs.nameMode)
+            tileW = t.tileW
             val lp = LinearLayout.LayoutParams(t.tileW, t.tileH)
             if (i > 0) lp.marginStart = gap
             t.setOnClickListener { AppRepo.launch(this, app) }
             t.setOnLongClickListener { showTileOptions(app); true }
-            t.onFocusChangeListener = View.OnFocusChangeListener { _, has ->
-                if (has) lastFocusedPkg = app.pkg
+            t.onFocusChangeListener = View.OnFocusChangeListener { v, has ->
+                if (has) {
+                    // Glide to the middle when moving with the remote; snap when eTV selects it.
+                    rowScroll.centreOn(v, smooth = !snapNext && !rebuilding)
+                    remember(v, "app:${app.pkg}")
+                }
             }
+            if (app.pkg == movingPkg) t.moving = true
             row.addView(t, lp)
         }
+        if (tileW == 0) tileW = dpi(96f * scale)
+        updateRowPadding()
         emptyHint.visibility = if (apps.isEmpty()) View.VISIBLE else View.GONE
+    }
 
-        val target: View? = tiles().firstOrNull { it.app.pkg == focusPkg } ?: row.getChildAt(0) ?: dock.getChildAt(2)
-        target?.post { target.requestFocus() }
+    /** Half a screen of space at each end, so the first and last apps can reach the middle. */
+    private fun updateRowPadding() {
+        val side = rowScroll.centrePadding(tileW)
+        row.setPaddingRelative(side, dpi(24f), side, dpi(4f))
     }
 
     // ---------------- app options & moving ----------------
@@ -343,21 +484,28 @@ class MainActivity : Activity() {
             when (which) {
                 0 -> AppRepo.launch(this, app)
                 1 -> startMove(app)
-                2 -> {
-                    prefs.favourites = prefs.favourites.filter { it != app.pkg }
-                    lastFocusedPkg = null
-                    rebuildRow()
-                }
+                2 -> removeFromHome(app)
                 3 -> AppRepo.openAppInfo(this, app.pkg)
             }
         }
+    }
+
+    /** Removes an app from the row and selects its neighbour, so you stay in the same spot. */
+    private fun removeFromHome(app: AppEntry) {
+        val list = prefs.favourites
+        val i = list.indexOf(app.pkg)
+        val rest = list.filter { it != app.pkg }
+        prefs.favourites = rest
+        Nav.homeKey = rest.getOrNull(i.coerceAtMost(rest.size - 1).coerceAtLeast(0))?.let { "app:$it" }
+        rebuildRow()
+        applyFocus()
     }
 
     private fun startMove(app: AppEntry) {
         movingPkg = app.pkg
         tiles().firstOrNull { it.app.pkg == app.pkg }?.let {
             it.moving = true
-            it.requestFocus()
+            select(it)
         }
         moveHint.text = "Moving ${app.label}   ·   Left / Right to place it, OK when done"
         moveHint.visibility = View.VISIBLE
@@ -371,8 +519,9 @@ class MainActivity : Activity() {
         if (i < 0 || j < 0 || j >= list.size) return
         Collections.swap(list, i, j)
         prefs.favourites = list
-        rebuildRow(m)
-        tiles().firstOrNull { it.app.pkg == m }?.moving = true
+        rebuildRow()
+        Nav.homeKey = "app:$m"
+        applyFocus()
     }
 
     private fun endMove() {
@@ -381,6 +530,8 @@ class MainActivity : Activity() {
         tiles().firstOrNull { it.app.pkg == m }?.moving = false
         moveHint.visibility = View.GONE
     }
+
+    // ---------------- remote ----------------
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (movingPkg != null) {
@@ -431,21 +582,21 @@ class MainActivity : Activity() {
             }
             View.FOCUS_UP -> {
                 if (inDock) {
-                    val back = tiles().firstOrNull { it.app.pkg == lastFocusedPkg } ?: tiles().firstOrNull()
-                    back?.requestFocus()
+                    val back = tiles().firstOrNull { it.app.pkg == lastRowPkg } ?: tiles().firstOrNull()
+                    back?.let { select(it) }
                 }
                 true
             }
-            else -> inDock // Down: from the row, the normal move into the dock
+            else -> {
+                // Down from the row lands on the dock button under the middle of the screen.
+                if (inRow && dock.childCount > 0) {
+                    val middle = dock.getChildAt(DOCK_APPS) ?: dock.getChildAt(0)
+                    val fromNearest = FocusFinder.getInstance().findNextFocus(root, f, View.FOCUS_DOWN)
+                    select(if (fromNearest?.parent === dock) fromNearest else middle)
+                }
+                true
+            }
         }
-    }
-
-    /** Back (and Home while already home) returns to the first app. */
-    private fun goToFirstApp() {
-        if (movingPkg != null) endMove()
-        lastFocusedPkg = null
-        rowScroll.smoothScrollTo(0, 0)
-        (row.getChildAt(0) ?: dock.getChildAt(0))?.requestFocus()
     }
 
     @Deprecated("Deprecated in Java")
@@ -458,19 +609,18 @@ class MainActivity : Activity() {
      * Remote keys (Philips layout in mind):
      * 1–9 open the app in that spot, 0 opens All apps, Options/Menu or Info opens the selected
      * app's options (or Customise), the colour keys are shortcuts, Sources opens Inputs.
+     * Volume, mute and the TV's own keys are never touched.
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             goToFirstApp() // a launcher has nowhere to go back to
             return true
         }
-        if (event.repeatCount > 0 && keyCode != KeyEvent.KEYCODE_DPAD_LEFT && keyCode != KeyEvent.KEYCODE_DPAD_RIGHT) {
-            return super.onKeyDown(keyCode, event)
-        }
+        if (event.repeatCount > 0) return super.onKeyDown(keyCode, event)
         when (keyCode) {
             in KeyEvent.KEYCODE_1..KeyEvent.KEYCODE_9 -> {
                 val tile = tiles().getOrNull(keyCode - KeyEvent.KEYCODE_1) ?: return true
-                tile.requestFocus()
+                select(tile)
                 AppRepo.launch(this, tile.app)
                 return true
             }
@@ -487,7 +637,13 @@ class MainActivity : Activity() {
         return super.onKeyDown(keyCode, event)
     }
 
-    private fun openAllApps() = startActivity(Intent(this, AppsActivity::class.java))
+    private fun openAllApps(focusPkg: String? = null, instant: Boolean = false) {
+        val i = Intent(this, AppsActivity::class.java)
+        if (focusPkg != null) i.putExtra(AppsActivity.EXTRA_FOCUS, focusPkg)
+        if (instant) i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(i)
+    }
+
     private fun openCustomise() = startActivity(Intent(this, SettingsActivity::class.java))
 
     // ---------------- dock actions ----------------

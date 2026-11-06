@@ -107,11 +107,33 @@ class Prefs(context: Context) {
 
     companion object {
         const val HOME_VIA_NONE = 0
-        /** The helper caught the Home button itself: the TV's home screen never opened. */
-        const val HOME_VIA_KEY = 1
         /** The TV's home screen opened and the helper switched back. */
         const val HOME_VIA_SCREEN = 2
     }
+
+    // Where you were (see Nav). Saved only when eTV goes into the background.
+    val placeScreen: Int get() = int("placeScreen", Nav.SCREEN_HOME)
+    val placeHome: String? get() = sp.getString("placeHome", null)
+    val placeApps: String? get() = sp.getString("placeApps", null)
+
+    fun savePlace(screen: Int, home: String?, apps: String?) {
+        sp.edit().putInt("placeScreen", screen).putString("placeHome", home).putString("placeApps", apps).apply()
+    }
+
+    /** Calls [onChange] when an option that changes how a screen looks is changed. */
+    fun listen(onChange: () -> Unit): SharedPreferences.OnSharedPreferenceChangeListener {
+        val l = SharedPreferences.OnSharedPreferenceChangeListener { _, key -> if (key in LOOK_KEYS) onChange() }
+        sp.registerOnSharedPreferenceChangeListener(l)
+        return l
+    }
+
+    fun unlisten(l: SharedPreferences.OnSharedPreferenceChangeListener) =
+        sp.unregisterOnSharedPreferenceChangeListener(l)
+
+    private val LOOK_KEYS = setOf(
+        "accent", "palette", "greeting", "clock24", "showDate", "tileSize", "nameMode", "iconStyle",
+        "arches", "favs", "hidden",
+    )
 
     /** Home screens learnt on this TV, on top of the ones Android reports. */
     var extraHomes: Set<String>

@@ -9,7 +9,7 @@ Made with the Philips remote in mind (works with any Android TV remote).
 
 | On the home screen | What it does |
 |---|---|
-| Left / Right | Move between apps (the selected arch fills with your highlight colour) |
+| Left / Right | Move between apps. The selected app always sits in the middle; the row slides under it |
 | OK | Open the app |
 | Hold OK, or Options / Info | Options for the selected app: Open, Move, Remove from home, App info |
 | Move → Left / Right → OK | Re-order the home row |
@@ -19,8 +19,8 @@ Made with the Philips remote in mind (works with any Android TV remote).
 | Yellow | Search |
 | Blue, or Options with nothing selected | Customise |
 | Down | Dock: Search, Inputs, All apps, Settings |
-| Home | Opens eTV; pressed in eTV, jumps back to the first app |
-| Back | Back to the first app |
+| Home, from another app | Back to exactly where you were: the same app on the row, dock button, or place in All apps |
+| Home again (already in eTV), or Back | The first app |
 
 Left / Right stop at the ends of the home row and the dock, and Up from the dock returns to the app you were on.
 
@@ -42,13 +42,12 @@ The first time eTV opens, it shows the **Home button** screen (later: Settings �
 Choose *Turn on the Home button helper*, pick **eTV Home button** in the Accessibility list that opens
 (on Philips usually under Accessibility → Services), switch it on and confirm.
 
-From then on the helper catches the Home button before the TV does and opens eTV, so the TV's own home screen
-never opens. Every other button goes straight through. As a backup, on TVs that don't hand Home to helpers,
-it switches straight back whenever the TV's own home screen opens. It never reads what's on screen, and it keeps
-and sends nothing. You can pause it from the same screen, which also shows how your last Home press was caught.
+From then on, whenever the TV opens its own home screen, eTV switches straight back. It can show for a
+moment first. The helper only sees which app is opening, never what's on screen or which buttons you press,
+and it keeps and sends nothing. You can pause it from the same screen.
 
-Updating from 1.1: if Home still flashes the TV's home screen after updating, switch the helper off and on
-once in Accessibility so the TV picks up its new Home button permission.
+(Version 1.2 caught the Home button itself, but on Android TV that stops held Volume up / down from
+repeating, so 1.3 went back to this. For no flash at all, use option 2 with `--replace`.)
 
 If Home still lands somewhere else, choose *Teach eTV your TV's home screen* and press Home within 45 seconds.
 eTV remembers that screen and switches away from it from then on.
@@ -60,6 +59,10 @@ bash make-default.sh <TV-IP>
 ```
 
 It sets eTV as the Home app and turns the helper on. `bash make-default.sh <TV-IP> --undo` turns the helper off again.
+
+For no flash at all: `bash make-default.sh <TV-IP> --replace` also switches the TV's own home screen off, so Home
+can only go to eTV. Things that live in that screen (its recommendations and its settings panel) are gone while
+it's off. `--undo` switches it back on.
 `install.sh` runs this automatically after installing.
 
 **3. If the TV asks** which app to use for Home, choose **eTV → Always**.
@@ -119,6 +122,7 @@ app/src/main/java/app/etv/launcher/
   SetupActivity.kt      Home button setup with live status
   HomeButtonService.kt  the Home button helper (accessibility service)
   HomeSetup.kt          who answers Home, and whether eTV is in charge
+  Nav.kt                where you were, so Home can bring you back there
   BootReceiver.kt       opens eTV when the TV starts
   Views.kt              arch shape, arch tile, background arches, door studs, rows, focus helpers
   AppRepo.kt            lists, caches and launches apps
