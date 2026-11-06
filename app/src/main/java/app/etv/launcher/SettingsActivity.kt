@@ -68,6 +68,7 @@ class SettingsActivity : EtvActivity() {
         window.setBackgroundDrawable(ColorDrawable(pal.bg))
         root.setBackgroundColor(pal.bg)
         title.setTextColor(pal.text)
+        title.typeface = Fonts.display(this, 500)
         list.removeAllViews()
 
         section("Home button")
@@ -112,14 +113,19 @@ class SettingsActivity : EtvActivity() {
         }
 
         section("Look")
-        val accentName = Look.accents[prefs.accent.coerceIn(0, Look.accents.size - 1)].first
-        row("accent", "Highlight colour", accentName, swatch = accent) {
-            prefs.accent = next(Look.accents, prefs.accent)
+        val theme = Look.theme(prefs)
+        row("theme", "Theme", theme.name, rerender = false) { pickTheme() }
+        row("accent", "Highlight colour", Look.accentName(prefs), swatch = accent) {
+            prefs.accent = next(theme.accents, prefs.accent)
         }
-        row("palette", "Background", pal.name, swatch = pal.tile) {
-            prefs.palette = next(Look.palettes, prefs.palette)
+        if (theme.palettes.size > 1) {
+            row("palette", "Background", pal.name, swatch = pal.tile) {
+                prefs.palette = next(theme.palettes, prefs.palette)
+            }
         }
-        row("arches", "Arches in the background", if (prefs.arches) "On" else "Off") { prefs.arches = !prefs.arches }
+        if (theme.layout == Layout.CLASSIC || theme.layout == Layout.DOORWAY) {
+            row("arches", "Arches in the background", if (prefs.arches) "On" else "Off") { prefs.arches = !prefs.arches }
+        }
 
         section("Top of the screen")
         val greetings = listOf("Arabic and English", "Arabic", "English", "Off")
@@ -136,8 +142,11 @@ class SettingsActivity : EtvActivity() {
         row("style", "Inside each arch", styles[prefs.iconStyle.coerceIn(0, 1)]) {
             prefs.iconStyle = next(styles, prefs.iconStyle)
         }
-        val names = listOf("Always", "Only on the selected app", "Never")
-        row("names", "App names", names[prefs.nameMode.coerceIn(0, 2)]) { prefs.nameMode = next(names, prefs.nameMode) }
+        if (theme.layout != Layout.DOORWAY && theme.layout != Layout.LANTERN) {
+            // Doorway and Lantern name the selected app under the doors instead.
+            val names = listOf("Always", "Only on the selected app", "Never")
+            row("names", "App names", names[prefs.nameMode.coerceIn(0, 2)]) { prefs.nameMode = next(names, prefs.nameMode) }
+        }
         val hiddenCount = prefs.hidden.size
         row("hidden", "Hidden apps", if (hiddenCount == 0) "None" else "$hiddenCount hidden", rerender = false) {
             editHidden()
@@ -274,6 +283,26 @@ class SettingsActivity : EtvActivity() {
             }
         }
         b.show()
+    }
+
+    /** Every theme with a line about it; picking one shows it at once. */
+    private fun pickTheme() {
+        val labels = Look.themes.map { "${it.name}  —  ${it.blurb}" }.toTypedArray()
+        AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+            .setTitle("Theme")
+            .setSingleChoiceItems(labels, prefs.theme.coerceIn(0, Look.themes.size - 1)) { d, which ->
+                if (which != prefs.theme) {
+                    // Each theme has its own colours: start from its first ones.
+                    prefs.accent = 0
+                    prefs.palette = 0
+                    prefs.theme = which
+                }
+                d.dismiss()
+                focusKey = "theme"
+                render()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun confirmReset() {

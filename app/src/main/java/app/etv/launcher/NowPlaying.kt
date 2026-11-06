@@ -470,18 +470,18 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
             })
             addState(intArrayOf(), GradientDrawable().apply { setColor(Color.TRANSPARENT) })
         }
-        art.fill = pal.tileInner
+        art.fill = pal.surface
         art.stroke = pal.tileStroke
         art.invalidate()
         appLine.setTextColor(accent)
         title.setTextColor(pal.text)
         time.setTextColor(pal.muted)
-        val iconColors = focusColors(pal.bg, pal.text)
+        val iconColors = focusColors(pal.onAccent, pal.text)
         for (b in listOf(prev, next)) {
-            b.background = studBackground(pal.tileInner, Color.TRANSPARENT, accent)
+            b.background = studBackground(pal.surface, Color.TRANSPARENT, accent)
             b.imageTintList = iconColors
         }
-        play.background = studBackground(pal.tileInner, pal.tileStroke, accent)
+        play.background = studBackground(pal.surface, pal.tileStroke, accent)
         play.imageTintList = iconColors
     }
 

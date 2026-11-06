@@ -13,12 +13,17 @@ class Prefs(context: Context) {
     private fun bool(key: String, def: Boolean) = sp.getBoolean(key, def)
     private fun putBool(key: String, v: Boolean) = sp.edit().putBoolean(key, v).apply()
 
-    /** Index into [Look.accents]. */
+    /** Index into [Look.themes]: 0 Classic, 1 Doorway, 2 Riad, 3 Cartouche, 4 Lantern. */
+    var theme: Int
+        get() = int("theme", 0)
+        set(v) = putInt("theme", v)
+
+    /** Index into the current theme's highlight colours. */
     var accent: Int
         get() = int("accent", 0)
         set(v) = putInt("accent", v)
 
-    /** Index into [Look.palettes]. */
+    /** Index into the current theme's backgrounds. */
     var palette: Int
         get() = int("palette", 0)
         set(v) = putInt("palette", v)
@@ -132,7 +137,7 @@ class Prefs(context: Context) {
 
     private val LOOK_KEYS = setOf(
         "accent", "palette", "greeting", "clock24", "showDate", "tileSize", "nameMode", "iconStyle",
-        "arches", "favs", "hidden", "updateCode", "nowPlaying",
+        "arches", "favs", "hidden", "updateCode", "nowPlaying", "theme",
     )
 
     /** Show the "now playing" card when another app plays in the background. */

@@ -22,6 +22,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -89,36 +90,78 @@ fun archPath(path: Path, oval: RectF, l: Float, t: Float, r: Float, b: Float, bo
     path.close()
 }
 
+/** A cartouche: a tall capsule, both ends fully round. */
+fun cartouchePath(path: Path, oval: RectF, l: Float, t: Float, r: Float, b: Float) {
+    path.reset()
+    val rad = (r - l) / 2f
+    oval.set(l, t, r, b)
+    path.addRoundRect(oval, rad, rad, Path.Direction.CW)
+}
+
 class ArchDrawable(private val density: Float) : Drawable() {
     var fill = 0
     var stroke = 0
     var strokeWidth = density
     var inner = 0
+    var shape = TileShape.ARCH
+
+    /** A light frame between the outline and the door (Riad); 0 for none. */
+    var ring = 0
+    var ringWidth = 3f * density
+
+    /** Three brass studs near the top (Riad); 0 for none. */
+    var studs = 0
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val path = Path()
     private val oval = RectF()
 
+    private fun shapePath(l: Float, t: Float, r: Float, b: Float, br: Float) {
+        if (shape == TileShape.CARTOUCHE) cartouchePath(path, oval, l, t, r, b)
+        else archPath(path, oval, l, t, r, b, br)
+    }
+
     override fun draw(canvas: Canvas) {
         val b: Rect = bounds
         val half = strokeWidth / 2f
         val br = 8f * density
-        archPath(path, oval, b.left + half, b.top + half, b.right - half, b.bottom - half, br)
+        var inset = half
+        if (ring != 0) {
+            // The whitewashed frame, then the door inside it.
+            shapePath(b.left + half, b.top + half, b.right - half, b.bottom - half, br)
+            paint.style = Paint.Style.FILL
+            paint.color = ring
+            canvas.drawPath(path, paint)
+            inset = half + ringWidth
+        }
+        shapePath(b.left + inset, b.top + inset, b.right - inset, b.bottom - inset, br * 0.8f)
         paint.style = Paint.Style.FILL
         paint.color = fill
         canvas.drawPath(path, paint)
-        if (strokeWidth > 0f && stroke != 0) {
-            paint.style = Paint.Style.STROKE
-            paint.strokeWidth = strokeWidth
-            paint.color = stroke
-            canvas.drawPath(path, paint)
-        }
+
         if (inner != 0) {
-            val inset = 5f * density
-            archPath(path, oval, b.left + inset, b.top + inset, b.right - inset, b.bottom - inset, br * 0.6f)
+            val i = inset + 4.5f * density
+            shapePath(b.left + i, b.top + i, b.right - i, b.bottom - i, br * 0.6f)
             paint.style = Paint.Style.STROKE
             paint.strokeWidth = 0.75f * density
             paint.color = inner
+            canvas.drawPath(path, paint)
+        }
+
+        if (studs != 0) {
+            paint.style = Paint.Style.FILL
+            paint.color = studs
+            val cy = b.top + inset + (b.width() * 0.22f)
+            val cx = b.exactCenterX()
+            val gap = 7f * density
+            for (k in -1..1) canvas.drawCircle(cx + k * gap, cy, 1.6f * density, paint)
+        }
+
+        if (strokeWidth > 0f && stroke != 0) {
+            shapePath(b.left + half, b.top + half, b.right - half, b.bottom - half, br)
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = strokeWidth
+            paint.color = stroke
             canvas.drawPath(path, paint)
         }
     }
@@ -130,7 +173,11 @@ class ArchDrawable(private val density: Float) : Drawable() {
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }
 
-/** One app, shaped like an arched door. Fills with the accent colour when selected. */
+/**
+ * One app, shaped like an arched door (or a cartouche). Fills with the accent colour when
+ * selected, or, when [fillOnFocus] is off (Riad), keeps its colour and gains an accent ring.
+ * [grow] is how much it grows when selected; 0 leaves its size to the caller (Lantern).
+ */
 @SuppressLint("ViewConstructor")
 class ArchTile(
     context: Context,
@@ -140,6 +187,9 @@ class ArchTile(
     scale: Float,
     iconStyle: Int,
     private val nameMode: Int,
+    private val shape: TileShape = TileShape.ARCH,
+    private val fillOnFocus: Boolean = true,
+    private val grow: Float = 1.12f,
 ) : FrameLayout(context) {
 
     val tileW: Int = context.dpi(96f * scale)
@@ -158,6 +208,7 @@ class ArchTile(
         }
 
     init {
+        arch.shape = shape
         background = arch
         isFocusable = true
         isClickable = true
@@ -212,36 +263,49 @@ class ArchTile(
     override fun onFocusChanged(gainFocus: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect)
         applyState()
-        softScale(if (gainFocus) 1.12f else 1f)
+        if (grow > 0f) softScale(if (gainFocus) grow else 1f)
     }
 
     private fun applyState() {
         val focused = isFocused
         val d = resources.displayMetrics.density
+        arch.ring = pal.ring
+        arch.studs = pal.studs
         when {
             moving -> {
                 arch.fill = pal.tile
                 arch.stroke = accent
                 arch.strokeWidth = 2.5f * d
                 arch.inner = Look.withAlpha(accent, 110)
-                letter.setTextColor(accent)
-                label.setTextColor(accent)
+                letter.setTextColor(if (pal.ring != 0) pal.tileText else accent)
+                label.setTextColor(if (pal.ring != 0) pal.tileLabel else accent)
             }
-            focused -> {
+            focused && fillOnFocus -> {
                 arch.fill = accent
                 arch.stroke = accent
                 arch.strokeWidth = d
-                arch.inner = Look.withAlpha(pal.bg, 80)
-                letter.setTextColor(pal.bg)
-                label.setTextColor(pal.bg)
+                arch.inner = Look.withAlpha(pal.onAccent, 80)
+                arch.ring = 0
+                arch.studs = 0
+                letter.setTextColor(pal.onAccent)
+                label.setTextColor(pal.onAccent)
+            }
+            focused -> {
+                // The door keeps its colour; a ring in the highlight colour marks it.
+                arch.fill = pal.tile
+                arch.stroke = accent
+                arch.strokeWidth = 3f * d
+                arch.inner = pal.tileInner
+                letter.setTextColor(pal.tileText)
+                label.setTextColor(pal.tileText)
             }
             else -> {
                 arch.fill = pal.tile
                 arch.stroke = pal.tileStroke
                 arch.strokeWidth = d
                 arch.inner = pal.tileInner
-                letter.setTextColor(pal.text)
-                label.setTextColor(pal.label)
+                letter.setTextColor(pal.tileText)
+                label.setTextColor(pal.tileLabel)
             }
         }
         label.typeface = Fonts.body(context, if (focused || moving) 500 else 400)
@@ -369,7 +433,7 @@ fun settingRow(
         setPadding(context.dpi(18f), 0, context.dpi(18f), 0)
         isFocusable = true
         isClickable = true
-        background = pillBackground(context, 14f, Color.TRANSPARENT, pal.tile, accent)
+        background = pillBackground(context, 14f, Color.TRANSPARENT, pal.card, accent)
     }
     val name = TextView(context).apply {
         text = label
@@ -403,3 +467,94 @@ fun settingRow(
     return row
 }
 
+
+/**
+ * A horizontal row that keeps the selected item in the middle of the screen (Lantern).
+ * HorizontalScrollView's own scrolling is switched off; [centreOn] does it all.
+ */
+class CentreScrollView(context: Context) : HorizontalScrollView(context) {
+    private val tmp = Rect()
+
+    override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect): Int = 0
+
+    fun centreOn(child: View, smooth: Boolean, attempt: Int = 0) {
+        val content = if (childCount > 0) getChildAt(0) else return
+        if (width == 0 || child.width == 0 || isLayoutRequested || content.isLayoutRequested) {
+            if (attempt < 8) post { centreOn(child, false, attempt + 1) }
+            return
+        }
+        child.getDrawingRect(tmp)
+        offsetDescendantRectToMyCoords(child, tmp)
+        val maxScroll = (content.width - width).coerceAtLeast(0)
+        val target = (tmp.centerX() - width / 2).coerceIn(0, maxScroll)
+        if (target == scrollX) return
+        if (smooth) smoothScrollTo(target, 0) else scrollTo(target, 0)
+    }
+
+    /** Padding for each end of the row so an item [itemWidth] wide can sit in the middle. */
+    fun centrePadding(itemWidth: Int): Int {
+        val w = if (width > 0) width else resources.displayMetrics.widthPixels
+        return ((w - itemWidth) / 2).coerceAtLeast(0)
+    }
+}
+
+/** Riad: a thin band of blue-and-white star tiles along the floor. */
+class TileBandView(context: Context) : View(context) {
+    var tileColor = 0
+    var ground = 0
+    var centre = 0
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val path = Path()
+
+    override fun onDraw(canvas: Canvas) {
+        val h = height.toFloat()
+        canvas.drawColor(ground)
+        val s = h * 0.46f
+        var x = h / 2f
+        while (x < width + h) {
+            val cy = h / 2f
+            paint.color = tileColor
+            // An eight-pointed star: two squares, one turned 45 degrees.
+            canvas.drawRect(x - s / 2, cy - s / 2, x + s / 2, cy + s / 2, paint)
+            path.reset()
+            val r = s / 2f * 1.414f
+            path.moveTo(x, cy - r)
+            path.lineTo(x + r, cy)
+            path.lineTo(x, cy + r)
+            path.lineTo(x - r, cy)
+            path.close()
+            canvas.drawPath(path, paint)
+            paint.color = centre
+            canvas.drawCircle(x, cy, h * 0.1f, paint)
+            x += h
+        }
+    }
+}
+
+/** Cartouche: a quiet frieze of papyrus stems along the floor. */
+class PapyrusView(context: Context) : View(context) {
+    var color = 0
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val path = Path()
+
+    override fun onDraw(canvas: Canvas) {
+        val d = resources.displayMetrics.density
+        val h = height.toFloat()
+        val step = 18f * d
+        var x = step / 2f
+        paint.color = color
+        while (x < width) {
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = 0.8f * d
+            canvas.drawLine(x, h, x, h * 0.4f, paint)
+            paint.style = Paint.Style.FILL
+            path.reset()
+            path.moveTo(x, h * 0.4f)
+            path.lineTo(x - 3.5f * d, 0f)
+            path.lineTo(x + 3.5f * d, 0f)
+            path.close()
+            canvas.drawPath(path, paint)
+            x += step
+        }
+    }
+}
