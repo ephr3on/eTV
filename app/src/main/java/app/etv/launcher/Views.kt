@@ -287,10 +287,23 @@ class ArchBackgroundView(context: Context) : View(context) {
     }
 }
 
-/** A row of door studs, the middle one in the accent colour. */
+/**
+ * A row of door studs, the middle one in the accent colour. While something plays in the
+ * background they show how far along it is instead: studs light up one by one in the accent
+ * colour, the current one glowing in as it fills.
+ */
 class DotsView(context: Context) : View(context) {
     var dot = 0
     var accent = 0
+
+    /** 0–1 while something plays, -1 for the plain studs. */
+    var progress = -1f
+        set(v) {
+            if (v != field) {
+                field = v
+                invalidate()
+            }
+        }
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -300,11 +313,23 @@ class DotsView(context: Context) : View(context) {
     override fun onDraw(canvas: Canvas) {
         val d = resources.displayMetrics.density
         val cy = height / 2f
-        for (i in 0 until 9) {
+        val n = 9
+        for (i in 0 until n) {
             val cx = 5f * d + i * 15f * d
-            val center = i == 4
-            paint.color = if (center) accent else dot
-            canvas.drawCircle(cx, cy, if (center) 2.3f * d else 1.5f * d, paint)
+            if (progress < 0f) {
+                val center = i == 4
+                paint.color = if (center) accent else dot
+                canvas.drawCircle(cx, cy, if (center) 2.3f * d else 1.5f * d, paint)
+            } else {
+                // How lit this stud is: 0 = not yet, 1 = passed.
+                val lit = (progress * n - i).coerceIn(0f, 1f)
+                paint.color = dot
+                canvas.drawCircle(cx, cy, 1.7f * d, paint)
+                if (lit > 0f) {
+                    paint.color = Look.withAlpha(accent, (60 + 195 * lit).toInt())
+                    canvas.drawCircle(cx, cy, (1.7f + 0.6f * lit) * d, paint)
+                }
+            }
         }
     }
 }

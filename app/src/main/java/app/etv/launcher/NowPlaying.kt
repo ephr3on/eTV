@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Outline
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
@@ -27,8 +26,6 @@ import android.service.notification.NotificationListenerService
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
-import android.view.ViewOutlineProvider
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -265,38 +262,88 @@ class NowPlayingWatcher(private val context: Context, private val onChange: (Now
     }
 }
 
-/** A thin rounded progress line. */
-class ProgressLine(context: Context) : View(context) {
-    var track = Color.GRAY
-    var fill = Color.WHITE
-    var fraction = 0f
+/**
+ * Artwork in a small Sidi Bou Said doorway: the picture is clipped to an arch, like the scene
+ * through an open door. Without artwork, the app's icon sits in the doorway instead.
+ */
+class ArchArtView(context: Context) : View(context) {
+    var bitmap: Bitmap? = null
         set(v) {
-            val c = v.coerceIn(0f, 1f)
-            if (c != field) {
-                field = c
+            if (v !== field) {
+                field = v
                 invalidate()
             }
         }
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val rect = RectF()
+    var fallback: Drawable? = null
+        set(v) {
+            if (v !== field) {
+                field = v
+                invalidate()
+            }
+        }
+    var dimmed = false
+        set(v) {
+            if (v != field) {
+                field = v
+                invalidate()
+            }
+        }
+    var fill = Color.DKGRAY
+    var stroke = Color.GRAY
+
+    private val path = android.graphics.Path()
+    private val oval = RectF()
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
+    private val matrix = android.graphics.Matrix()
 
     override fun onDraw(canvas: Canvas) {
-        val r = height / 2f
-        paint.color = track
-        rect.set(0f, 0f, width.toFloat(), height.toFloat())
-        canvas.drawRoundRect(rect, r, r, paint)
-        if (fraction > 0f) {
-            paint.color = fill
-            rect.set(0f, 0f, width * fraction, height.toFloat())
-            canvas.drawRoundRect(rect, r, r, paint)
+        val d = resources.displayMetrics.density
+        val w = width.toFloat()
+        val h = height.toFloat()
+        archPath(path, oval, 0.5f * d, 0.5f * d, w - 0.5f * d, h - 0.5f * d, 4f * d)
+
+        canvas.save()
+        canvas.clipPath(path)
+        paint.style = Paint.Style.FILL
+        paint.color = fill
+        canvas.drawRect(0f, 0f, w, h, paint)
+        val bmp = bitmap
+        if (bmp != null && bmp.width > 0 && bmp.height > 0) {
+            // Centre-crop the artwork into the doorway.
+            val scale = maxOf(w / bmp.width, h / bmp.height)
+            matrix.reset()
+            matrix.setScale(scale, scale)
+            matrix.postTranslate((w - bmp.width * scale) / 2f, (h - bmp.height * scale) / 2f)
+            paint.alpha = if (dimmed) 120 else 255
+            canvas.drawBitmap(bmp, matrix, paint)
+            paint.alpha = 255
+        } else {
+            fallback?.let { icon ->
+                val s = (minOf(w, h) * 0.56f).toInt()
+                val l = ((w - s) / 2f).toInt()
+                val t = ((h - s) / 2f + h * 0.08f).toInt()
+                icon.setBounds(l, t, l + s, t + s)
+                icon.alpha = if (dimmed) 130 else 255
+                icon.draw(canvas)
+                icon.alpha = 255
+            }
         }
+        canvas.restore()
+
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = d
+        paint.color = stroke
+        canvas.drawPath(path, paint)
     }
 }
 
 /**
- * The "now playing" card: artwork, app, title, a progress line and three controls.
- * It fades in when something plays and fades out when it's gone. Every size inside it is fixed,
- * so its once-a-second progress update never makes the rest of the home screen re-lay out.
+ * The "now playing" bar. It sits between the clock and the doors, styled like the dock: a small
+ * arched window with the artwork, the app and title, the time, and three round controls.
+ * The door studs under the date show how far along it is ([onProgress]).
+ *
+ * Every size inside it is fixed, so its once-a-second update never makes the rest of the home
+ * screen re-lay out.
  */
 @SuppressLint("ViewConstructor")
 class NowPlayingCard(context: Context) : LinearLayout(context) {
@@ -306,30 +353,27 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
     var onPlayPause: (() -> Unit)? = null
     var onNext: (() -> Unit)? = null
 
-    /** Called when one of the card's parts is selected, with a key for "where you were". */
+    /** Called when one of the bar's parts is selected, with a key for "where you were". */
     var onFocused: ((View, String) -> Unit)? = null
+
+    /** How far along playback is (0–1), or -1 when unknown or hidden. Drives the door studs. */
+    var onProgress: ((Float) -> Unit)? = null
 
     val openArea = LinearLayout(context)
     val prev = ImageView(context)
     val play = ImageView(context)
     val next = ImageView(context)
 
-    private val artBox = FrameLayout(context)
-    private val art = ImageView(context)
-    private val artFallback = ImageView(context)
-    private val appIcon = ImageView(context)
-    private val appName = TextView(context)
-    private val stateText = TextView(context)
+    private val art = ArchArtView(context)
+    private val appLine = TextView(context)
     private val title = TextView(context)
-    private val subtitle = TextView(context)
-    private val progress = ProgressLine(context)
     private val time = TextView(context)
-    private val progressRow = LinearLayout(context)
 
     private var pal: Palette = Look.palettes[0]
     private var accent = Color.WHITE
     private var data: NowPlaying? = null
     private var showing = false
+    private var lastProgress = -2f
 
     private val ticker = object : Runnable {
         override fun run() {
@@ -339,92 +383,51 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
     }
 
     init {
-        orientation = VERTICAL
+        orientation = HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
         visibility = View.GONE
         alpha = 0f
-        val p = context.dpi(12f)
-        setPadding(p, p, p, context.dpi(10f))
+        setPadding(context.dpi(6f), 0, context.dpi(8f), 0)
         clipChildren = false
         clipToPadding = false
 
-        // Top: artwork and what's playing. OK here opens the app.
+        // Artwork, app and title. OK here opens the app on its player.
         openArea.orientation = HORIZONTAL
         openArea.gravity = Gravity.CENTER_VERTICAL
         openArea.isFocusable = true
         openArea.isClickable = true
-        val ip = context.dpi(4f)
-        openArea.setPadding(ip, ip, ip, ip)
+        openArea.setPadding(context.dpi(4f), 0, context.dpi(12f), 0)
         openArea.setOnClickListener { onOpen?.invoke() }
+        openArea.setOnFocusChangeListener { v, has -> if (has) onFocused?.invoke(v, "media:open") }
+        openArea.addView(art, LayoutParams(context.dpi(30f), context.dpi(38f)))
 
-        artBox.outlineProvider = object : ViewOutlineProvider() {
-            override fun getOutline(view: View, outline: Outline) {
-                outline.setRoundRect(0, 0, view.width, view.height, context.dp(9f))
-            }
-        }
-        artBox.clipToOutline = true
-        art.scaleType = ImageView.ScaleType.CENTER_CROP
-        artFallback.scaleType = ImageView.ScaleType.FIT_CENTER
-        val fb = context.dpi(26f)
-        artBox.addView(art, FrameLayout.LayoutParams(-1, -1))
-        artBox.addView(artFallback, FrameLayout.LayoutParams(fb, fb, Gravity.CENTER))
-        openArea.addView(artBox, LayoutParams(context.dpi(92f), context.dpi(52f)))
-
-        val info = LinearLayout(context).apply { orientation = VERTICAL }
-        val appLine = LinearLayout(context).apply {
-            orientation = HORIZONTAL
+        val text = LinearLayout(context).apply {
+            orientation = VERTICAL
             gravity = Gravity.CENTER_VERTICAL
         }
-        val ai = context.dpi(13f)
-        appLine.addView(appIcon, LayoutParams(ai, ai).apply { marginEnd = context.dpi(5f) })
-        appName.typeface = Fonts.body(context, 500)
-        appName.sp(10.5f)
-        appName.letterSpacing = 0.04f
-        appName.maxLines = 1
-        appName.ellipsize = TextUtils.TruncateAt.END
-        appLine.addView(appName, LayoutParams(0, -2, 1f))
-        stateText.typeface = Fonts.body(context, 300)
-        stateText.sp(10.5f)
-        stateText.maxLines = 1
-        stateText.gravity = Gravity.END
-        appLine.addView(stateText, LayoutParams(context.dpi(62f), -2))
-        info.addView(appLine, LayoutParams(-1, -2))
-
-        title.typeface = Fonts.body(context, 500)
-        title.sp(13.5f)
+        appLine.typeface = Fonts.body(context, 500)
+        appLine.sp(9.5f)
+        appLine.letterSpacing = 0.12f
+        appLine.maxLines = 1
+        appLine.ellipsize = TextUtils.TruncateAt.END
+        text.addView(appLine, LayoutParams(-1, -2))
+        title.typeface = Fonts.body(context, 400)
+        title.sp(13f)
         title.maxLines = 1
         title.ellipsize = TextUtils.TruncateAt.END
-        info.addView(title, LayoutParams(-1, -2).apply { topMargin = context.dpi(3f) })
+        title.includeFontPadding = false
+        text.addView(title, LayoutParams(-1, -2).apply { topMargin = context.dpi(2f) })
+        openArea.addView(text, LayoutParams(context.dpi(196f), -2).apply { marginStart = context.dpi(10f) })
+        addView(openArea, LayoutParams(-2, context.dpi(42f)))
 
-        subtitle.typeface = Fonts.body(context, 300)
-        subtitle.sp(11.5f)
-        subtitle.maxLines = 1
-        subtitle.ellipsize = TextUtils.TruncateAt.END
-        info.addView(subtitle, LayoutParams(-1, -2).apply { topMargin = context.dpi(1f) })
-        openArea.addView(info, LayoutParams(0, -2, 1f).apply { marginStart = context.dpi(11f) })
-        addView(openArea, LayoutParams(-1, -2))
-
-        // Middle: progress.
-        progressRow.orientation = HORIZONTAL
-        progressRow.gravity = Gravity.CENTER_VERTICAL
-        progressRow.addView(progress, LayoutParams(0, context.dpi(3f), 1f))
         time.typeface = Fonts.body(context, 300)
         time.sp(10.5f)
-        time.gravity = Gravity.END
+        time.gravity = Gravity.CENTER
         time.maxLines = 1
         time.fontFeatureSettings = "tnum"
-        progressRow.addView(time, LayoutParams(context.dpi(84f), -2).apply { marginStart = context.dpi(8f) })
-        addView(progressRow, LayoutParams(-1, context.dpi(16f)).apply {
-            topMargin = context.dpi(8f)
-            marginStart = context.dpi(4f)
-            marginEnd = context.dpi(4f)
-        })
+        addView(time, LayoutParams(context.dpi(74f), -2))
 
-        // Bottom: previous, play / pause, next.
-        val controls = LinearLayout(context).apply {
-            orientation = HORIZONTAL
-            gravity = Gravity.CENTER
-            clipChildren = false
-        }
+        // Previous, play / pause, next: round, like the studs on a door.
         fun button(v: ImageView, iconRes: Int, size: Float, key: String, action: () -> Unit) {
             v.setImageResource(iconRes)
             v.scaleType = ImageView.ScaleType.CENTER
@@ -432,27 +435,22 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
             v.isClickable = true
             v.setOnClickListener { action() }
             v.setOnFocusChangeListener { view, has ->
-                view.softScale(if (has) 1.08f else 1f)
+                view.softScale(if (has) 1.1f else 1f)
                 if (has) onFocused?.invoke(view, key)
             }
-            val s = context.dpi(size)
-            controls.addView(v, LayoutParams(s, s).apply {
-                marginStart = context.dpi(8f)
-                marginEnd = context.dpi(8f)
-            })
+            val sz = context.dpi(size)
+            addView(v, LayoutParams(sz, sz).apply { marginStart = context.dpi(5f) })
         }
-        button(prev, R.drawable.ic_prev, 38f, "media:prev") { onPrev?.invoke() }
-        button(play, R.drawable.ic_pause, 46f, "media:play") { onPlayPause?.invoke() }
-        button(next, R.drawable.ic_next, 38f, "media:next") { onNext?.invoke() }
-        openArea.setOnFocusChangeListener { v, has -> if (has) onFocused?.invoke(v, "media:open") }
-        addView(controls, LayoutParams(-1, -2).apply { topMargin = context.dpi(6f) })
+        button(prev, R.drawable.ic_prev, 32f, "media:prev") { onPrev?.invoke() }
+        button(play, R.drawable.ic_pause, 38f, "media:play") { onPlayPause?.invoke() }
+        button(next, R.drawable.ic_next, 32f, "media:next") { onNext?.invoke() }
     }
 
     fun viewFor(key: String): View? = if (!showing) null else when (key) {
         "media:open" -> openArea
-        "media:prev" -> prev.takeIf { it.visibility == View.VISIBLE }
+        "media:prev" -> prev.takeIf { it.isFocusable }
         "media:play" -> play
-        "media:next" -> next.takeIf { it.visibility == View.VISIBLE }
+        "media:next" -> next.takeIf { it.isFocusable }
         else -> null
     }
 
@@ -462,58 +460,57 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
         this.pal = pal
         this.accent = accent
         val d = context.dp(1f)
+        // The same pill as the dock buttons, a little fuller.
         background = GradientDrawable().apply {
-            cornerRadius = 20 * d
-            setColor(Look.withAlpha(pal.tile, 238))
+            cornerRadius = 24 * d
+            setColor(Look.withAlpha(pal.tile, 200))
             setStroke(context.dpi(1f), pal.tileStroke)
         }
         openArea.background = StateListDrawable().apply {
             addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply {
-                cornerRadius = 13 * d
-                setColor(Look.withAlpha(accent, 36))
+                cornerRadius = 21 * d
+                setColor(Look.withAlpha(accent, 34))
                 setStroke(context.dpi(1.5f), accent)
             })
-            addState(intArrayOf(), GradientDrawable().apply {
-                cornerRadius = 13 * d
-                setColor(Color.TRANSPARENT)
-            })
+            addState(intArrayOf(), GradientDrawable().apply { setColor(Color.TRANSPARENT) })
         }
-        artBox.setBackgroundColor(pal.tileInner)
-        appName.setTextColor(accent)
-        stateText.setTextColor(pal.muted)
+        art.fill = pal.tileInner
+        art.stroke = pal.tileStroke
+        art.invalidate()
+        appLine.setTextColor(accent)
         title.setTextColor(pal.text)
-        subtitle.setTextColor(pal.label)
         time.setTextColor(pal.muted)
-        progress.track = pal.tileStroke
-        progress.fill = accent
-        progress.invalidate()
         val iconColors = focusColors(pal.bg, pal.text)
         for (b in listOf(prev, next)) {
-            b.background = pillBackground(context, 19f, Color.TRANSPARENT, accent)
+            b.background = studBackground(pal.tileInner, Color.TRANSPARENT, accent)
             b.imageTintList = iconColors
         }
-        play.background = pillBackground(context, 23f, pal.tileStroke, accent)
+        play.background = studBackground(pal.tileInner, pal.tileStroke, accent)
         play.imageTintList = iconColors
     }
 
-    /** Shows (or updates) the card. */
+    /** A round stud: filled softly, accent when selected. */
+    private fun studBackground(fill: Int, stroke: Int, focus: Int) = StateListDrawable().apply {
+        addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply {
+            shape = GradientDrawable.OVAL
+            setColor(focus)
+        })
+        addState(intArrayOf(), GradientDrawable().apply {
+            shape = GradientDrawable.OVAL
+            setColor(fill)
+            if (stroke != Color.TRANSPARENT) setStroke(context.dpi(1f), stroke)
+        })
+    }
+
+    /** Shows (or updates) the bar. */
     fun show(np: NowPlaying) {
         data = np
-        setIfChanged(appName, np.app.uppercase())
-        setIfChanged(stateText, if (np.buffering) "Loading" else if (np.playing) "Playing" else "Paused")
-        setIfChanged(title, np.title)
-        setIfChanged(subtitle, np.subtitle)
-        subtitle.visibility = if (np.subtitle.isEmpty()) View.INVISIBLE else View.VISIBLE
-
-        if (appIcon.drawable !== np.appIcon) appIcon.setImageDrawable(np.appIcon)
-        if (np.art != null) {
-            if ((art.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap !== np.art) art.setImageBitmap(np.art)
-            artFallback.visibility = View.GONE
-        } else {
-            art.setImageDrawable(null)
-            if (artFallback.drawable !== np.appIcon) artFallback.setImageDrawable(np.appIcon)
-            artFallback.visibility = View.VISIBLE
-        }
+        val state = if (np.buffering) "LOADING" else if (np.playing) "PLAYING" else "PAUSED"
+        setIfChanged(appLine, "${np.app.uppercase()}  ·  $state")
+        setIfChanged(title, if (np.subtitle.isNotEmpty()) "${np.title}  —  ${np.subtitle}" else np.title)
+        art.bitmap = np.art
+        art.fallback = np.appIcon
+        art.dimmed = !np.playing
 
         val playIcon = if (np.playing) R.drawable.ic_pause else R.drawable.ic_play
         if (play.tag != playIcon) {
@@ -523,35 +520,33 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
         play.contentDescription = if (np.playing) "Pause" else "Play"
         setShown(prev, np.canPrev)
         setShown(next, np.canNext)
-
-        val live = np.duration <= 0
-        progressRow.visibility = if (live && np.positionNow() < 0) View.INVISIBLE else View.VISIBLE
         updateProgress()
 
         if (!showing) {
             showing = true
             animate().cancel()
             visibility = View.VISIBLE
-            translationY = -context.dp(8f)
-            animate().alpha(1f).translationY(0f).setDuration(260).start()
+            translationY = context.dp(6f)
+            animate().alpha(1f).translationY(0f).setDuration(280).start()
         }
         removeCallbacks(ticker)
         if (np.playing) postDelayed(ticker, 1_000L)
     }
 
-    /** Fades the card away. */
+    /** Fades the bar away. */
     fun hide() {
         removeCallbacks(ticker)
         data = null
+        report(-1f)
         if (!showing) return
         showing = false
         animate().cancel()
-        animate().alpha(0f).translationY(-context.dp(8f)).setDuration(320)
+        animate().alpha(0f).translationY(context.dp(6f)).setDuration(340)
             .withEndAction { if (!showing) visibility = View.GONE }
             .start()
     }
 
-    /** Stops the once-a-second progress update (eTV is in the background). */
+    /** Stops the once-a-second update (eTV is in the background). */
     fun pause() = removeCallbacks(ticker)
 
     fun resume() {
@@ -569,11 +564,18 @@ class NowPlayingCard(context: Context) : LinearLayout(context) {
         val np = data ?: return
         val pos = np.positionNow()
         if (np.duration > 0 && pos >= 0) {
-            progress.fraction = pos.toFloat() / np.duration
+            report(pos.toFloat() / np.duration)
             setIfChanged(time, "${fmt(pos)} / ${fmt(np.duration)}")
         } else {
-            progress.fraction = 0f
+            report(-1f)
             setIfChanged(time, if (pos > 0) fmt(pos) else "Live")
+        }
+    }
+
+    private fun report(p: Float) {
+        if (p != lastProgress) {
+            lastProgress = p
+            onProgress?.invoke(p)
         }
     }
 
