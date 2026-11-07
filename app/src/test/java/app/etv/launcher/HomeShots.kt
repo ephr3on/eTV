@@ -84,6 +84,35 @@ class HomeShots {
         File(out, "bounds-$name.txt").writeText(sb.toString())
     }
 
+    /** Lantern's ways of showing the prayer times, side by side. */
+    @Test
+    fun lanternPrayers() {
+        fakeApps()
+        val ctx = RuntimeEnvironment.getApplication()
+        val lantern = Look.themes.indexOfFirst { it.layout == Layout.LANTERN }
+        for (style in 0..3) {
+            for (lang in listOf(0, 2)) {
+                try {
+                    val p = Prefs(ctx)
+                    p.theme = lantern
+                    p.setupShown = true
+                    p.athanSetupShown = true
+                    p.place = Place("Hannover, Lower Saxony, Germany", 52.37052, 9.73322, "Europe/Berlin")
+                    p.prayerSource = PrayerStore.SRC_DEVICE
+                    p.athanOn = false
+                    p.greeting = lang
+                    p.lanternPrayers = style
+                    val c = Robolectric.buildActivity(MainActivity::class.java).setup()
+                    shadowOf(Looper.getMainLooper()).idle()
+                    save(c.get().window.decorView, "lantern-style$style-lang$lang")
+                    c.pause().stop().destroy()
+                } catch (e: Throwable) {
+                    File(out, "error-lantern-$style-$lang.txt").writeText(e.stackTraceToString())
+                }
+            }
+        }
+    }
+
     @Test
     fun home() {
         fakeApps()
@@ -100,6 +129,7 @@ class HomeShots {
                     p.prayerSource = PrayerStore.SRC_DEVICE
                     p.athanOn = false // no downloads, no alarms
                     p.greeting = lang
+                    p.lanternPrayers = 0
                     val c = Robolectric.buildActivity(MainActivity::class.java).setup()
                     shadowOf(Looper.getMainLooper()).idle()
                     save(c.get().window.decorView, "home-${i}-${t.name.lowercase()}-lang$lang")

@@ -16,7 +16,7 @@ your apps, home row and settings stay the same.
 | **Doorway** | Calmer: the prayer times down one top corner and Search / Inputs / All apps / Settings as round buttons down the other, framing the greeting and clock; the selected app named under the doors, Now playing at the foot |
 | **Riad** | Daylight: blue doors with brass studs on a whitewashed wall, tabs along the top, an **Inputs** row (Live TV, HDMI) on the home screen, a band of blue-and-white tiles |
 | **Cartouche** | Pharaonic: lapis and gold, apps as cartouches, the clock in a cartouche, a side rail for the sections, a papyrus frieze (Reem Kufi type) |
-| **Lantern** | One door at a time: the selected app large and lit in the middle, its neighbours fading away; along the top, the clock and the buttons mirror each other on either side of the prayer times, all on one line |
+| **Lantern** | One door at a time: the selected app large and lit in the middle, its neighbours fading away; along the top, the clock and the buttons mirror each other on either side of the prayer times, which show one at a time the same way (the next prayer large, its neighbours fading), all on one line |
 
 The remote works the same everywhere: arrows move within the doors, buttons, inputs or Now playing, stop at the
 ends of a row, and moving back into the doors returns to the app you were on.
@@ -98,6 +98,7 @@ Everything is in **Settings → Athan**:
 | Athan volume | As the TV is, or a set level (it un-mutes the TV and puts the volume back afterwards) |
 | Listen now | Plays the next athan and the dua straight away |
 | On the home screen | Prayer times, sunrise, Hijri date (and a ±day adjustment for the month's start) |
+| In Lantern | One at a time (the next prayer large, its neighbours fading; the default), a line through the day, the sun's path over the lit door, or at the foot of the screen |
 
 The times from aladhan.com or the mosque are kept on the TV, so they work without internet; whenever they're
 missing, the TV works them out itself with the same method. Makkah's athan and Makkah's Fajr athan are inside eTV;

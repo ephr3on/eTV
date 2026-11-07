@@ -790,8 +790,14 @@ class MainActivity : EtvActivity() {
                 colors = intArrayOf(Look.withAlpha(accent, 0x18), Look.withAlpha(accent, 0))
             }
         }
+        // How the prayer times show: on the top line (a line or one at a time), as the sun's path
+        // over the lit door, or at the foot of the screen (the doors then move up a little).
+        val style = if (prefs.showPrayers) prefs.lanternPrayers else 0
+        val atFoot = style == 3
+        val lift = if (atFoot) 24f else 0f
+
         // The glow sits behind the lit door, centred on it.
-        root.addView(glow, at(dpi(560f), dpi(480f), Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 24f))
+        root.addView(glow, at(dpi(560f), dpi(480f), Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 24f - lift))
 
         // The top: the clock on the left, the buttons on the right, mirror images of each other
         // (same margin, about the same width), with the prayer times between them. All three sit
@@ -821,21 +827,41 @@ class MainActivity : EtvActivity() {
         addToDock(roundButton(3, "Settings", R.drawable.ic_settings, false, updateReady) { openCustomise() }, s, s, LANTERN_BUTTON_GAP)
         dockAppsIndex = 2
         root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = axis - LANTERN_BUTTON / 2f, end = LANTERN_MARGIN))
-        // The prayer times above the lit door, their line on the axis.
         prayerStrip(columnDp = 72f)?.let {
-            root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.LINE_DP))
+            when (style) {
+                // The sun's path: its highest point on the axis, curving down either side of the lit door.
+                1 -> {
+                    it.form = PrayerShape.ARC
+                    root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.ARC_TOP_DP))
+                }
+                // One at a time: the next prayer's time on the axis, its neighbours fading either side.
+                2 -> {
+                    it.form = PrayerShape.CAROUSEL
+                    root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.CAROUSEL_AXIS_DP))
+                }
+                // At the foot, under the app's name.
+                3 -> root.addView(it, at(-2, -2, Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, bottom = 6f))
+                // A line through the day, on the axis.
+                else -> root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.LINE_DP))
+            }
         }
 
         val scroller = CentreScrollView(this)
         makeRow(scroller, Gravity.BOTTOM, 0f, 0f)
-        root.addView(rowScroll, at(-1, dpi(330f), Gravity.TOP, top = 64f))
+        root.addView(rowScroll, at(-1, dpi(330f), Gravity.TOP, top = 64f - lift))
         scroller.addOnLayoutChangeListener { _, l, _, r, _, oldL, _, oldR, _ ->
             if (r - l != oldR - oldL) scroller.post { centreLantern(false) }
         }
-        root.addView(captionBlock(28f), at(-1, -2, Gravity.TOP, top = 398f))
-        root.addView(emptyHint, at(-1, -2, Gravity.TOP, top = 200f))
-        root.addView(moveHint, at(-1, -2, Gravity.TOP, top = 452f))
-        root.addView(nowCard, at(-2, dpi(NOW_BAR_DP), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, bottom = 14f))
+        root.addView(captionBlock(28f), at(-1, -2, Gravity.TOP, top = 398f - lift))
+        root.addView(emptyHint, at(-1, -2, Gravity.TOP, top = 200f - lift))
+        if (atFoot) {
+            // The foot holds the prayer times, so Now playing and the move hint take the free top centre.
+            root.addView(moveHint, at(-1, -2, Gravity.TOP, top = LANTERN_AXIS - 10f))
+            root.addView(nowCard, at(-2, dpi(NOW_BAR_DP), Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - NOW_BAR_DP / 2f))
+        } else {
+            root.addView(moveHint, at(-1, -2, Gravity.TOP, top = 452f))
+            root.addView(nowCard, at(-2, dpi(NOW_BAR_DP), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, bottom = 14f))
+        }
     }
 
     /** Lantern: the selected door full size in the middle, its neighbours smaller and dimmer. */

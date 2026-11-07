@@ -106,6 +106,10 @@ internal fun SettingsActivity.athanPane() {
     group("On the home screen")
     row("prayers", "Prayer times", if (p.showPrayers) "Shown" else "Hidden") { p.showPrayers = !p.showPrayers }
     row("sunrise", "Sunrise among them", if (p.showSunrise) "Shown" else "Hidden") { p.showSunrise = !p.showSunrise }
+    val lanternNames = listOf("A line through the day", "The sun's path", "One at a time", "At the foot")
+    row("lanternprayers", "In Lantern", lanternNames[p.lanternPrayers.coerceIn(0, 3)]) {
+        p.lanternPrayers = (p.lanternPrayers + 1) % lanternNames.size
+    }
     row("hijri", "Hijri date, under the date", if (p.showHijri) "Shown" else "Hidden") { p.showHijri = !p.showHijri }
     if (p.showHijri) {
         val adjust = listOf(0, 1, 2, -2, -1)
