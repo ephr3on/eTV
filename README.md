@@ -16,7 +16,7 @@ your apps, home row and settings stay the same.
 | **Doorway** | Calmer: the prayer times down one top corner and Search / Inputs / All apps / Settings as round buttons down the other, framing the greeting and clock; the selected app named under the doors, Now playing at the foot |
 | **Riad** | Daylight: blue doors with brass studs on a whitewashed wall, tabs along the top, an **Inputs** row (Live TV, HDMI) on the home screen, a band of blue-and-white tiles |
 | **Cartouche** | Pharaonic: lapis and gold, apps as cartouches, the clock in a cartouche, a side rail for the sections, a papyrus frieze (Reem Kufi type) |
-| **Lantern** | One door at a time: the selected app large and lit in the middle, its neighbours fading away; along the top, the clock and the buttons mirror each other on either side of the prayer times, which show one at a time the same way (the next prayer large, its neighbours fading), all on one line |
+| **Lantern** | One door at a time: the selected app large and lit in the middle, its neighbours fading away; along the top, the clock and the buttons mirror each other on either side of the prayer times, which show one at a time the same way (the next prayer large, its neighbours fading); the prayer names, the clock and the buttons all start on one top line |
 
 The remote works the same everywhere: arrows move within the doors, buttons, inputs or Now playing, stop at the
 ends of a row, and moving back into the doors returns to the app you were on.
@@ -49,7 +49,7 @@ Channel + / − (or Page Up / Down) jump a screen at a time.
 **Customise** (the Settings button) changes, instantly: highlight colour (Whitewash, Sand, Bougainvillea, Sea glass),
 background (Sea blue, Night, Dusk), background arches, greeting (Arabic and English / Arabic / English / off),
 12- or 24-hour clock, date, arch size, app icon or letter inside each arch, when app names show, hidden apps,
-and resetting the home row. It also lists the remote shortcuts and opens the Home button setup.
+which of the buttons show (Search, Inputs, All apps; Settings is always there, and the remote's shortcuts work either way), and resetting the home row. It also lists the remote shortcuts and opens the Home button setup.
 
 Options that are simply on or off have a switch; a line under each option says what it does; options with a
 **›** open a panel at the right edge, in the theme's colours, where the current choice has a filled doorway.
