@@ -227,6 +227,9 @@ class MainActivity : EtvActivity() {
         // Back home normally: nothing left to learn about the TV's own home screen.
         if (prefs.learningHome) prefs.learnUntil = 0L
 
+        // Home during the athan: the athan screen comes straight back.
+        if (AthanService.isPlaying) showAthanScreen()
+
         // Prayer times: keep them fresh, the athan alarm set, and the chosen recordings on the TV.
         PrayerSync.refreshIfDue(this)
         AthanScheduler.schedule(this)
@@ -988,6 +991,16 @@ class MainActivity : EtvActivity() {
 
     // ---------------- prayer times ----------------
 
+    private fun showAthanScreen() {
+        try {
+            startActivity(
+                Intent(this, AthanActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT),
+            )
+        } catch (_: Exception) {
+        }
+    }
+
     private fun hijriDate(): String? {
         if (!prefs.showHijri) return null
         val tz = Days.tz(prefs.place)
@@ -1377,10 +1390,9 @@ class MainActivity : EtvActivity() {
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            // Back during the athan ends it.
+            // During the athan, the athan screen belongs in front.
             if (AthanService.isPlaying) {
-                AthanService.stop()
-                updateClock()
+                showAthanScreen()
                 return true
             }
             goToMiddleApp() // a launcher has nowhere to go back to

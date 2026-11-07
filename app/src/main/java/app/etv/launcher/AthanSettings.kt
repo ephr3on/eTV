@@ -98,7 +98,10 @@ internal fun SettingsActivity.athanPane() {
         val i = volumes.indexOf(p.athanVolume)
         p.athanVolume = volumes[(i + 1) % volumes.size]
     }
-    row("test", "Listen now", "Play the next athan and the dua", rerender = false) {
+    row("code", "Code to end the athan early", if (AthanService.hasCode(this)) "Set" else "None: it always plays to the end", rerender = false) {
+        changeCode()
+    }
+    row("test", "Listen now", "The next athan and the dua, to the end", rerender = false) {
         val next = PrayerStore.next(this, p, System.currentTimeMillis(), athanOnly = false)?.prayer ?: Prayer.DHUHR
         if (!AthanService.start(this, next, test = true)) toast("Couldn't play the athan")
     }
@@ -403,6 +406,46 @@ private fun SettingsActivity.pickDua() {
         }
         .setNegativeButton("Cancel", null)
         .show()
+}
+
+// ---------------- the code ----------------
+
+private const val NUMBER_SECRET = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+
+/** Sets or changes the code (the current one first, if there is one). */
+private fun SettingsActivity.changeCode() {
+    focusKey = "code"
+    if (AthanService.hasCode(this)) {
+        askText("Your current code", "", "", NUMBER_SECRET) { old ->
+            if (AthanService.isCode(this, old)) askNewCode() else if (old.isNotEmpty()) toast("That's not the code")
+        }
+    } else {
+        askNewCode()
+    }
+}
+
+private fun SettingsActivity.askNewCode() {
+    askText("New code", "4 to 12 digits; leave it empty for no code", "", NUMBER_SECRET) { first ->
+        if (first.isEmpty()) {
+            AthanService.setCode(this, "")
+            render()
+            toast("No code: the athan always plays to the end")
+            return@askText
+        }
+        if (first.length !in 4..12 || first.any { it !in '0'..'9' }) {
+            toast("Use 4 to 12 digits")
+            return@askText
+        }
+        askText("The new code again", "", "", NUMBER_SECRET) { second ->
+            if (second == first) {
+                AthanService.setCode(this, first)
+                render()
+                toast("Code set. Type it on the remote's number keys to end an athan early.")
+            } else {
+                toast("The two didn't match; the code wasn't changed")
+            }
+        }
+    }
 }
 
 // ---------------- one prayer ----------------

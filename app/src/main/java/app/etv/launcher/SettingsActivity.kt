@@ -380,7 +380,7 @@ class SettingsActivity : EtvActivity() {
             "Hold OK" to "Options for the selected app",
             "Home (from an app)" to "Back to exactly where you were",
             "Home again,  or  Back" to "The app in the middle of the row",
-            "OK, Back  or  Stop" to "During the athan: end it",
+            "During the athan" to "Nothing ends it until it and the dua are over",
         )
         for ((key, what) in shortcuts) shortcutLine(key, what)
     }

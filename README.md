@@ -34,7 +34,7 @@ Made with the Philips remote in mind (works with any Android TV remote).
 | 1 – 9 | Open the app in that spot on the home row |
 | 0 or Red | All apps |
 | Green or Sources | Inputs (HDMI etc.) |
-| Back, during the athan | Ends the athan |
+| During the athan | Nothing, until it and the dua are over (only the private code ends it early) |
 | Yellow | Search |
 | Blue, or Options with nothing selected | Customise |
 | Down | Dock: Search, Inputs, All apps, Settings |
@@ -81,7 +81,10 @@ long until it, and the Hijri date sits under the date. When a prayer's time come
 - after the athan, Sheikh al-Sha'rawi's dua after the athan (دعاء الشعراوي بعد الأذان);
 - then the athan screen closes and what was playing carries on.
 
-**OK**, **Back** or the remote's **Stop / Pause** end it early. Volume works as always.
+Nothing on the remote ends it early: OK, Back, Stop and Pause do nothing, and if Home or an app's button hides
+the athan screen it comes straight back, with anything that started playing paused again. Only your own code, typed
+on the number keys, ends it before the athan and the dua are over: set it on the TV in Settings → Athan → Code to
+end the athan early (it stays on the TV, as a salted hash; without one the athan always plays to the end). Volume works as always.
 
 Everything is in **Settings → Athan**:
 
@@ -96,7 +99,8 @@ Everything is in **Settings → Athan**:
 | Each prayer | Switch one prayer's athan off, give it its own recording, move it by a few minutes, or set a fixed time |
 | What's playing on the TV | Pause, then carry on (default) / Pause / Keep playing |
 | Athan volume | As the TV is, or a set level (it un-mutes the TV and puts the volume back afterwards) |
-| Listen now | Plays the next athan and the dua straight away |
+| Code to end the athan early | Your own 4–12 digit code; typed on the remote's number keys during the athan, it ends it. Without one, nothing does |
+| Listen now | Plays the next athan and the dua straight away (to the end, like the real one) |
 | On the home screen | Prayer times, sunrise, Hijri date (and a ±day adjustment for the month's start) |
 | In Lantern | One at a time (the next prayer large, its neighbours fading; the default), a line through the day, the sun's path over the lit door, or at the foot of the screen |
 
