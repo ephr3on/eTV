@@ -86,7 +86,7 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
     }
 
     /** How to draw across (Doorway's top-to-bottom list ignores it). */
-    var shape = PrayerShape.LINE
+    var form = PrayerShape.LINE
         set(v) {
             field = v
             requestLayout()
@@ -184,11 +184,11 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
             return
         }
         val n = cells.size.coerceAtLeast(1)
-        if (!vertical && shape == PrayerShape.ARC) {
+        if (!vertical && form == PrayerShape.ARC) {
             setMeasuredDimension((ARC_WIDTH_DP * d).toInt(), (ARC_HEIGHT_DP * d).toInt())
             return
         }
-        if (!vertical && shape == PrayerShape.CAROUSEL) {
+        if (!vertical && form == PrayerShape.CAROUSEL) {
             setMeasuredDimension((CAROUSEL_WIDTH_DP * d).toInt(), (CAROUSEL_HEIGHT_DP * d).toInt())
             return
         }
@@ -211,8 +211,8 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
         if (cells.isEmpty()) return
         when {
             vertical -> drawVertical(canvas)
-            shape == PrayerShape.ARC -> drawArc(canvas)
-            shape == PrayerShape.CAROUSEL -> drawCarousel(canvas)
+            form == PrayerShape.ARC -> drawArc(canvas)
+            form == PrayerShape.CAROUSEL -> drawCarousel(canvas)
             else -> drawHorizontal(canvas)
         }
     }

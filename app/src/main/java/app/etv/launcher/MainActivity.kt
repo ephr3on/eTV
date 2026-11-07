@@ -831,12 +831,12 @@ class MainActivity : EtvActivity() {
             when (style) {
                 // The sun's path: its highest point on the axis, curving down either side of the lit door.
                 1 -> {
-                    it.shape = PrayerShape.ARC
+                    it.form = PrayerShape.ARC
                     root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.ARC_TOP_DP))
                 }
                 // One at a time: the next prayer's time on the axis, its neighbours fading either side.
                 2 -> {
-                    it.shape = PrayerShape.CAROUSEL
+                    it.form = PrayerShape.CAROUSEL
                     root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.CAROUSEL_AXIS_DP))
                 }
                 // At the foot, under the app's name.
