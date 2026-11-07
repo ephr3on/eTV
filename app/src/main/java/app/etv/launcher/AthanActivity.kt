@@ -188,16 +188,28 @@ class AthanActivity : Activity() {
             if (digit >= 0) {
                 typed.append(digit)
                 val len = AthanService.codeLength(this)
-                if (len > 0 && typed.length > len) typed.delete(0, typed.length - len)
-                if (len > 0 && AthanService.isCode(this, typed.toString())) {
-                    typed.setLength(0)
-                    AthanService.stopWithCode()
-                    finish()
-                }
+                if (typed.length > len) typed.delete(0, typed.length - len)
+                if (typed.length == len) check(typed.toString())
             }
         }
         return true
     }
+
+    /** Checks the last digits typed against the code, off the main thread (the check is slow on purpose). */
+    private fun check(digits: String) {
+        val app = applicationContext
+        checker.execute {
+            if (AthanService.isCode(app, digits)) {
+                handler.post {
+                    typed.setLength(0)
+                    AthanService.stopWithCode()
+                    if (!isFinishing) finish()
+                }
+            }
+        }
+    }
+
+    private val checker = java.util.concurrent.Executors.newSingleThreadExecutor()
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
