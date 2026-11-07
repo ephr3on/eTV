@@ -58,6 +58,9 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
     companion object {
         /** Across: how far down the day's line runs (for lining other things up with it). */
         const val LINE_DP = 36f
+
+        /** Down: the height of [n] prayers, one of them the next (with its countdown). */
+        fun verticalHeightDp(n: Int) = n * 34f + 18f + 4f
     }
 
     private val d = resources.displayMetrics.density

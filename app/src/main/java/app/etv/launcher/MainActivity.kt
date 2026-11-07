@@ -55,10 +55,10 @@ class MainActivity : EtvActivity() {
         private const val LANTERN_AXIS = 54f
         private const val DOORWAY_MARGIN = 40f
         private const val LANTERN_MARGIN = 44f
-        private const val LANTERN_CLOCK_SP = 30f
-        private const val LANTERN_CLOCK_BOX = 36f
+        private const val LANTERN_CLOCK_SP = 32f
+        private const val LANTERN_CLOCK_BOX = 38f
         private const val LANTERN_BUTTON = 38f
-        private const val LANTERN_BUTTON_GAP = 6f
+        private const val LANTERN_BUTTON_GAP = 1f
 
     }
 
@@ -604,7 +604,8 @@ class MainActivity : EtvActivity() {
         val column = strip != null
         makeDock(column, if (column) Gravity.CENTER_HORIZONTAL else Gravity.CENTER_VERTICAL)
         val s = dpi(38f)
-        val gap = if (column) 12f else 8f
+        // Spaced so the two columns are the same height.
+        val gap = if (column) ((PrayerStripView.verticalHeightDp(if (prefs.showSunrise) 6 else 5) - 4 * 38f) / 3f).coerceAtLeast(8f) else 8f
         addToDock(roundButton(0, "Search", R.drawable.ic_search, true, false) { openSearch() }, s, s, gap)
         addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, true, false) { showInputs() }, s, s, gap)
         addToDock(roundButton(2, "All apps", R.drawable.ic_apps, true, false) { openAllApps() }, s, s, gap)
@@ -764,7 +765,9 @@ class MainActivity : EtvActivity() {
         clock = c; greeting = g1; greeting2 = g2; date = d
         root.addView(top, at(-2, -2, Gravity.TOP or Gravity.START, start = 118f, top = 34f))
         // The prayer times opposite the clock, each in a cartouche.
-        prayerStrip(columnDp = 78f)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.END, top = 34f, end = 36f)) }
+        prayerStrip(columnDp = 78f)?.let {
+            root.addView(it, at(-2, -2, Gravity.TOP or Gravity.END, top = 75f - PrayerStripView.LINE_DP, end = 39f))
+        }
 
         root.addView(sectionTitle("FAVOURITES", accent), at(-2, -2, Gravity.TOP or Gravity.START, start = 118f, top = 150f))
         makeRow(HorizontalScrollView(this), Gravity.START or Gravity.BOTTOM, 40f, 40f)
@@ -800,7 +803,7 @@ class MainActivity : EtvActivity() {
             gravity = Gravity.START
         }
         val c = clockView(LANTERN_CLOCK_SP, Gravity.START)
-        val d = text(11f, 300, color = pal.muted).apply {
+        val d = text(12.5f, 300, color = pal.muted).apply {
             visibility = if (prefs.showDate) View.VISIBLE else View.GONE
             setLineSpacing(dp(2f), 1f)
         }
