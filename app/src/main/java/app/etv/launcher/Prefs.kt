@@ -138,7 +138,7 @@ class Prefs(context: Context) {
     private val LOOK_KEYS = setOf(
         "accent", "palette", "greeting", "clock24", "showDate", "tileSize", "nameMode", "iconStyle",
         "arches", "favs", "hidden", "updateCode", "nowPlaying", "theme",
-        "showPrayers", "showSunrise", "showHijri", "hijriAdjust", "locName",
+        "showPrayers", "showSunrise", "showHijri", "hijriAdjust", "locName", "lanternPrayers",
     )
 
     /** Show the "now playing" card when another app plays in the background. */
@@ -285,6 +285,11 @@ class Prefs(context: Context) {
     var showHijri: Boolean
         get() = bool("showHijri", true)
         set(v) = putBool("showHijri", v)
+
+    /** How Lantern shows the prayer times: 0 a line, 1 the sun's path, 2 one at a time, 3 at the foot. */
+    var lanternPrayers: Int
+        get() = int("lanternPrayers", 0)
+        set(v) = putInt("lanternPrayers", v)
 
     /** Days added to the Hijri date (-2 to 2), for when the month starts by sighting. */
     var hijriAdjust: Int

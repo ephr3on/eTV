@@ -23,6 +23,18 @@ class PrayerCell(
     val quiet: Boolean,
 )
 
+/** How the prayer times are drawn. */
+enum class PrayerShape {
+    /** A line through the day, a marker for each prayer. */
+    LINE,
+
+    /** The sun's path: the prayers on an arc, from Fajr low on one side to Isha low on the other. */
+    ARC,
+
+    /** One at a time, like Lantern's doors: the next prayer large, its neighbours fading away. */
+    CAROUSEL,
+}
+
 /** The colours one theme gives the prayer times. */
 class PrayerColors(
     val name: Int,
@@ -61,7 +73,25 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
 
         /** Down: the height of [n] prayers, one of them the next (with its countdown). */
         fun verticalHeightDp(n: Int) = n * 34f + 18f + 4f
+
+        /** Arc: its size, and how far down its top (the highest point of the sun's path) is. */
+        const val ARC_WIDTH_DP = 520f
+        const val ARC_HEIGHT_DP = 172f
+        const val ARC_TOP_DP = 38f
+
+        /** Carousel: its size, and how far down the middle of the next prayer's time is. */
+        const val CAROUSEL_WIDTH_DP = 540f
+        const val CAROUSEL_HEIGHT_DP = 92f
+        const val CAROUSEL_AXIS_DP = 44f
     }
+
+    /** How to draw across (Doorway's top-to-bottom list ignores it). */
+    var shape = PrayerShape.LINE
+        set(v) {
+            field = v
+            requestLayout()
+            invalidate()
+        }
 
     private val d = resources.displayMetrics.density
     private var colors = PrayerColors(Color.WHITE, Color.WHITE, Color.GRAY, Color.GRAY, Color.WHITE, 0, Color.WHITE, Color.BLACK)
@@ -154,6 +184,14 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
             return
         }
         val n = cells.size.coerceAtLeast(1)
+        if (!vertical && shape == PrayerShape.ARC) {
+            setMeasuredDimension((ARC_WIDTH_DP * d).toInt(), (ARC_HEIGHT_DP * d).toInt())
+            return
+        }
+        if (!vertical && shape == PrayerShape.CAROUSEL) {
+            setMeasuredDimension((CAROUSEL_WIDTH_DP * d).toInt(), (CAROUSEL_HEIGHT_DP * d).toInt())
+            return
+        }
         if (vertical) {
             val h = n * vRow + (if (cells.any { it.next }) vNextExtra else 0f) + 4f
             setMeasuredDimension((widthDp * d).toInt(), (h * d).toInt())
@@ -171,7 +209,144 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
             return
         }
         if (cells.isEmpty()) return
-        if (vertical) drawVertical(canvas) else drawHorizontal(canvas)
+        when {
+            vertical -> drawVertical(canvas)
+            shape == PrayerShape.ARC -> drawArc(canvas)
+            shape == PrayerShape.CAROUSEL -> drawCarousel(canvas)
+            else -> drawHorizontal(canvas)
+        }
+    }
+
+    // ---------------- the sun's path ----------------
+
+    private fun drawArc(c: Canvas) {
+        val n = cells.size
+        val w = ARC_WIDTH_DP * d
+        val cx = w / 2f
+        val rx = w / 2f - 28f * d
+        val ry = 96f * d
+        val cy = ARC_TOP_DP * d + ry
+        // Fajr low on the reading side, Isha low on the other; evenly along the arc.
+        val start = 166f
+        val end = 14f
+        fun angle(pos: Float): Float {
+            val t = if (n > 1) pos / (n - 1) else 0.5f
+            val a = start + (end - start) * t
+            return if (rtl) 180f - a else a
+        }
+        fun px(a: Float) = cx + rx * Math.cos(Math.toRadians(a.toDouble())).toFloat()
+        fun py(a: Float) = cy - ry * Math.sin(Math.toRadians(a.toDouble())).toFloat()
+
+        // The path, then the part already passed.
+        oval.set(cx - rx, cy - ry, cx + rx, cy + ry)
+        shape.style = Paint.Style.STROKE
+        shape.strokeCap = Paint.Cap.ROUND
+        shape.strokeWidth = 1f * d
+        shape.color = colors.line
+        c.drawArc(oval, 180f + 8f, 164f, false, shape)
+        if (nowPos > 0f) {
+            val p = nowPos.coerceAtMost((n - 1).toFloat())
+            val a0 = angle(0f)
+            val a1 = angle(p)
+            shape.strokeWidth = 2f * d
+            shape.color = Look.withAlpha(colors.accent, 200)
+            // Canvas angles run clockwise from 3 o'clock; ours anticlockwise, so negate.
+            c.drawArc(oval, -a0, a0 - a1, false, shape)
+            if (nowPos < n - 1) nowMark(c, px(a1), py(a1))
+        }
+
+        for ((i, cell) in cells.withIndex()) {
+            val a = angle(i.toFloat())
+            val x = px(a)
+            val y = py(a)
+            marker(c, cell, x, y)
+
+            // Name and time inside the arc, under their marker.
+            namePaint.textAlign = Paint.Align.CENTER
+            namePaint.typeface = if (cell.next) nameFaceNext else nameFace
+            namePaint.textSize = sp(if (cell.quiet) 13f else 14.5f)
+            namePaint.color = when {
+                cell.next -> colors.accent
+                cell.past || cell.quiet -> colors.muted
+                else -> colors.name
+            }
+            c.drawText(cell.name, x, y + 24f * d, namePaint)
+
+            timePaint.textAlign = Paint.Align.CENTER
+            timePaint.typeface = if (cell.next) timeFaceNext else timeFace
+            timePaint.textSize = sp(if (cell.next) 18f else if (cell.quiet) 14f else 16f)
+            timePaint.color = if (cell.past || cell.quiet) colors.muted else colors.time
+            c.drawText(cell.time, x, y + 45f * d, timePaint)
+
+            if (cell.note.isNotEmpty()) {
+                notePaint.textAlign = Paint.Align.CENTER
+                notePaint.textSize = sp(noteSp)
+                notePaint.color = colors.accent
+                c.drawText(cell.note, x, y + 63f * d, notePaint)
+            }
+        }
+    }
+
+    // ---------------- one at a time ----------------
+
+    private fun drawCarousel(c: Canvas) {
+        val n = cells.size
+        val mid = cells.indexOfFirst { it.next }.let { if (it < 0) 0 else it }
+        val w = CAROUSEL_WIDTH_DP * d
+        val cx = w / 2f
+        val axis = CAROUSEL_AXIS_DP * d
+        // Neighbours either side, smaller and fainter the further they are, like the doors below.
+        val offsets = floatArrayOf(0f, 128f, 228f)
+        val alphas = intArrayOf(255, 170, 90)
+        for (k in 2 downTo 0) {
+            for (side in if (k == 0) intArrayOf(0) else intArrayOf(-1, 1)) {
+                val i = mid + side * k
+                if (i < 0 || i >= n) continue
+                val cell = cells[i]
+                // Earlier prayers on the reading side: the left in English, the right in Arabic.
+                val dir = if (rtl) -side else side
+                val x = cx + dir * offsets[k] * d
+                val alpha = alphas[k]
+                if (k == 0) {
+                    // The next prayer: its name above, its time large on the line, the countdown below.
+                    namePaint.textAlign = Paint.Align.CENTER
+                    namePaint.typeface = nameFaceNext
+                    namePaint.textSize = sp(17f)
+                    namePaint.color = colors.accent
+                    c.drawText(cell.name, x, axis - 20f * d, namePaint)
+                    timePaint.textAlign = Paint.Align.CENTER
+                    timePaint.typeface = timeFaceNext
+                    timePaint.textSize = sp(27f)
+                    timePaint.color = colors.time
+                    c.drawText(cell.time, x, axis + 10f * d, timePaint)
+                    if (cell.note.isNotEmpty()) {
+                        notePaint.textAlign = Paint.Align.CENTER
+                        notePaint.textSize = sp(12.5f)
+                        notePaint.color = colors.accent
+                        c.drawText(cell.note, x, axis + 32f * d, notePaint)
+                    }
+                    // A fine bead either side of the time, setting it apart from its neighbours.
+                    val half = timePaint.measureText(cell.time) / 2f + 18f * d
+                    for (sx in floatArrayOf(-1f, 1f)) {
+                        val mx = x + sx * half
+                        shape.style = Paint.Style.FILL
+                        shape.color = Look.withAlpha(colors.accent, 120)
+                        c.drawCircle(mx, axis, 2f * d, shape)
+                    }
+                } else {
+                    namePaint.textAlign = Paint.Align.CENTER
+                    namePaint.typeface = nameFace
+                    namePaint.textSize = sp(if (k == 1) 14f else 12.5f)
+                    namePaint.color = Look.withAlpha(if (cell.past || cell.quiet) colors.muted else colors.name, alpha)
+                    c.drawText(cell.name, x, axis - 14f * d, namePaint)
+                    timePaint.textAlign = Paint.Align.CENTER
+                    timePaint.typeface = timeFace
+                    timePaint.textSize = sp(if (k == 1) 17f else 14.5f)
+                    timePaint.color = Look.withAlpha(if (cell.past || cell.quiet) colors.muted else colors.time, alpha)
+                    c.drawText(cell.time, x, axis + 9f * d, timePaint)
+                }
+            }
+        }
     }
 
     // ---------------- across ----------------
