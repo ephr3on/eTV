@@ -24,11 +24,18 @@ import android.widget.TextView
  */
 class SettingsActivity : EtvActivity() {
 
+    companion object {
+        /** Open on Athan and ask for the city straight away (the first time eTV needs it). */
+        const val EXTRA_CHOOSE_CITY = "app.etv.launcher.CHOOSE_CITY"
+        private const val ATHAN = 2
+    }
+
     private class Category(val name: String, val about: String)
 
     private val categories = listOf(
         Category("Look", "The theme, its colours and its background."),
         Category("Home screen", "What the home screen shows, and how the apps look on it."),
+        Category("Athan", "Prayer times on the home screen, and the call to prayer when each one comes."),
         Category("Apps", "Hidden apps and your home row."),
         Category("Home button", "Making the remote's Home button open eTV."),
         Category("Updates", "New versions of eTV, straight from GitHub."),
@@ -40,15 +47,20 @@ class SettingsActivity : EtvActivity() {
     private lateinit var title: TextView
     private lateinit var menu: LinearLayout
     private lateinit var paneScroll: ScrollView
-    private lateinit var pane: LinearLayout
-    private var pal: Palette = Look.palettes[0]
-    private var accent = 0
+    internal lateinit var pane: LinearLayout
+    internal var pal: Palette = Look.palettes[0]
+    internal var accent = 0
 
     /** The category whose options are showing. */
     private var current = 0
 
     /** What to select after redrawing: "cat:<n>" or an option's key. */
-    private var focusKey: String? = "cat:0"
+    internal var focusKey: String? = "cat:0"
+
+    /** Ask for the city once the screen is up. */
+    private var chooseCity = false
+
+    private val prayersChanged: () -> Unit = { render() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,17 +102,31 @@ class SettingsActivity : EtvActivity() {
 
         root.addView(columns, FrameLayout.LayoutParams(-1, -1))
         setContentView(root)
+
+        if (intent?.getBooleanExtra(EXTRA_CHOOSE_CITY, false) == true) {
+            current = ATHAN
+            focusKey = "location"
+            chooseCity = true
+        }
     }
 
     override fun onResume() {
         super.onResume()
         // Show the updater's progress as it happens.
         Updater.onChange = { render() }
+        AthanSounds.onChange = { render() }
+        PrayerStore.listeners.add(prayersChanged)
         render()
+        if (chooseCity) {
+            chooseCity = false
+            root.post { pickLocation() }
+        }
     }
 
     override fun onPause() {
         Updater.onChange = null
+        AthanSounds.onChange = null
+        PrayerStore.listeners.remove(prayersChanged)
         super.onPause()
     }
 
@@ -108,7 +134,7 @@ class SettingsActivity : EtvActivity() {
 
     // ---------------- drawing ----------------
 
-    private fun render() {
+    internal fun render() {
         pal = Look.palette(prefs)
         accent = Look.accent(prefs)
         window.setBackgroundDrawable(ColorDrawable(pal.bg))
@@ -202,14 +228,15 @@ class SettingsActivity : EtvActivity() {
             topMargin = dpi(6f)
             bottomMargin = dpi(14f)
         })
-        when (index) {
-            0 -> lookPane()
-            1 -> homeScreenPane()
-            2 -> appsPane()
-            3 -> homeButtonPane()
-            4 -> updatesPane()
-            5 -> remotePane()
-            6 -> aboutPane()
+        when (c.name) {
+            "Look" -> lookPane()
+            "Home screen" -> homeScreenPane()
+            "Athan" -> athanPane()
+            "Apps" -> appsPane()
+            "Home button" -> homeButtonPane()
+            "Updates" -> updatesPane()
+            "Remote" -> remotePane()
+            "About" -> aboutPane()
         }
     }
 
@@ -325,6 +352,7 @@ class SettingsActivity : EtvActivity() {
             "Hold OK" to "Options for the selected app",
             "Home (from an app)" to "Back to exactly where you were",
             "Home again,  or  Back" to "The app in the middle of the row",
+            "OK, Back  or  Stop" to "During the athan: end it",
         )
         for ((key, what) in shortcuts) shortcutLine(key, what)
     }
@@ -338,7 +366,7 @@ class SettingsActivity : EtvActivity() {
 
     // ---------------- building blocks ----------------
 
-    private fun group(text: String) {
+    internal fun group(text: String) {
         pane.addView(sectionLabel(this, pal, text), LinearLayout.LayoutParams(-1, -2).apply {
             topMargin = dpi(18f)
             bottomMargin = dpi(4f)
@@ -346,7 +374,7 @@ class SettingsActivity : EtvActivity() {
         })
     }
 
-    private fun note(text: String) {
+    internal fun note(text: String) {
         pane.addView(noteText(this, pal, text), LinearLayout.LayoutParams(-1, -2).apply {
             topMargin = dpi(6f)
             bottomMargin = dpi(4f)
@@ -377,7 +405,7 @@ class SettingsActivity : EtvActivity() {
         pane.addView(line, LinearLayout.LayoutParams(-1, -2))
     }
 
-    private fun row(
+    internal fun row(
         key: String,
         label: String,
         value: String,
@@ -479,7 +507,7 @@ class SettingsActivity : EtvActivity() {
     }
 
     /** The card needs notification access; TVs hide that switch, so offer both ways to give it. */
-    private fun explainNowPlayingAccess() {
+    internal fun explainNowPlayingAccess() {
         val canOpen = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
             .resolveActivity(packageManager) != null
         val msg = "To show what's playing, Android needs to let eTV see media from other apps " +

@@ -71,6 +71,10 @@ class MainActivity : EtvActivity() {
     private var dots: DotsView? = null
     private var caption: TextView? = null
     private var inputsRow: LinearLayout? = null
+    private var prayers: PrayerStripView? = null
+
+    /** The Hijri date goes on its own line under the date (themes with little room beside it). */
+    private var hijriOwnLine = false
     private var dockVertical = false
     private var dockAppsIndex = 0
 
@@ -93,8 +97,15 @@ class MainActivity : EtvActivity() {
     private var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
     private val timeReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) = updateClock()
+        override fun onReceive(context: Context, intent: Intent) {
+            updateClock()
+            // In case the athan alarm came late (or not at all): its time has come, play it.
+            AthanScheduler.checkDue(this@MainActivity)
+        }
     }
+
+    /** New prayer times arrived (from aladhan.com or the mosque). */
+    private val prayersChanged: () -> Unit = { if (isResumedNow) updateClock() }
 
     /** Apps installed, updated or removed since the last refresh (their icons may have changed). */
     private val iconChanges = HashSet<String>()
@@ -141,6 +152,7 @@ class MainActivity : EtvActivity() {
         registerSystemReceiver(packageReceiver, pkgFilter)
         // Customise and All apps change options while this screen is hidden; redraw on return.
         prefsListener = prefs.listen { needsRender = true }
+        PrayerStore.listeners.add(prayersChanged)
 
         handleHome(intent)
     }
@@ -206,12 +218,22 @@ class MainActivity : EtvActivity() {
         // Back home normally: nothing left to learn about the TV's own home screen.
         if (prefs.learningHome) prefs.learnUntil = 0L
 
+        // Prayer times: keep them fresh, the athan alarm set, and the chosen recordings on the TV.
+        PrayerSync.refreshIfDue(this)
+        AthanScheduler.schedule(this)
+        AthanScheduler.checkDue(this)
+        AthanSounds.ensureChosen(this)
+
         // First run: offer the Home button setup once, only if Home doesn't reach eTV yet.
         if (!prefs.setupShown) {
             prefs.setupShown = true
             if (!HomeSetup.homeHandled(this)) {
                 startActivity(Intent(this, SetupActivity::class.java))
             }
+        } else if (!prefs.athanSetupShown && prefs.place == null && (prefs.athanOn || prefs.showPrayers)) {
+            // The athan needs to know where you are: ask once.
+            prefs.athanSetupShown = true
+            startActivity(Intent(this, SettingsActivity::class.java).putExtra(SettingsActivity.EXTRA_CHOOSE_CITY, true))
         }
     }
 
@@ -229,6 +251,7 @@ class MainActivity : EtvActivity() {
         try { unregisterReceiver(packageReceiver) } catch (_: Exception) {}
         handler.removeCallbacks(refreshApps)
         prefsListener?.let { prefs.unlisten(it) }
+        PrayerStore.listeners.remove(prayersChanged)
         super.onDestroy()
     }
 
@@ -254,6 +277,7 @@ class MainActivity : EtvActivity() {
             if (::nowCard.isInitialized) nowCard.pause()
             greeting = null; greeting2 = null; clock = null; date = null; dots = null
             caption = null; inputsRow = null; dockVertical = false
+            prayers = null; hijriOwnLine = theme.layout != Layout.CLASSIC && theme.layout != Layout.DOORWAY
 
             root = FrameLayout(this).apply {
                 clipChildren = false
@@ -506,11 +530,23 @@ class MainActivity : EtvActivity() {
             letterSpacing = 0.2f
         }
 
+    /** Today's prayer times, in this theme's style; null when they're switched off. */
+    private fun prayerStrip(style: StripStyle): PrayerStripView? {
+        if (!prefs.showPrayers) return null
+        return PrayerStripView(this, style).also {
+            it.applyTheme(pal, accent)
+            prayers = it
+        }
+    }
+
     // ---- Classic: today's eTV ----
 
     private fun buildClassic() {
         archesBackground()
-        root.addView(header(Gravity.CENTER_HORIZONTAL, 18f, 58f, 13f, true), at(-1, -2, Gravity.TOP, top = 70f))
+        // The prayer times across the top, the greeting and clock below them.
+        val strip = prayerStrip(StripStyle.ARCH)
+        strip?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 10f)) }
+        root.addView(header(Gravity.CENTER_HORIZONTAL, 18f, 58f, 13f, true), at(-1, -2, Gravity.TOP, top = if (strip != null) 84f else 70f))
         makeRow(HorizontalScrollView(this), Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 48f, 48f)
         root.addView(rowScroll, at(-1, dpi(190f), Gravity.TOP, top = 232f))
         root.addView(emptyHint, at(-1, -2, Gravity.TOP, top = 302f))
@@ -544,6 +580,8 @@ class MainActivity : EtvActivity() {
         addToDock(roundButton(3, "Settings", R.drawable.ic_settings, true, updateReady) { openCustomise() }, s, s, 8f)
         dockAppsIndex = 2
         root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = 22f, end = 30f))
+        // The prayer times in the other top corner, one a line.
+        prayerStrip(StripStyle.LIST)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.START, start = 30f, top = 22f)) }
 
         makeRow(HorizontalScrollView(this), Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 48f, 48f)
         root.addView(rowScroll, at(-1, dpi(196f), Gravity.TOP, top = 200f))
@@ -622,6 +660,11 @@ class MainActivity : EtvActivity() {
         inputsRow = inputs
         root.addView(inputs, at(-2, dpi(44f), Gravity.TOP or Gravity.START, start = 48f, top = 324f))
 
+        prayerStrip(StripStyle.RIAD)?.let {
+            root.addView(sectionTitle("PRAYER TIMES", pal.muted), at(-2, -2, Gravity.TOP or Gravity.START, start = 48f, top = 386f))
+            root.addView(it, at(-2, -2, Gravity.TOP or Gravity.START, start = 48f, top = 404f))
+        }
+
         root.addView(moveHint, at(-1, -2, Gravity.TOP, top = 384f))
         root.addView(nowCard, at(-2, dpi(NOW_BAR_DP), Gravity.BOTTOM or Gravity.END, end = 40f, bottom = 30f))
     }
@@ -686,6 +729,8 @@ class MainActivity : EtvActivity() {
         top.addView(info, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dpi(18f) })
         clock = c; greeting = g1; greeting2 = g2; date = d
         root.addView(top, at(-2, -2, Gravity.TOP or Gravity.START, start = 118f, top = 34f))
+        // The prayer times opposite the clock, each in a cartouche.
+        prayerStrip(StripStyle.CARTOUCHE)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.END, top = 36f, end = 40f)) }
 
         root.addView(sectionTitle("FAVOURITES", accent), at(-2, -2, Gravity.TOP or Gravity.START, start = 118f, top = 150f))
         makeRow(HorizontalScrollView(this), Gravity.START or Gravity.BOTTOM, 40f, 40f)
@@ -729,6 +774,8 @@ class MainActivity : EtvActivity() {
         addToDock(roundButton(3, "Settings", R.drawable.ic_settings, false, updateReady) { openCustomise() }, s, s, 4f)
         dockAppsIndex = 2
         root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = 20f, end = 30f))
+        // The prayer times above the lit door.
+        prayerStrip(StripStyle.ARCH)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 10f)) }
 
         val scroller = CentreScrollView(this)
         makeRow(scroller, Gravity.BOTTOM, 0f, 0f)
@@ -856,7 +903,69 @@ class MainActivity : EtvActivity() {
         clock?.let { setIfChanged(it, SimpleDateFormat(if (prefs.clock24) "HH:mm" else "h:mm", locale).format(now)) }
         date?.let {
             val pattern = if (theme.layout == Layout.CARTOUCHE || theme.layout == Layout.LANTERN) "EEEE · d MMMM" else "EEEE, d MMMM"
-            setIfChanged(it, SimpleDateFormat(pattern, locale).format(now))
+            var text = SimpleDateFormat(pattern, locale).format(now)
+            hijriDate()?.let { h -> text += if (hijriOwnLine) "\n$h" else "  ·  $h" }
+            setIfChanged(it, text)
+        }
+        updatePrayers()
+    }
+
+    // ---------------- prayer times ----------------
+
+    private fun hijriDate(): String? {
+        if (!prefs.showHijri) return null
+        val tz = Days.tz(prefs.place)
+        val h = PrayerStore.hijri(this, prefs, Days.today(tz), tz) ?: return null
+        return Hijri.format(h, arabic = prefs.greeting != 2)
+    }
+
+    /** Fills in the prayer times: the next prayer marked, with how long until it. */
+    private fun updatePrayers() {
+        val strip = prayers ?: return
+        val place = prefs.place
+        if (place == null) {
+            strip.showMessage("Prayer times  ·  choose your city in Settings → Athan")
+            return
+        }
+        val tz = Days.tz(place)
+        val now = System.currentTimeMillis()
+        val today = Days.today(tz, now)
+        val playing = AthanService.current?.prayer
+        val next = PrayerStore.next(this, prefs, now, athanOnly = false)
+        // After Isha, tomorrow's times.
+        val day = if (playing != null) today else next?.day ?: today
+        val t = PrayerStore.times(this, prefs, day) ?: return
+        val friday = Days.isFriday(day, tz)
+        val english = prefs.greeting == 2
+        val cells = Prayer.values().filter { it != Prayer.SUNRISE || prefs.showSunrise }.map { pr ->
+            val at = Days.epoch(day, t[pr.ordinal], tz)
+            val isNext = if (playing != null) pr == playing else next != null && pr == next.prayer && day == next.day
+            val note = when {
+                playing != null && pr == playing -> if (english) "Athan" else "الأذان"
+                isNext && next != null -> countdown(next.at - now, english)
+                else -> ""
+            }
+            PrayerCell(
+                name = if (english) pr.enName(friday) else pr.arName(friday),
+                time = Days.clock(t[pr.ordinal], prefs.clock24),
+                note = note,
+                next = isNext,
+                past = !isNext && at <= now,
+                quiet = pr == Prayer.SUNRISE,
+            )
+        }
+        strip.show(cells)
+    }
+
+    private fun countdown(ms: Long, english: Boolean): String {
+        val mins = ((ms + 59_999L) / 60_000L).toInt().coerceAtLeast(0)
+        val h = mins / 60
+        val m = mins % 60
+        return when {
+            h > 0 && english -> "in $h:%02d".format(m)
+            h > 0 -> "بعد $h:%02d".format(m)
+            english -> "in $m min"
+            else -> "بعد $m د"
         }
     }
 
@@ -1177,6 +1286,12 @@ class MainActivity : EtvActivity() {
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // Back during the athan ends it.
+            if (AthanService.isPlaying) {
+                AthanService.stop()
+                updateClock()
+                return true
+            }
             goToMiddleApp() // a launcher has nowhere to go back to
             return true
         }
