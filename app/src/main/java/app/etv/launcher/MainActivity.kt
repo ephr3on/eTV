@@ -531,10 +531,24 @@ class MainActivity : EtvActivity() {
         }
 
     /** Today's prayer times, in this theme's style; null when they're switched off. */
-    private fun prayerStrip(style: StripStyle): PrayerStripView? {
+    private fun prayerStrip(vertical: Boolean = false, columnDp: Float = 84f): PrayerStripView? {
         if (!prefs.showPrayers) return null
-        return PrayerStripView(this, style).also {
-            it.applyTheme(pal, accent)
+        val light = theme.layout == Layout.RIAD
+        val colors = PrayerColors(
+            name = pal.label,
+            time = pal.text,
+            muted = pal.muted,
+            line = pal.tileStroke,
+            // Riad marks the next prayer with one of its blue doors, brass studs and all.
+            accent = if (light) pal.tile else accent,
+            doorFill = if (light) pal.tile else Look.withAlpha(accent, 70),
+            doorStroke = if (light) pal.tile else accent,
+            bg = pal.bg,
+            studs = if (light) pal.studs else 0,
+        )
+        return PrayerStripView(this, vertical).also {
+            it.columnDp = columnDp
+            it.applyTheme(colors)
             prayers = it
         }
     }
@@ -544,9 +558,12 @@ class MainActivity : EtvActivity() {
     private fun buildClassic() {
         archesBackground()
         // The prayer times across the top, the greeting and clock below them.
-        val strip = prayerStrip(StripStyle.ARCH)
-        strip?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 10f)) }
-        root.addView(header(Gravity.CENTER_HORIZONTAL, 18f, 58f, 13f, true), at(-1, -2, Gravity.TOP, top = if (strip != null) 84f else 70f))
+        val strip = prayerStrip()
+        strip?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 16f)) }
+        root.addView(
+            header(Gravity.CENTER_HORIZONTAL, 18f, if (strip != null) 52f else 58f, 13f, true),
+            at(-1, -2, Gravity.TOP, top = if (strip != null) 116f else 70f),
+        )
         makeRow(HorizontalScrollView(this), Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 48f, 48f)
         root.addView(rowScroll, at(-1, dpi(190f), Gravity.TOP, top = 232f))
         root.addView(emptyHint, at(-1, -2, Gravity.TOP, top = 302f))
@@ -581,7 +598,7 @@ class MainActivity : EtvActivity() {
         dockAppsIndex = 2
         root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = 22f, end = 30f))
         // The prayer times in the other top corner, one a line.
-        prayerStrip(StripStyle.LIST)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.START, start = 30f, top = 22f)) }
+        prayerStrip(vertical = true)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.START, start = 36f, top = 26f)) }
 
         makeRow(HorizontalScrollView(this), Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 48f, 48f)
         root.addView(rowScroll, at(-1, dpi(196f), Gravity.TOP, top = 200f))
@@ -660,9 +677,9 @@ class MainActivity : EtvActivity() {
         inputsRow = inputs
         root.addView(inputs, at(-2, dpi(44f), Gravity.TOP or Gravity.START, start = 48f, top = 324f))
 
-        prayerStrip(StripStyle.RIAD)?.let {
+        prayerStrip(columnDp = 86f)?.let {
             root.addView(sectionTitle("PRAYER TIMES", pal.muted), at(-2, -2, Gravity.TOP or Gravity.START, start = 48f, top = 386f))
-            root.addView(it, at(-2, -2, Gravity.TOP or Gravity.START, start = 48f, top = 404f))
+            root.addView(it, at(-2, -2, Gravity.TOP or Gravity.START, start = 48f, top = 408f))
         }
 
         root.addView(moveHint, at(-1, -2, Gravity.TOP, top = 384f))
@@ -730,7 +747,7 @@ class MainActivity : EtvActivity() {
         clock = c; greeting = g1; greeting2 = g2; date = d
         root.addView(top, at(-2, -2, Gravity.TOP or Gravity.START, start = 118f, top = 34f))
         // The prayer times opposite the clock, each in a cartouche.
-        prayerStrip(StripStyle.CARTOUCHE)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.END, top = 36f, end = 40f)) }
+        prayerStrip(columnDp = 78f)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.END, top = 34f, end = 36f)) }
 
         root.addView(sectionTitle("FAVOURITES", accent), at(-2, -2, Gravity.TOP or Gravity.START, start = 118f, top = 150f))
         makeRow(HorizontalScrollView(this), Gravity.START or Gravity.BOTTOM, 40f, 40f)
@@ -775,7 +792,7 @@ class MainActivity : EtvActivity() {
         dockAppsIndex = 2
         root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = 20f, end = 30f))
         // The prayer times above the lit door.
-        prayerStrip(StripStyle.ARCH)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 10f)) }
+        prayerStrip(columnDp = 76f)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 14f)) }
 
         val scroller = CentreScrollView(this)
         makeRow(scroller, Gravity.BOTTOM, 0f, 0f)
@@ -937,8 +954,10 @@ class MainActivity : EtvActivity() {
         val t = PrayerStore.times(this, prefs, day) ?: return
         val friday = Days.isFriday(day, tz)
         val english = prefs.greeting == 2
-        val cells = Prayer.values().filter { it != Prayer.SUNRISE || prefs.showSunrise }.map { pr ->
-            val at = Days.epoch(day, t[pr.ordinal], tz)
+        val shown = Prayer.values().filter { it != Prayer.SUNRISE || prefs.showSunrise }
+        val ats = shown.map { Days.epoch(day, t[it.ordinal], tz) }
+        val cells = shown.mapIndexed { idx, pr ->
+            val at = ats[idx]
             val isNext = if (playing != null) pr == playing else next != null && pr == next.prayer && day == next.day
             val note = when {
                 playing != null && pr == playing -> if (english) "Athan" else "الأذان"
@@ -954,18 +973,31 @@ class MainActivity : EtvActivity() {
                 quiet = pr == Prayer.SUNRISE,
             )
         }
-        strip.show(cells)
+        // Where now falls on the day's line: between two prayers, as a fraction of the way.
+        var nowPos = 0f
+        if (ats.isNotEmpty() && now >= ats.first()) {
+            nowPos = (ats.size - 1).toFloat()
+            for (i in 0 until ats.size - 1) {
+                if (now < ats[i + 1]) {
+                    nowPos = i + (now - ats[i]).toFloat() / (ats[i + 1] - ats[i]).coerceAtLeast(1L)
+                    break
+                }
+            }
+        }
+        strip.show(cells, rightToLeft = !english, now = nowPos)
     }
 
+    /** "in 1 h 42 min" / "بعد ١:٤٢", and under an hour "in 42 min" / "بعد ٤٢ دقيقة". */
     private fun countdown(ms: Long, english: Boolean): String {
         val mins = ((ms + 59_999L) / 60_000L).toInt().coerceAtLeast(0)
         val h = mins / 60
         val m = mins % 60
         return when {
-            h > 0 && english -> "in $h:%02d".format(m)
-            h > 0 -> "بعد $h:%02d".format(m)
+            english && h > 0 -> if (m == 0) "in $h h" else "in $h h $m min"
             english -> "in $m min"
-            else -> "بعد $m د"
+            h > 0 -> Hijri.arabicDigits("بعد $h:%02d".format(m))
+            m <= 1 -> "الآن"
+            else -> Hijri.arabicDigits("بعد $m دقيقة")
         }
     }
 

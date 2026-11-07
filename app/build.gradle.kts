@@ -13,7 +13,7 @@ android {
         targetSdk = 35
         // GitHub sets ETV_VERSION_CODE (100 + the build number) so every build counts as newer.
         versionCode = System.getenv("ETV_VERSION_CODE")?.toIntOrNull() ?: 6
-        versionName = "1.8.1"
+        versionName = "1.8.2"
     }
 
     // One fixed key, so every new build installs over the previous one.
@@ -59,6 +59,17 @@ android {
         noCompress += "mp3"
     }
 
+    // Screenshots of the home screen (HomeShots), run on GitHub by .github/workflows/shots.yml.
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            all {
+                it.systemProperty("shots.dir", layout.buildDirectory.dir("shots").get().asFile.path)
+                System.getenv("ETV_SOUNDS_IN")?.let { dir -> it.systemProperty("sounds.in", dir) }
+            }
+        }
+    }
+
     lint {
         abortOnError = false
         checkReleaseBuilds = false
@@ -66,5 +77,8 @@ android {
 }
 
 // No libraries on purpose: plain Android Views keep the launcher tiny and quick to start.
+// (The two below are only for the screenshot test; they never go into the APK.)
 dependencies {
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.14.1")
 }

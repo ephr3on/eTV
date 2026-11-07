@@ -224,7 +224,7 @@ app/src/main/java/app/etv/launcher/
   Updater.kt            checks GitHub releases, downloads and installs new versions
   PrayerTimes.kt        prayers, calculation methods, the TV's own calculation, Hijri dates, the stored times
   PrayerSources.kt      aladhan.com, Mawaqit mosques, city search, keeping the times fresh
-  PrayerStrip.kt        the prayer times on the home screen, styled for each theme
+  PrayerStrip.kt        the prayer times on the home screen: a line through the day, styled for each theme
   AthanSounds.kt        the athan recordings and the dua: built in, or fetched once
   AthanService.kt       the athan alarm, and playing the athan and dua while pausing the rest of the TV
   AthanActivity.kt      the athan screen
@@ -236,6 +236,10 @@ app/src/main/java/app/etv/launcher/
   Prefs.kt              all saved options
 app/src/main/assets/fonts/   El Messiri, Reem Kufi and Readex Pro (SIL Open Font License, see OFL files)
 app/src/main/assets/athan/   Makkah's athan and Fajr athan (public domain, see CREDITS.txt)
+app/src/main/res/raw/        Let's Encrypt's root certificates: older TVs don't know the newer ones archive.org uses
+app/src/test/                HomeShots: pictures of the home screen in every theme, without a TV
+scripts/check-sounds.sh      fetches every downloadable recording and says what it is
+.github/workflows/shots.yml  runs both for branches named shots*, and puts the results on the branch shots-out
 install.sh, make-default.sh  one-command install and Home setup from a Mac
 ```
 

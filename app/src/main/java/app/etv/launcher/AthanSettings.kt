@@ -348,7 +348,7 @@ private fun SettingsActivity.useSound(prayers: List<Prayer>, id: String) {
     val s = AthanSounds.find(this, id) ?: return
     if (!AthanSounds.isReady(this, s)) {
         AthanSounds.ensure(this, s, force = true) { ok ->
-            toast(if (ok) "${s.name} is ready" else "Couldn't download ${s.name}. Makkah's athan plays until it works.")
+            toast(if (ok) "${s.name} is ready" else "Couldn't download ${s.name} (${AthanSounds.whyFailed(s)}). Makkah's athan plays until it works.")
         }
     }
 }
@@ -377,7 +377,7 @@ private fun SettingsActivity.pickDua() {
                     val s = list[which]
                     if (!AthanSounds.isReady(this, s)) {
                         AthanSounds.ensure(this, s, force = true) { ok ->
-                            toast(if (ok) "The dua is ready" else "Couldn't download the dua. Try again later.")
+                            toast(if (ok) "The dua is ready" else "Couldn't download the dua: ${AthanSounds.whyFailed(s)}")
                         }
                     }
                 }
@@ -387,7 +387,7 @@ private fun SettingsActivity.pickDua() {
                         p.dua = AthanSounds.CUSTOM_DUA
                         render()
                         AthanSounds.find(this, AthanSounds.CUSTOM_DUA)?.let { s ->
-                            AthanSounds.ensure(this, s, force = true) { ok -> if (!ok) toast("Couldn't download that recording") }
+                            AthanSounds.ensure(this, s, force = true) { ok -> if (!ok) toast("Couldn't download that recording: ${AthanSounds.whyFailed(s)}") }
                         }
                     }
                 }

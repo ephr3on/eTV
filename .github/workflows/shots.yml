@@ -1,0 +1,81 @@
+name: Screenshots
+
+# Pictures of the home screen and a check of the downloadable recordings, without a TV.
+# Runs for branches named shots*, and by hand; the results go to the branch shots-out.
+on:
+  push:
+    branches: ['shots', 'shots-*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  shots:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Check the recordings
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg file >/dev/null
+          mkdir -p out
+          ./scripts/check-sounds.sh > out/sounds.txt 2>&1 || true
+
+      - name: Fetch Let's Encrypt's roots and check archive.org chains to them
+        run: |
+          set +e
+          mkdir -p out/certs
+          cd out/certs
+          for u in https://letsencrypt.org/certs/isrgrootx1.pem https://letsencrypt.org/certs/isrg-root-x2.pem https://letsencrypt.org/certs/gen-y/root-ye.pem https://letsencrypt.org/certs/gen-y/root-yr.pem; do
+            curl -sSL -m 60 -o "$(basename "$u")" "$u" < /dev/null
+          done
+          {
+            for f in *.pem; do echo "== $f"; openssl x509 -in "$f" -noout -subject -issuer -dates -fingerprint -sha256; done
+            for h in dn711001.ca.archive.org dn711007.ca.archive.org dn710102.ca.archive.org; do
+              openssl s_client -connect $h:443 -servername $h -showcerts < /dev/null 2>/dev/null | awk '/BEGIN CERT/{n++} {print > ("served" n ".pem")}'
+              echo "== $h: served certificates"
+              for c in served*.pem; do if [ -s "$c" ]; then openssl x509 -in "$c" -noout -subject -issuer -enddate 2>/dev/null; fi; done
+              echo "-- verifies with Root YE alone as the trust anchor:"
+              cat served2.pem served3.pem served4.pem 2>/dev/null > untrusted.pem
+              openssl verify -CAfile root-ye.pem -untrusted untrusted.pem served1.pem 2>&1 | tail -2
+              echo "-- verifies with ISRG Root X1 alone (old Android):"
+              openssl verify -CAfile isrgrootx1.pem -untrusted untrusted.pem served1.pem 2>&1 | tail -2
+              rm -f served*.pem untrusted.pem
+            done
+          } > ../certs.txt 2>&1
+          true
+
+      - name: Take the screenshots
+        run: |
+          chmod +x gradlew
+          mkdir -p "$RUNNER_TEMP/sounds"
+          for u in https://archive.org/download/Islamic_Tape-258_uP_bY_mUSLEm/sharawy_doaa_24.mp3 https://archive.org/download/alshaarawi/alshaarawi-doaa-24.mp3; do
+            curl -sSL -m 120 -o "$RUNNER_TEMP/sounds/$(basename "$u")" "$u" < /dev/null || true
+          done
+          ETV_SOUNDS_IN="$RUNNER_TEMP/sounds" ./gradlew --no-daemon testDebugUnitTest > out/gradle.txt 2>&1 || true
+          cp -r app/build/shots/. out/ 2>/dev/null || true
+          for f in out/clean-*.mp3; do
+            [ -f "$f" ] || continue
+            { echo "== $f"; file -b "$f"; ffprobe -v error -show_entries stream=codec_name,sample_rate,channels:format=duration -of compact "$f"; echo "decode errors: $(ffmpeg -nostdin -v error -i "$f" -f null - 2>&1 | wc -l)"; } >> out/clean.txt
+            rm -f "$f"
+          done
+          cp -r app/build/test-results/testDebugUnitTest/. out/ 2>/dev/null || true
+
+      - name: Publish the results
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd out
+          git init -q
+          git checkout -q -b shots-out
+          git add -A
+          git -c user.name=eTV-ci -c user.email=ci@users.noreply.github.com commit -qm "Results for $GITHUB_SHA"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" shots-out

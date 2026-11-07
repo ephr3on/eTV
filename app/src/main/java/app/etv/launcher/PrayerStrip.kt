@@ -2,34 +2,19 @@ package app.etv.launcher
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.view.Gravity
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
+import android.graphics.Typeface
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
-
-/** How the prayer times look in each theme. */
-enum class StripStyle {
-    /** Classic, Lantern: names over times; the next prayer stands in an outlined doorway. */
-    ARCH,
-
-    /** Riad: every prayer a small whitewashed door; the next one is a blue door with brass studs. */
-    RIAD,
-
-    /** Cartouche: the next prayer in a gold cartouche. */
-    CARTOUCHE,
-
-    /** Doorway: a quiet list in the corner, one prayer a line. */
-    LIST,
-}
 
 /** One prayer on the home screen. */
 class PrayerCell(
     val name: String,
     val time: String,
-    /** Under the next prayer: how long until it. */
+    /** Under the next prayer: how long until it ("بعد ١:٤٢", "in 1 h 42 min", or "Athan" while it plays). */
     val note: String,
     val next: Boolean,
     /** Already prayed today. */
@@ -38,198 +23,317 @@ class PrayerCell(
     val quiet: Boolean,
 )
 
+/** The colours one theme gives the prayer times. */
+class PrayerColors(
+    val name: Int,
+    val time: Int,
+    val muted: Int,
+    /** The day's line, and the markers of the prayers still to come. */
+    val line: Int,
+    /** The part of the line already passed today, the next prayer's name and the countdown. */
+    val accent: Int,
+    /** The little doorway that marks the next prayer. */
+    val doorFill: Int,
+    val doorStroke: Int,
+    /** The wall behind, to cut the line around an open marker. */
+    val bg: Int,
+    /** Brass studs on that doorway (Riad); 0 for none. */
+    val studs: Int = 0,
+)
+
 /**
- * Today's prayer times on the home screen. Nothing in it can be selected: it's there to be read.
- * Sizes are fixed, so the once-a-minute update never moves anything else on the screen.
+ * Today's prayer times on the home screen, as a line through the day: a marker for each prayer,
+ * the line filled in up to now, and the next prayer standing in a small doorway with how long
+ * until it underneath. Prayers already passed are quieter.
+ *
+ * Arabic names read right to left (Fajr on the right); English ones left to right. [vertical]
+ * stacks them top to bottom instead, for a corner of the screen (Doorway).
+ *
+ * Everything is drawn here, at a fixed size: nothing can be cut off, nothing can be selected,
+ * and the once-a-minute update never moves anything else on the screen.
  */
 @SuppressLint("ViewConstructor")
-class PrayerStripView(context: Context, private val style: StripStyle) : LinearLayout(context) {
+class PrayerStripView(context: Context, private val vertical: Boolean) : View(context) {
 
-    private var pal: Palette = Look.palettes[0]
-    private var accent = Color.WHITE
-    private val message = TextView(context)
-    private var shown: List<PrayerCell> = emptyList()
+    private val d = resources.displayMetrics.density
+    private var colors = PrayerColors(Color.WHITE, Color.WHITE, Color.GRAY, Color.GRAY, Color.WHITE, 0, Color.WHITE, Color.BLACK)
+    private var cells: List<PrayerCell> = emptyList()
+    private var rtl = false
+    /** Where now is on the line: 0 at the first prayer, 1 at the second, ... (may be below 0 or past the last). */
+    private var nowPos = -1f
+    private var message: String? = null
 
-    private class Holder(val box: View, val name: TextView, val time: TextView, val note: TextView, val shape: ArchDrawable?)
+    private val namePaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.SUBPIXEL_TEXT_FLAG)
+    private val timePaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.SUBPIXEL_TEXT_FLAG)
+    private val notePaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.SUBPIXEL_TEXT_FLAG)
+    private val shape = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val door = Path()
+    private val oval = RectF()
 
-    private val holders = ArrayList<Holder>()
+    /** Fonts: the theme's display face for the names, the body face for the numbers. */
+    private var nameFace: Typeface = Fonts.display(context, 500)
+    private var nameFaceNext: Typeface = Fonts.display(context, 600)
+    private var timeFace: Typeface = Fonts.body(context, 400)
+    private var timeFaceNext: Typeface = Fonts.body(context, 600)
 
     init {
-        orientation = if (style == StripStyle.LIST) VERTICAL else HORIZONTAL
-        gravity = if (style == StripStyle.LIST) Gravity.START else Gravity.CENTER
-        clipChildren = false
-        clipToPadding = false
-        message.typeface = Fonts.body(context, 300)
-        message.sp(11.5f)
-        message.visibility = View.GONE
+        isFocusable = false
+        notePaint.typeface = Fonts.body(context, 500)
+        timePaint.fontFeatureSettings = "tnum"
+        notePaint.fontFeatureSettings = "tnum"
     }
 
-    fun applyTheme(pal: Palette, accent: Int) {
-        this.pal = pal
-        this.accent = accent
-        message.setTextColor(pal.muted)
+    // ---------------- sizes (dp) ----------------
+
+    /** Horizontal: the width of each prayer's column. */
+    var columnDp = 84f
+
+    /** Vertical: the whole width. */
+    var widthDp = 160f
+
+    private val nameSp get() = if (vertical) 15f else 15.5f
+    private val timeSp get() = if (vertical) 15f else 18f
+    private val noteSp = 11.5f
+
+    // Horizontal rows: name, line, time, countdown.
+    private val hNameBase = 17f
+    private val hLine = 36f
+    private val hTimeBase = 66f
+    private val hNoteBase = 86f
+    private val hHeight = 94f
+
+    // Vertical rows.
+    private val vRow = 34f
+    private val vNextExtra = 18f
+    private val vLineX = 9f
+
+    private fun sp(v: Float) = v * resources.displayMetrics.scaledDensity
+
+    fun applyTheme(c: PrayerColors) {
+        colors = c
+        nameFace = Fonts.display(context, 500)
+        nameFaceNext = Fonts.display(context, 600)
+        timeFace = Fonts.body(context, 400)
+        timeFaceNext = Fonts.body(context, 600)
+        notePaint.typeface = Fonts.body(context, 500)
+        invalidate()
     }
 
     /** A single quiet line instead of the times (no city chosen yet). */
     fun showMessage(text: String) {
-        if (message.parent == null) {
-            removeAllViews()
-            holders.clear()
-            shown = emptyList()
-            addView(message, LayoutParams(-2, -2))
-        }
-        message.visibility = View.VISIBLE
-        if (message.text?.toString() != text) message.text = text
+        if (message == text && cells.isEmpty()) return
+        message = text
+        cells = emptyList()
+        requestLayout()
+        invalidate()
     }
 
-    fun show(cells: List<PrayerCell>) {
-        if (message.parent != null) {
-            removeView(message)
-        }
-        if (holders.size != cells.size) build(cells.size)
-        for ((i, c) in cells.withIndex()) apply(holders[i], c, shown.getOrNull(i))
-        shown = cells
+    fun show(list: List<PrayerCell>, rightToLeft: Boolean, now: Float) {
+        val sizeChanged = list.size != cells.size || message != null || list.any { it.next } != cells.any { it.next }
+        message = null
+        cells = list
+        rtl = rightToLeft
+        nowPos = now
+        if (sizeChanged) requestLayout()
+        invalidate()
     }
 
-    private fun build(n: Int) {
-        removeAllViews()
-        holders.clear()
-        val d = resources.displayMetrics.density
-        for (i in 0 until n) {
-            val name = TextView(context).apply {
-                includeFontPadding = false
-                gravity = Gravity.CENTER
-                maxLines = 1
-            }
-            val time = TextView(context).apply {
-                includeFontPadding = false
-                gravity = Gravity.CENTER
-                fontFeatureSettings = "tnum"
-                maxLines = 1
-            }
-            val note = TextView(context).apply {
-                includeFontPadding = false
-                gravity = Gravity.CENTER
-                fontFeatureSettings = "tnum"
-                maxLines = 1
-            }
-            if (style == StripStyle.LIST) {
-                val row = LinearLayout(context).apply {
-                    orientation = HORIZONTAL
-                    gravity = Gravity.CENTER_VERTICAL
-                    setPadding(context.dpi(12f), 0, context.dpi(12f), 0)
-                }
-                name.typeface = Fonts.display(context, 500)
-                name.sp(14f)
-                name.gravity = Gravity.START or Gravity.CENTER_VERTICAL
-                time.typeface = Fonts.body(context, 400)
-                time.sp(13.5f)
-                time.gravity = Gravity.END or Gravity.CENTER_VERTICAL
-                note.typeface = Fonts.body(context, 400)
-                note.sp(10.5f)
-                note.gravity = Gravity.END or Gravity.CENTER_VERTICAL
-                row.addView(name, LayoutParams(0, -2, 1f))
-                row.addView(note, LayoutParams(-2, -2).apply { marginEnd = context.dpi(8f) })
-                row.addView(time, LayoutParams(context.dpi(50f), -2))
-                addView(row, LayoutParams(context.dpi(196f), context.dpi(27f)).apply { if (i > 0) topMargin = context.dpi(2f) })
-                holders.add(Holder(row, name, time, note, null))
-            } else {
-                val shape = ArchDrawable(d).apply {
-                    this.shape = if (style == StripStyle.CARTOUCHE) TileShape.CARTOUCHE else TileShape.ARCH
-                }
-                val cell = LinearLayout(context).apply {
-                    orientation = VERTICAL
-                    gravity = Gravity.CENTER_HORIZONTAL
-                    background = shape
-                    setPadding(0, context.dpi(if (style == StripStyle.CARTOUCHE) 15f else 19f), 0, 0)
-                }
-                name.typeface = Fonts.display(context, 500)
-                name.sp(12.5f)
-                time.typeface = Fonts.body(context, 500)
-                time.sp(14f)
-                note.typeface = Fonts.body(context, 400)
-                note.sp(9.5f)
-                cell.addView(name, LayoutParams(-1, -2))
-                cell.addView(time, LayoutParams(-1, -2).apply { topMargin = context.dpi(4f) })
-                cell.addView(note, LayoutParams(-1, -2).apply { topMargin = context.dpi(3f) })
-                val w = if (style == StripStyle.RIAD) 62f else 60f
-                val h = if (style == StripStyle.RIAD) 62f else 68f
-                addView(cell, LayoutParams(context.dpi(w), context.dpi(h)).apply {
-                    if (i > 0) marginStart = context.dpi(if (style == StripStyle.RIAD) 8f else 4f)
-                })
-                holders.add(Holder(cell, name, time, note, shape))
-            }
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val msg = message
+        if (msg != null) {
+            notePaint.textSize = sp(12f)
+            setMeasuredDimension((notePaint.measureText(msg) + 4 * d).toInt(), (24 * d).toInt())
+            return
         }
-        shown = emptyList()
+        val n = cells.size.coerceAtLeast(1)
+        if (vertical) {
+            val h = n * vRow + (if (cells.any { it.next }) vNextExtra else 0f) + 4f
+            setMeasuredDimension((widthDp * d).toInt(), (h * d).toInt())
+        } else {
+            setMeasuredDimension((n * columnDp * d).toInt(), (hHeight * d).toInt())
+        }
     }
 
-    private fun apply(h: Holder, c: PrayerCell, before: PrayerCell?) {
-        setText(h.name, c.name)
-        setText(h.time, c.time)
-        setText(h.note, c.note)
-        h.note.visibility = if (c.note.isEmpty()) View.INVISIBLE else View.VISIBLE
-        // Colours only change when the state does.
-        if (before != null && before.next == c.next && before.past == c.past && before.quiet == c.quiet) return
-
-        val d = resources.displayMetrics.density
-        val dim = if (c.past || c.quiet) 0.55f else 1f
-        when (style) {
-            StripStyle.LIST -> {
-                h.box.background = if (c.next) GradientDrawable().apply {
-                    cornerRadius = 14f * d
-                    setColor(Look.withAlpha(accent, 30))
-                    setStroke(context.dpi(1f), accent)
-                } else null
-                h.name.setTextColor(if (c.next) accent else pal.label)
-                h.time.setTextColor(if (c.next) pal.text else pal.label)
-                h.note.setTextColor(accent)
-            }
-            StripStyle.RIAD -> {
-                val s = h.shape!!
-                s.strokeWidth = d
-                if (c.next) {
-                    s.fill = pal.tile
-                    s.stroke = pal.tile
-                    s.inner = pal.tileInner
-                    s.studs = pal.studs
-                    h.name.setTextColor(pal.tileLabel)
-                    h.time.setTextColor(pal.tileText)
-                    h.note.setTextColor(pal.studs)
-                } else {
-                    s.fill = pal.card
-                    s.stroke = pal.tileStroke
-                    s.inner = 0
-                    s.studs = 0
-                    h.name.setTextColor(pal.muted)
-                    h.time.setTextColor(pal.text)
-                }
-                s.invalidateSelf()
-            }
-            else -> {
-                val s = h.shape!!
-                s.inner = 0
-                s.studs = 0
-                if (c.next) {
-                    s.fill = Look.withAlpha(accent, 28)
-                    s.stroke = accent
-                    s.strokeWidth = 1.2f * d
-                } else {
-                    s.fill = Color.TRANSPARENT
-                    // Cartouche: every prayer in a faint cartouche; Classic and Lantern: just the text.
-                    s.stroke = if (style == StripStyle.CARTOUCHE) pal.dot else 0
-                    s.strokeWidth = if (style == StripStyle.CARTOUCHE) 0.8f * d else 0f
-                }
-                h.name.setTextColor(if (c.next) accent else pal.muted)
-                h.time.setTextColor(if (c.next) pal.text else pal.label)
-                h.note.setTextColor(accent)
-                s.invalidateSelf()
-            }
+    override fun onDraw(canvas: Canvas) {
+        message?.let {
+            notePaint.textSize = sp(12f)
+            notePaint.color = colors.muted
+            notePaint.textAlign = Paint.Align.LEFT
+            canvas.drawText(it, 2 * d, 16 * d, notePaint)
+            return
         }
-        h.name.alpha = dim
-        h.time.alpha = dim
+        if (cells.isEmpty()) return
+        if (vertical) drawVertical(canvas) else drawHorizontal(canvas)
     }
 
-    private fun setText(v: TextView, s: String) {
-        if (v.text?.toString() != s) v.text = s
+    // ---------------- across ----------------
+
+    private fun drawHorizontal(c: Canvas) {
+        val n = cells.size
+        val col = columnDp * d
+        fun cx(i: Int) = (if (rtl) n - 1 - i else i) * col + col / 2f
+        val ly = hLine * d
+
+        // The day's line, then the part already passed.
+        val first = cx(0)
+        val last = cx(n - 1)
+        shape.style = Paint.Style.STROKE
+        shape.strokeCap = Paint.Cap.ROUND
+        shape.strokeWidth = 1f * d
+        shape.color = colors.line
+        c.drawLine(first, ly, last, ly, shape)
+        if (nowPos > 0f) {
+            val p = nowPos.coerceAtMost((n - 1).toFloat())
+            val i = p.toInt().coerceAtMost(n - 2)
+            val x = cx(i) + (cx(i + 1) - cx(i)) * (p - i)
+            shape.strokeWidth = 2f * d
+            shape.color = Look.withAlpha(colors.accent, 200)
+            c.drawLine(first, ly, x, ly, shape)
+            if (nowPos < n - 1) nowMark(c, x, ly)
+        }
+
+        for ((i, cell) in cells.withIndex()) {
+            val x = cx(i)
+            marker(c, cell, x, ly)
+
+            namePaint.textAlign = Paint.Align.CENTER
+            namePaint.typeface = if (cell.next) nameFaceNext else nameFace
+            namePaint.textSize = sp(if (cell.quiet) nameSp - 1.5f else nameSp)
+            namePaint.color = when {
+                cell.next -> colors.accent
+                cell.past || cell.quiet -> colors.muted
+                else -> colors.name
+            }
+            c.drawText(cell.name, x, hNameBase * d, namePaint)
+
+            timePaint.textAlign = Paint.Align.CENTER
+            timePaint.typeface = if (cell.next) timeFaceNext else timeFace
+            timePaint.textSize = sp(if (cell.next) timeSp + 1f else if (cell.quiet) timeSp - 2f else timeSp)
+            timePaint.color = when {
+                cell.next -> colors.time
+                cell.past || cell.quiet -> colors.muted
+                else -> colors.time
+            }
+            c.drawText(cell.time, x, hTimeBase * d, timePaint)
+
+            if (cell.note.isNotEmpty()) {
+                notePaint.textAlign = Paint.Align.CENTER
+                notePaint.textSize = sp(noteSp)
+                notePaint.color = colors.accent
+                c.drawText(cell.note, x, hNoteBase * d, notePaint)
+            }
+        }
+    }
+
+    // ---------------- down ----------------
+
+    private fun drawVertical(c: Canvas) {
+        val w = widthDp * d
+        val lineX = if (rtl) w - vLineX * d else vLineX * d
+        val textStart = if (rtl) w - 28 * d else 28 * d
+        val textEnd = if (rtl) 4 * d else w - 4 * d
+        val row = vRow * d
+
+        // Where each row's marker sits.
+        val ys = FloatArray(cells.size)
+        var y = 0f
+        for ((i, cell) in cells.withIndex()) {
+            ys[i] = y + row / 2f
+            y += row + if (cell.next) vNextExtra * d else 0f
+        }
+
+        shape.style = Paint.Style.STROKE
+        shape.strokeCap = Paint.Cap.ROUND
+        shape.strokeWidth = 1f * d
+        shape.color = colors.line
+        c.drawLine(lineX, ys.first(), lineX, ys.last(), shape)
+        if (nowPos > 0f) {
+            val p = nowPos.coerceAtMost((cells.size - 1).toFloat())
+            val i = p.toInt().coerceAtMost(cells.size - 2)
+            val ny = ys[i] + (ys[i + 1] - ys[i]) * (p - i)
+            shape.strokeWidth = 2f * d
+            shape.color = Look.withAlpha(colors.accent, 200)
+            c.drawLine(lineX, ys.first(), lineX, ny, shape)
+            if (nowPos < cells.size - 1) nowMark(c, lineX, ny)
+        }
+
+        for ((i, cell) in cells.withIndex()) {
+            val cy = ys[i]
+            marker(c, cell, lineX, cy)
+
+            namePaint.typeface = if (cell.next) nameFaceNext else nameFace
+            namePaint.textSize = sp(if (cell.quiet) nameSp - 1.5f else nameSp)
+            namePaint.color = when {
+                cell.next -> colors.accent
+                cell.past || cell.quiet -> colors.muted
+                else -> colors.name
+            }
+            namePaint.textAlign = if (rtl) Paint.Align.RIGHT else Paint.Align.LEFT
+            val base = cy + namePaint.textSize * 0.36f
+            c.drawText(cell.name, textStart, base, namePaint)
+
+            timePaint.typeface = if (cell.next) timeFaceNext else timeFace
+            timePaint.textSize = sp(if (cell.next) timeSp + 1f else timeSp)
+            timePaint.color = if (cell.past || cell.quiet) colors.muted else colors.time
+            timePaint.textAlign = if (rtl) Paint.Align.LEFT else Paint.Align.RIGHT
+            c.drawText(cell.time, textEnd, cy + timePaint.textSize * 0.36f, timePaint)
+
+            if (cell.note.isNotEmpty()) {
+                notePaint.textSize = sp(noteSp)
+                notePaint.color = colors.accent
+                notePaint.textAlign = if (rtl) Paint.Align.RIGHT else Paint.Align.LEFT
+                c.drawText(cell.note, textStart, cy + row / 2f + 8 * d, notePaint)
+            }
+        }
+    }
+
+    // ---------------- markers ----------------
+
+    /** Now: a small light with a soft glow around it, so it never looks like a prayer. */
+    private fun nowMark(c: Canvas, x: Float, y: Float) {
+        shape.style = Paint.Style.FILL
+        shape.color = Look.withAlpha(colors.accent, 50)
+        c.drawCircle(x, y, 8f * d, shape)
+        shape.color = colors.bg
+        c.drawCircle(x, y, 4.6f * d, shape)
+        shape.color = colors.accent
+        c.drawCircle(x, y, 3.4f * d, shape)
+    }
+
+    /** A dot on the line: filled once passed, open while still to come; the next prayer a small doorway. */
+    private fun marker(c: Canvas, cell: PrayerCell, x: Float, y: Float) {
+        if (cell.next) {
+            val w = 13f * d
+            val h = 17f * d
+            archPath(door, oval, x - w / 2f, y - h / 2f, x + w / 2f, y + h / 2f, 2f * d)
+            shape.style = Paint.Style.FILL
+            shape.color = colors.doorFill
+            c.drawPath(door, shape)
+            shape.style = Paint.Style.STROKE
+            shape.strokeWidth = 1.4f * d
+            shape.color = colors.doorStroke
+            c.drawPath(door, shape)
+            if (colors.studs != 0) {
+                shape.style = Paint.Style.FILL
+                shape.color = colors.studs
+                for (k in -1..1) c.drawCircle(x + k * 2.6f * d, y + 1.5f * d, 0.9f * d, shape)
+            }
+            return
+        }
+        val r = if (cell.quiet) 2.6f * d else 3.6f * d
+        shape.style = Paint.Style.FILL
+        if (cell.past) {
+            // Passed: a small solid bead on the passed line.
+            shape.color = Look.withAlpha(colors.accent, 200)
+            c.drawCircle(x, y, if (cell.quiet) 2.2f * d else 3f * d, shape)
+            return
+        }
+        // Still to come: an open ring; the wall shows through, so the line stops at it.
+        shape.color = colors.bg
+        c.drawCircle(x, y, r, shape)
+        shape.style = Paint.Style.STROKE
+        shape.strokeWidth = 1.3f * d
+        shape.color = if (cell.quiet) colors.muted else colors.name
+        c.drawCircle(x, y, r, shape)
     }
 }
