@@ -32,8 +32,17 @@ jobs:
       - name: Take the screenshots
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon testDebugUnitTest --tests '*HomeShots*' > out/gradle.txt 2>&1 || true
+          mkdir -p "$RUNNER_TEMP/sounds"
+          for u in https://archive.org/download/Islamic_Tape-258_uP_bY_mUSLEm/sharawy_doaa_24.mp3 https://archive.org/download/alshaarawi/alshaarawi-doaa-24.mp3; do
+            curl -sSL -m 120 -o "$RUNNER_TEMP/sounds/$(basename "$u")" "$u" < /dev/null || true
+          done
+          ETV_SOUNDS_IN="$RUNNER_TEMP/sounds" ./gradlew --no-daemon testDebugUnitTest > out/gradle.txt 2>&1 || true
           cp -r app/build/shots/. out/ 2>/dev/null || true
+          for f in out/clean-*.mp3; do
+            [ -f "$f" ] || continue
+            { echo "== $f"; file -b "$f"; ffprobe -v error -show_entries stream=codec_name,sample_rate,channels:format=duration -of compact "$f"; echo "decode errors: $(ffmpeg -nostdin -v error -i "$f" -f null - 2>&1 | wc -l)"; } >> out/clean.txt
+            rm -f "$f"
+          done
           cp -r app/build/test-results/testDebugUnitTest/. out/ 2>/dev/null || true
 
       - name: Publish the results

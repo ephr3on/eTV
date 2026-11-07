@@ -63,7 +63,10 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-            all { it.systemProperty("shots.dir", layout.buildDirectory.dir("shots").get().asFile.path) }
+            all {
+                it.systemProperty("shots.dir", layout.buildDirectory.dir("shots").get().asFile.path)
+                System.getenv("ETV_SOUNDS_IN")?.let { dir -> it.systemProperty("sounds.in", dir) }
+            }
         }
     }
 

@@ -80,7 +80,10 @@ object Net {
             else -> "the site answered ${e.code}"
         }
         is java.net.UnknownHostException -> "no internet"
+        is javax.net.ssl.SSLException -> "the TV couldn't make a secure connection"
         is java.net.SocketTimeoutException -> "no answer in time"
+        is java.net.ConnectException -> "couldn't reach the site"
+        is java.io.IOException -> if (e.message?.contains("space", true) == true) "the TV is full" else "the connection broke off"
         else -> "couldn't connect"
     }
 }
