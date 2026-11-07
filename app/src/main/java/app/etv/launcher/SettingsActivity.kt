@@ -57,6 +57,15 @@ class SettingsActivity : EtvActivity() {
     /** What to select after redrawing: "cat:<n>" or an option's key. */
     internal var focusKey: String? = "cat:0"
 
+    /**
+     * True while render() rebuilds the screen. Taking the views away moves the remote's focus to
+     * the first category for a moment; that must not count as you choosing it.
+     */
+    private var rebuilding = false
+
+    /** The category whose options are on the right now (-1 before the first). */
+    private var shownPane = -1
+
     /** Ask for the city once the screen is up. */
     private var chooseCity = false
 
@@ -135,6 +144,15 @@ class SettingsActivity : EtvActivity() {
     // ---------------- drawing ----------------
 
     internal fun render() {
+        rebuilding = true
+        try {
+            rebuild()
+        } finally {
+            rebuilding = false
+        }
+    }
+
+    private fun rebuild() {
         pal = Look.palette(prefs)
         accent = Look.accent(prefs)
         window.setBackgroundDrawable(ColorDrawable(pal.bg))
@@ -143,19 +161,28 @@ class SettingsActivity : EtvActivity() {
         title.typeface = Fonts.display(this, 500)
         root.findViewWithTag<View>("divider")?.setBackgroundColor(pal.tileStroke)
 
+        // Remember where you were before the views go.
+        val key = focusKey
+        val scrollY = paneScroll.scrollY
+        val samePane = shownPane == current
+        val oldIndex = (0 until pane.childCount).firstOrNull { pane.getChildAt(it).tag == key } ?: -1
+
         menu.removeAllViews()
         for ((i, c) in categories.withIndex()) menu.addView(categoryButton(i, c), LinearLayout.LayoutParams(-1, dpi(46f)).apply {
             topMargin = dpi(4f)
         })
         showPane(current)
+        // Same options as before: stay scrolled where you were.
+        if (samePane) paneScroll.scrollTo(0, scrollY)
 
-        val key = focusKey
         val target = when {
             key == null -> null
             key.startsWith("cat:") -> menu.getChildAt(key.substring(4).toIntOrNull() ?: 0)
-            else -> pane.findViewWithTag(key)
+            else -> pane.findViewWithTag(key) ?: nearestOption(oldIndex)
         } ?: menu.getChildAt(current)
-        target?.post { target.requestFocus() }
+        // At once, before anything is drawn, so focus never visibly jumps.
+        target?.requestFocus()
+        focusKey = (target?.tag as? String) ?: key
     }
 
     /** A category on the left: a small doorway marks the one whose options are showing. */
@@ -171,7 +198,7 @@ class SettingsActivity : EtvActivity() {
             background = pillBackground(this@SettingsActivity, 14f, Color.TRANSPARENT, pal.card, accent)
             setOnClickListener { enterPane() }
             setOnFocusChangeListener { _, has ->
-                if (has) {
+                if (has && !rebuilding) {
                     focusKey = "cat:$index"
                     if (current != index) {
                         current = index
@@ -216,6 +243,7 @@ class SettingsActivity : EtvActivity() {
     private fun showPane(index: Int) {
         pane.removeAllViews()
         paneScroll.scrollTo(0, 0)
+        shownPane = index
         val c = categories[index]
         pane.addView(TextView(this).apply {
             text = c.name
@@ -420,11 +448,18 @@ class SettingsActivity : EtvActivity() {
             onPress()
             if (rerender) render()
         }
-        r.setOnFocusChangeListener { _, has -> if (has) focusKey = key }
+        r.setOnFocusChangeListener { _, has -> if (has && !rebuilding) focusKey = key }
         pane.addView(r, LinearLayout.LayoutParams(-1, dpi(52f)).apply { topMargin = dpi(4f) })
     }
 
     // ---------------- moving between the two sides ----------------
+
+    /** The row was pressed away (the option it belonged to is gone): the option now in its place. */
+    private fun nearestOption(index: Int): View? {
+        if (index < 0) return null
+        val rows = (0 until pane.childCount).map { pane.getChildAt(it) }
+        return rows.drop(index).firstOrNull { it.isFocusable } ?: rows.lastOrNull { it.isFocusable }
+    }
 
     private fun firstOption(): View? =
         (0 until pane.childCount).map { pane.getChildAt(it) }.firstOrNull { it.isFocusable }
