@@ -7,6 +7,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Looper
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -59,6 +61,27 @@ class HomeShots {
         val bmp = Bitmap.createBitmap(1920, 1080, Bitmap.Config.ARGB_8888)
         v.draw(Canvas(bmp))
         FileOutputStream(File(out, "$name.png")).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        // Where everything is, in dp, to check alignment and symmetry by numbers.
+        val sb = StringBuilder("dp: left top right bottom | centre-x  (screen 960 x 540, centre 480)\n")
+        val content = v.findViewById<View>(android.R.id.content) as ViewGroup
+        fun walk(g: View, depth: Int) {
+            if (g.visibility != View.VISIBLE || g.width == 0) return
+            val loc = IntArray(2)
+            g.getLocationInWindow(loc)
+            val l = loc[0] / 2f
+            val t = loc[1] / 2f
+            val r = l + g.width / 2f
+            val b = t + g.height / 2f
+            val label = (g as? TextView)?.text?.toString()?.replace("\n", " / ")?.take(40) ?: ""
+            sb.append("  ".repeat(depth)).append(g.javaClass.simpleName).append(' ')
+                .append("%.0f %.0f %.0f %.0f | %.0f".format(l, t, r, b, (l + r) / 2f))
+                .append(if (label.isNotEmpty()) "  \"$label\"" else "").append('\n')
+            if (g is ViewGroup && depth < 3 && g !is android.widget.HorizontalScrollView) {
+                for (i in 0 until g.childCount) walk(g.getChildAt(i), depth + 1)
+            }
+        }
+        for (i in 0 until content.childCount) walk(content.getChildAt(i), 0)
+        File(out, "bounds-$name.txt").writeText(sb.toString())
     }
 
     @Test
