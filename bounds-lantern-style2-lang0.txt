@@ -1,0 +1,15 @@
+dp: left top right bottom | centre-x  (screen 960 x 540, centre 480)
+FrameLayout 0 0 960 540 | 480
+  View 200 24 760 504 | 480
+  LinearLayout 44 35 177 116 | 111
+    TextView 44 35 116 73 | 80  "19:08"
+    TextView 44 77 177 116 | 111  "Saturday · 7 November / ‎٢٧ جمادى الأولى"
+  LinearLayout 761 35 916 73 | 839
+    ImageView 761 35 799 73 | 780
+    ImageView 800 35 838 73 | 819
+    ImageView 839 35 877 73 | 858
+    ImageView 878 35 916 73 | 897
+  PrayerStripView 210 33 750 125 | 480
+  CentreScrollView 0 64 960 394 | 480
+  LinearLayout 0 398 960 443 | 480
+    TextView 0 398 960 443 | 480  "Plex"

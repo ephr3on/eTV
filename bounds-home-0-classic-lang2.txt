@@ -1,0 +1,15 @@
+dp: left top right bottom | centre-x  (screen 960 x 540, centre 480)
+FrameLayout 0 0 960 540 | 480
+  ArchBackgroundView 0 0 960 540 | 480
+  PrayerStripView 228 16 732 110 | 480
+  LinearLayout 0 116 960 280 | 480
+    TextView 0 116 960 145 | 480  "Good evening"
+    TextView 0 149 960 230 | 480  "19:08"
+    TextView 0 236 960 258 | 480  "Saturday, 7 November  ·  27 Jumada al-Ul"
+    DotsView 415 272 545 280 | 480
+  HorizontalScrollView 0 232 960 422 | 480
+  LinearLayout 0 466 960 522 | 480
+    TextView 199 472 310 516 | 254  "Search"
+    TextView 324 472 434 516 | 379  "Inputs"
+    TextView 448 472 565 516 | 506  "All apps"
+    TextView 579 472 761 516 | 670  "Settings  ·  Update"

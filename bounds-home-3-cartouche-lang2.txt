@@ -1,0 +1,22 @@
+dp: left top right bottom | centre-x  (screen 960 x 540, centre 480)
+FrameLayout 0 0 960 540 | 480
+  FrameLayout 0 0 78 540 | 39
+    TextView 0 26 78 50 | 39  "eTV"
+    LinearLayout 0 104 78 384 | 39
+      ImageView 21 104 57 152 | 39
+      ImageView 21 162 57 210 | 39
+      ImageView 21 220 57 268 | 39
+      ImageView 21 278 57 326 | 39
+      ImageView 21 336 57 384 | 39
+    View 77 0 78 540 | 78
+  LinearLayout 118 34 431 106 | 275
+    FrameLayout 118 34 266 106 | 192
+      FrameLayout 122 38 262 102 | 192
+    View 274 45 277 95 | 275
+    LinearLayout 295 40 431 100 | 363
+      TextView 295 40 431 66 | 363  "Good evening"
+      TextView 295 68 431 100 | 363  "Saturday · 7 November / ‎27 Jumada al-Ul"
+  PrayerStripView 453 39 921 133 | 687
+  TextView 118 150 208 168 | 163  "FAVOURITES"
+  HorizontalScrollView 79 160 960 360 | 520
+  PapyrusView 79 523 960 534 | 520

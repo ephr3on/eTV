@@ -1,0 +1,10 @@
+== out/clean-alshaarawi-doaa-24.mp3
+MPEG ADTS, layer III, v1, 32 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|sample_rate=44100|channels=2
+format|duration=68.310250
+decode errors: 0
+== out/clean-sharawy_doaa_24.mp3
+MPEG ADTS, layer III, v1, 32 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|sample_rate=44100|channels=2
+format|duration=68.310250
+decode errors: 0
