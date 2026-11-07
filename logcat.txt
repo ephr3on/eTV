@@ -1,0 +1,353 @@
+--------- beginning of main
+11-07 16:04:59.942   481  1885 I MediaFocusControl: requestAudioFocus() from uid/pid 10174/3646 AA=USAGE_MEDIA/CONTENT_TYPE_MUSIC clientId=android.media.AudioManager@1bdbf52app.etv.launcher.AthanService$$ExternalSyntheticLambda19@981a223 callingPack=app.etv.launcher req=2 flags=0x0 sdk=35
+11-07 16:04:59.942   481  1885 I AudioService.FadeOutManager: unfadeOutUid() uid:10174
+--------- beginning of system
+11-07 16:04:59.943   481  1885 I ActivityTaskManager: START u0 {flg=0x10020000 cmp=app.etv.launcher/.AthanActivity} from uid 10174
+11-07 16:04:59.946   481   684 W ActivityTaskManager: Tried to set launchTime (0) < mLastActivityLaunchTime (207096)
+11-07 16:04:59.954   754   799 D SplashScreenView: Build android.window.SplashScreenView{4b6a77e V.E...... ......ID 0,0-0,0}
+11-07 16:04:59.954   754   799 D SplashScreenView: Icon: view: android.widget.ImageView{241e4df V.ED..... ......I. 0,0-0,0 #10204dd android:id/splashscreen_icon_view} drawable: com.android.wm.shell.startingsurface.SplashscreenIconDrawableFactory$ImmobileIconDrawable@d44952c size: 420
+11-07 16:04:59.954   754   799 D SplashScreenView: Branding: view: android.view.View{7af1bf5 G.ED..... ......I. 0,0-0,0 #10204dc android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+11-07 16:04:59.970   754   801 W Parcel  : Expecting binder but got null!
+11-07 16:04:59.978   481  1602 D CoreBackPreview: Window{5f80586 u0 Splash Screen app.etv.launcher}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@4b4f674, mPriority=0}
+11-07 16:04:59.984  3646  3681 W Parcel  : Expecting binder but got null!
+11-07 16:04:59.986   481  1600 D CoreBackPreview: Window{bbef412 u0 app.etv.launcher/app.etv.launcher.AthanActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b6505e0, mPriority=0}
+11-07 16:05:00.041  1656  2007 I AiAiEcho: Predicting[0]: 
+11-07 16:05:00.041  1656  2007 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+11-07 16:05:00.042  1656  2007 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+11-07 16:05:00.062   754   801 D EGL_emulation: app_time_stats: avg=1389.64ms min=157.79ms max=2621.48ms count=2
+11-07 16:05:00.143   481   502 I ActivityTaskManager: Displayed app.etv.launcher/.AthanActivity: +191ms
+11-07 16:05:00.145   481  1600 I MediaSessionStack: addSession to bottom of stack | record: app.etv.launcher/eTV athan (userId=0)
+11-07 16:05:00.149   481  1602 I MediaSessionStack: onPlaybackStateChanged - Pushing session to top | record: app.etv.launcher/eTV athan (userId=0)
+11-07 16:05:00.150   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 1
+11-07 16:05:00.150   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:00.150   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:00.150   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 1
+11-07 16:05:00.150   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:00.150   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:00.153   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 2
+11-07 16:05:00.153   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10f250
+11-07 16:05:00.153   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: app.etv.launcher
+11-07 16:05:00.154   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c111050
+11-07 16:05:00.154   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c111050
+11-07 16:05:00.154   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10f250
+11-07 16:05:00.154   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10f250
+11-07 16:05:00.158   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10f250
+11-07 16:05:00.159   953   953 I MediaPlayerList: Adding wrapped media player: app.etv.launcher at key: 2
+11-07 16:05:00.160   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:00.160   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:00.160   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 2
+11-07 16:05:00.160   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c111050
+11-07 16:05:00.160   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c111050
+11-07 16:05:00.163   430  3062 D NuPlayerDriver: NuPlayerDriver(0x7bac0064ffb0) created, clientPid(3646)
+11-07 16:05:00.163   481   684 D CoreBackPreview: Window{5f80586 u0 Splash Screen app.etv.launcher EXITING}: Setting back callback null
+11-07 16:05:00.163   481  1885 W InputManager-JNI: Input channel object '5f80586 Splash Screen app.etv.launcher (client)' was disposed without first being removed with the input manager!
+11-07 16:05:00.164   126   126 I hwservicemanager: getTransport: Cannot find entry android.hardware.media.omx@1.0::IOmx/default in either framework or device VINTF manifest.
+11-07 16:05:00.166   430  3062 D MediaPlayerService: OMX service is not available
+11-07 16:05:00.170   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: app.etv.launcher
+11-07 16:05:00.189   430  8210 D GenericSource: FileSource remote
+11-07 16:05:00.189   953   953 I MediaPlayerList: Adding wrapped media player: app.etv.launcher at key: 2
+11-07 16:05:00.190   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:00.190   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:00.201   481   481 D MediaSessionService: Media button session is changed to app.etv.launcher/eTV athan (userId=0)
+11-07 16:05:00.204   953   953 I MediaPlayerList: onMediaKeyEventSessionChanged: token=app.etv.launcher
+11-07 16:05:00.205   953   953 D MediaPlayerList: setActivePlayer(): setting player to app.etv.launcher
+11-07 16:05:00.205   953   953 D MediaPlayerList: sendMediaUpdate
+11-07 16:05:00.205   953   953 I MediaPlayerList: sendMediaUpdate: Creating a one item queue for a player with no queue
+11-07 16:05:00.205   953   953 D MediaPlayerList: sendMediaUpdate state=PlaybackState {state=3, position=59, buffered position=0, speed=1.0, updated=499518, actions=0, custom actions=[], active item id=-1, error=null}
+11-07 16:05:00.205   953   953 D MediaControlProfile: onMediaUpdated: track_changed=true state=true queue=true
+11-07 16:05:00.207   953   953 D MediaControlProfile: onCurrentPlayerStateUpdated state.
+11-07 16:05:00.207   953   953 D MediaControlProfile: updateSupportedOpcodes setting supported opcodes to: 0
+11-07 16:05:00.207   953   953 D MediaControlProfile: onCurrentPlayerStateUpdated metadata: title= أذان الظهر duration= 0
+11-07 16:05:00.207   953   953 D BluetoothMediaControlGattService: updatePlayerState: playbackState= PLAYING
+11-07 16:05:00.207   953   953 W BluetoothMediaControlGattService: Feature PLAYBACK_SPEED(BIT 8) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature PLAYBACK_SPEED(BIT 8) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature PLAYBACK_SPEED(BIT 8) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature TRACK_POSITION(BIT 7) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature TRACK_POSITION_NOTIFY support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature PLAYER_NAME(BIT 1) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature PLAYER_NAME(BIT 1) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature PLAYER_NAME(BIT 1) support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature PLAYER_NAME_NOTIFY support: true
+11-07 16:05:00.208   953   953 W BluetoothMediaControlGattService: Feature MEDIA_CONTROL_POINT_OPCODES_SUPPORTED(BIT 19) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature PLAYING_ORDER_SUPPORTED(BIT 16) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature PLAYING_ORDER(BIT 15) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature PLAYER_ICON_OBJ_ID(BIT 2) support: false
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature PLAYER_ICON_URL(BIT 3) support: false
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature MEDIA_CONTROL_POINT_OPCODES_SUPPORTED(BIT 19) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature TRACK_TITLE(BIT 5) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature TRACK_TITLE(BIT 5) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature TRACK_TITLE_NOTIFY support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION_NOTIFY support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:00.209   953   953 W BluetoothMediaControlGattService: Feature SEEKING_SPEED(BIT 9) support: true
+11-07 16:05:00.210   953   953 W BluetoothMediaControlGattService: Feature SEEKING_SPEED(BIT 9) support: true
+11-07 16:05:00.210   953   953 W BluetoothMediaControlGattService: Feature SEEKING_SPEED(BIT 9) support: true
+11-07 16:05:00.210   953   953 W BluetoothMediaControlGattService: Feature TRACK_CHANGED(BIT 4) support: true
+11-07 16:05:00.210   953   953 D MediaControlProfile: GMCS processPendingPlayerStateRequest
+11-07 16:05:00.210   953   953 W BluetoothMediaControlGattService: Feature PLAYING_ORDER_SUPPORTED(BIT 16) support: true
+11-07 16:05:00.210   953   953 W BluetoothMediaControlGattService: Feature PLAYING_ORDER(BIT 15) support: true
+11-07 16:05:00.210   953   953 W BluetoothMediaControlGattService: Feature PLAYING_ORDER_NOTIFY support: true
+11-07 16:05:00.210   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:00.210   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:00.210   953   953 D MediaControlProfile: onCurrentPlayerQueueUpdated: not implemented
+11-07 16:05:00.210   953   953 D MediaControlProfile: GMCS processPendingPlayerStateRequest
+11-07 16:05:00.216   430  8209 I GenericSource: start
+11-07 16:05:00.218   953   953 I MediaPlayerList: onMediaKeyEventSessionChanged: token=app.etv.launcher
+11-07 16:05:00.218   953   953 D MediaPlayerList: setActivePlayer(): setting player to app.etv.launcher
+11-07 16:05:00.218   953   953 D MediaPlayerList: sendMediaUpdate
+11-07 16:05:00.218   953   953 I MediaPlayerList: sendMediaUpdate: Creating a one item queue for a player with no queue
+11-07 16:05:00.218   953   953 D MediaPlayerList: sendMediaUpdate state=PlaybackState {state=3, position=72, buffered position=0, speed=1.0, updated=499531, actions=0, custom actions=[], active item id=-1, error=null}
+11-07 16:05:00.218   953   953 D AvrcpNativeInterface: sendMediaUpdate: metadata=true playStatus=true queue=true
+11-07 16:05:00.218   953   953 D AvrcpTargetJni: sendMediaUpdateNative
+11-07 16:05:00.219   953   953 I bt_stack: [INFO:avrcp_service.cc(423)] virtual void bluetooth::avrcp::AvrcpService::SendMediaUpdate(bool, bool, bool) track_changed=1 :  play_state=1 :  queue=1
+11-07 16:05:00.220   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 2
+11-07 16:05:00.220   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: app.etv.launcher
+11-07 16:05:00.220   953   953 D MediaPlayerList: Already have a controller for the player: app.etv.launcher, updating instead
+11-07 16:05:00.221   953   953 D MediaPlayerList: sendMediaUpdate
+11-07 16:05:00.221   953   953 I MediaPlayerList: sendMediaUpdate: Creating a one item queue for a player with no queue
+11-07 16:05:00.221   953   953 D MediaPlayerList: sendMediaUpdate state=PlaybackState {state=3, position=75, buffered position=0, speed=1.0, updated=499534, actions=0, custom actions=[], active item id=-1, error=null}
+11-07 16:05:00.221   953   953 D MediaControlProfile: onMediaUpdated: track_changed=false state=false queue=false
+11-07 16:05:00.221   953   953 W BluetoothMediaControlGattService: Feature PLAYER_NAME(BIT 1) support: true
+11-07 16:05:00.221   953   953 W BluetoothMediaControlGattService: Feature PLAYER_NAME(BIT 1) support: true
+11-07 16:05:00.221   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:00.221   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:00.221   953   953 D MediaControlProfile: GMCS processPendingPlayerStateRequest
+11-07 16:05:00.221   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:00.221   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:00.238   430  8214 D CCodec  : allocate(c2.android.mp3.decoder)
+11-07 16:05:00.239   430  8214 I CCodec  : setting up 'default' as default (vendor) store
+11-07 16:05:00.239   437   822 V C2Store : in init
+11-07 16:05:00.239   437   822 V C2Store : loading dll
+11-07 16:05:00.240   430  8214 I CCodec  : Created component [c2.android.mp3.decoder]
+11-07 16:05:00.240   430  8214 D CCodecConfig: read media type: audio/mpeg
+11-07 16:05:00.241   430  8214 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.max-count.values
+11-07 16:05:00.241   430  8214 D ReflectedParamUpdater: extent() != 1 for single value type: output.subscribed-indices.values
+11-07 16:05:00.241   430  8214 D ReflectedParamUpdater: extent() != 1 for single value type: input.buffers.allocator-ids.values
+11-07 16:05:00.241   430  8214 D ReflectedParamUpdater: extent() != 1 for single value type: output.buffers.allocator-ids.values
+11-07 16:05:00.241   430  8214 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.allocator-ids.values
+11-07 16:05:00.241   430  8214 D ReflectedParamUpdater: extent() != 1 for single value type: output.buffers.pool-ids.values
+11-07 16:05:00.241   430  8214 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.pool-ids.values
+11-07 16:05:00.242   430  8214 I CCodecConfig: query failed after returning 7 values (BAD_INDEX)
+11-07 16:05:00.242   430  8214 D CCodecConfig: c2 config diff is Dict {
+11-07 16:05:00.242   430  8214 D CCodecConfig:   c2::u32 coded.bitrate.value = 64000
+11-07 16:05:00.242   430  8214 D CCodecConfig:   c2::u32 input.buffers.max-size.value = 8192
+11-07 16:05:00.242   430  8214 D CCodecConfig:   c2::u32 input.delay.value = 0
+11-07 16:05:00.242   430  8214 D CCodecConfig:   string input.media-type.value = "audio/mpeg"
+11-07 16:05:00.242   430  8214 D CCodecConfig:   string output.media-type.value = "audio/raw"
+11-07 16:05:00.242   430  8214 D CCodecConfig:   c2::u32 raw.channel-count.value = 2
+11-07 16:05:00.242   430  8214 D CCodecConfig:   c2::u32 raw.sample-rate.value = 44100
+11-07 16:05:00.242   430  8214 D CCodecConfig: }
+11-07 16:05:00.242   430  8214 D MediaCodec: flushMediametrics
+11-07 16:05:00.242   430  8214 D CCodec  : [c2.android.mp3.decoder] buffers are bound to CCodec for this session
+11-07 16:05:00.242   430  8214 D CCodecConfig: no c2 equivalents for durationUs
+11-07 16:05:00.242   430  8214 D CCodecConfig: no c2 equivalents for encoder-delay
+11-07 16:05:00.242   430  8214 D CCodecConfig: no c2 equivalents for encoder-padding
+11-07 16:05:00.242   430  8214 D CCodecConfig: no c2 equivalents for flags
+11-07 16:05:00.242   430  8214 D CCodecConfig: c2 config diff is   c2::u32 raw.channel-count.value = 1
+11-07 16:05:00.243   430  8214 W Codec2Client: query -- param skipped: index = 1107298332.
+11-07 16:05:00.243   430  8214 D CCodec  : encoding statistics level = 0
+11-07 16:05:00.243   430  8214 D CCodec  : setup formats input: AMessage(what = 0x00000000) = {
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t bitrate = 64000
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t channel-count = 1
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t max-input-size = 8192
+11-07 16:05:00.243   430  8214 D CCodec  :   string mime = "audio/mpeg"
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t sample-rate = 44100
+11-07 16:05:00.243   430  8214 D CCodec  : }
+11-07 16:05:00.243   430  8214 D CCodec  : setup formats output: AMessage(what = 0x00000000) = {
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t channel-count = 1
+11-07 16:05:00.243   430  8214 D CCodec  :   string mime = "audio/raw"
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t sample-rate = 44100
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t encoder-delay = 576
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t encoder-padding = 1271
+11-07 16:05:00.243   430  8214 D CCodec  :   int32_t android._config-pcm-encoding = 2
+11-07 16:05:00.243   430  8214 D CCodec  : }
+11-07 16:05:00.243   430  8214 I CCodecConfig: query failed after returning 7 values (BAD_INDEX)
+11-07 16:05:00.243   430  8214 I MediaCodec: MediaCodec will operate in async mode
+11-07 16:05:00.243   430  8213 D MediaCodec: keep callback message for reclaim
+11-07 16:05:00.245   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 2
+11-07 16:05:00.245   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: app.etv.launcher
+11-07 16:05:00.245   953   953 D MediaPlayerList: Already have a controller for the player: app.etv.launcher, updating instead
+11-07 16:05:00.246   953   953 D MediaPlayerList: sendMediaUpdate
+11-07 16:05:00.246   953   953 I MediaPlayerList: sendMediaUpdate: Creating a one item queue for a player with no queue
+11-07 16:05:00.246   953   953 D MediaPlayerList: sendMediaUpdate state=PlaybackState {state=3, position=100, buffered position=0, speed=1.0, updated=499559, actions=0, custom actions=[], active item id=-1, error=null}
+11-07 16:05:00.246   953   953 D AvrcpNativeInterface: sendMediaUpdate: metadata=false playStatus=false queue=false
+11-07 16:05:00.246   953   953 D AvrcpTargetJni: sendMediaUpdateNative
+11-07 16:05:00.246   953   953 I bt_stack: [INFO:avrcp_service.cc(423)] virtual void bluetooth::avrcp::AvrcpService::SendMediaUpdate(bool, bool, bool) track_changed=0 :  play_state=0 :  queue=0
+11-07 16:05:00.246   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:00.246   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:00.248   430  8214 W Codec2Client: query -- param skipped: index = 1342179345.
+11-07 16:05:00.248   430  8214 W Codec2Client: query -- param skipped: index = 2415921170.
+11-07 16:05:00.249   437   822 D BufferPoolAccessor2.0: bufferpool2 0x77bce7af43d8 : 0(0 size) total buffers - 0(0 size) used buffers - 7702/7707 (recycle/alloc) - 24/7707 (fetch/transfer)
+11-07 16:05:00.249   437   822 D BufferPoolAccessor2.0: Destruction - bufferpool2 0x77bce7af43d8 cached: 0/0M, 0/0% in use; allocs: 7707, 100% recycled; transfers: 7707, 100% unfetched
+11-07 16:05:00.249   437   822 D BufferPoolAccessor2.0: bufferpool2 0x77bce7aeebf8 : 0(0 size) total buffers - 0(0 size) used buffers - 2611/2616 (recycle/alloc) - 8/2616 (fetch/transfer)
+11-07 16:05:00.249   437   822 D BufferPoolAccessor2.0: Destruction - bufferpool2 0x77bce7aeebf8 cached: 0/0M, 0/0% in use; allocs: 2616, 100% recycled; transfers: 2616, 100% unfetched
+11-07 16:05:00.249   430  8214 D CCodecBufferChannel: [c2.android.mp3.decoder#390] Created input block pool with allocatorID 16 => poolID 21 - OK (0)
+11-07 16:05:00.250   430  6017 D BufferPoolAccessor2.0: bufferpool2 0x7bac20654c88 : 0(0 size) total buffers - 0(0 size) used buffers - 7700/7708 (recycle/alloc) - 8/15412 (fetch/transfer)
+11-07 16:05:00.250   430  6017 D BufferPoolAccessor2.0: Destruction - bufferpool2 0x7bac20654c88 cached: 0/0M, 0/0% in use; allocs: 7708, 100% recycled; transfers: 15412, 100% unfetched
+11-07 16:05:00.250   430  6017 D BufferPoolAccessor2.0: bufferpool2 0x7bac20655818 : 0(0 size) total buffers - 0(0 size) used buffers - 2611/2619 (recycle/alloc) - 8/5230 (fetch/transfer)
+11-07 16:05:00.250   430  6017 D BufferPoolAccessor2.0: Destruction - bufferpool2 0x7bac20655818 cached: 0/0M, 0/0% in use; allocs: 2619, 100% recycled; transfers: 5230, 100% unfetched
+11-07 16:05:00.250   430  8214 I CCodecBufferChannel: [c2.android.mp3.decoder#390] Created output block pool with allocatorID 16 => poolID 30 - OK
+11-07 16:05:00.250   430  8214 D CCodecBufferChannel: [c2.android.mp3.decoder#390] Configured output block pool ids 30 => OK
+11-07 16:05:00.259  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3227 
+11-07 16:05:00.262  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 0, unlocked = true
+11-07 16:05:00.262  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=app.etv.launcher fieldId=-1 fieldName=null extras=null}, false)
+11-07 16:05:00.262  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4008 ShouldHideHeaderOnInitialState = false
+11-07 16:05:00.262  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 2, unlocked = true
+11-07 16:05:00.264   437  8215 D SimpleC2Component: Using output block pool with poolID 30 => got 30 - 0
+11-07 16:05:00.264   437  8215 I C2SoftMp3Dec: Reconfiguring decoder: 0->44100 Hz, 0->1 channels
+11-07 16:05:00.266   355  1183 W AudioFlinger: createTrack_l(): mismatch between requested flags (00000008) and output flags (00000002)
+11-07 16:05:00.269   355  1183 D AudioFlinger: Client defaulted notificationFrames to 11155 for frameCount 22310
+11-07 16:05:00.269   355  1183 D AF::TrackHandle: OpPlayAudio: track:61 usage:1 not muted
+11-07 16:05:00.293   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c1104b0
+11-07 16:05:00.293   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c1106f0
+11-07 16:05:00.293   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c1120d0
+11-07 16:05:00.354   355   464 D AudioFlinger: mixer(0x7ce7acc289a0) throttle end: throttle time(35)
+11-07 16:05:00.542   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10f430
+11-07 16:05:01.607  3646  3681 D EGL_emulation: app_time_stats: avg=370.18ms min=321.70ms max=400.11ms count=4
+11-07 16:05:02.144   481  1358 D OomAdjuster: Not killing cached processes
+11-07 16:05:02.807  3646  3681 D EGL_emulation: app_time_stats: avg=399.92ms min=399.65ms max=400.15ms count=3
+11-07 16:05:04.007  3646  3681 D EGL_emulation: app_time_stats: avg=399.98ms min=399.89ms max=400.04ms count=3
+11-07 16:05:04.975   481  1600 D InputDispatcher: Touch mode switch rejected, caller (pid=0, uid=10174) doesn't own the focused window nor none of the previously interacted window
+11-07 16:05:05.210  3646  3681 D EGL_emulation: app_time_stats: avg=400.89ms min=399.54ms max=402.88ms count=3
+11-07 16:05:05.264   437   790 D BufferPoolAccessor2.0: evictor expired: 2, evicted: 0
+11-07 16:05:05.400   430  8214 D BufferPoolAccessor2.0: bufferpool2 0x7bac20655a68 : 8(65536 size) total buffers - 5(40960 size) used buffers - 211/219 (recycle/alloc) - 8/434 (fetch/transfer)
+11-07 16:05:05.400   437  8215 D BufferPoolAccessor2.0: bufferpool2 0x77bce7aeebf8 : 4(9216 size) total buffers - 1(2304 size) used buffers - 214/218 (recycle/alloc) - 4/217 (fetch/transfer)
+11-07 16:05:05.455   430  3062 D NuPlayerDriver: stop(0x7bac0064ffb0)
+11-07 16:05:05.466  3646  3646 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-07 16:05:05.466  3646  3646 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-07 16:05:05.466   430  3062 D NuPlayerDriver: reset(0x7bac0064ffb0) at state 8
+11-07 16:05:05.466   430  8214 D CCodecBuffers: [c2.android.mp3.decoder#390:1D-Output.Impl[N]] Client returned a buffer it does not own according to our record: 0
+11-07 16:05:05.466   430  8214 D CCodecBuffers: [c2.android.mp3.decoder#390:1D-Output.Impl[N]] Client returned a buffer it does not own according to our record: 1
+11-07 16:05:05.466   430  8214 D CCodecBuffers: [c2.android.mp3.decoder#390:1D-Output.Impl[N]] Client returned a buffer it does not own according to our record: 2
+11-07 16:05:05.467   430  8214 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+11-07 16:05:05.467   437   813 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+11-07 16:05:05.467   437   813 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+11-07 16:05:05.467   430  8213 D MediaCodec: flushMediametrics
+11-07 16:05:05.468   437   813 V C2Store : in ~ComponentModule
+11-07 16:05:05.468   437   813 V C2Store : unloading dll
+11-07 16:05:05.468   430  8209 D NuPlayerDriver: notifyResetComplete(0x7bac0064ffb0)
+11-07 16:05:05.468   430  3062 W AMessage: failed to post message as target looper for handler 0 is gone.
+11-07 16:05:05.469   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 1
+11-07 16:05:05.469   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:05.469   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:05.469   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 1
+11-07 16:05:05.469   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:05.469   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:05.469   481  1358 I MediaSessionStack: removeSession | record: app.etv.launcher/eTV athan (userId=0)
+11-07 16:05:05.469   481  1358 D MediaSessionService: Media button session is changed to null
+11-07 16:05:05.470   953   953 W AudioMediaPlayerWrapper: The session was destroyed app.etv.launcher
+11-07 16:05:05.470   953   953 D MediaPlayerList: sessionUpdatedCallback(): packageName: app.etv.launcher
+11-07 16:05:05.470   953   953 D MediaPlayerList: sendMediaUpdate
+11-07 16:05:05.470   953   953 D MediaPlayerList: sendMediaUpdate state=null
+11-07 16:05:05.470   953   953 D MediaControlProfile: onMediaUpdated: track_changed=true state=true queue=true
+11-07 16:05:05.470   953   953 D MediaControlProfile: onCurrentPlayerStateUpdated metadata: title= Not Provided duration= 0
+11-07 16:05:05.470   953   953 D BluetoothMediaControlGattService: updatePlayerState: playbackState= INACTIVE
+11-07 16:05:05.470   953   953 D BluetoothMediaControlGattService: updateMediaStateChar
+11-07 16:05:05.470   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:05.470   953   953 D BluetoothMediaControlGattService: updateMediaStateChar setting to state= 1
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PLAYER_NAME(BIT 1) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PLAYER_ICON_URL(BIT 3) support: false
+11-07 16:05:05.471   953   953 D BluetoothMediaControlGattService: updateObjectID
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PLAYER_ICON_OBJ_ID(BIT 2) support: false
+11-07 16:05:05.471   953   953 D BluetoothMediaControlGattService: updateObjectID
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature CURRENT_TRACK_SEGMENT_OBJ_ID(BIT 10) support: false
+11-07 16:05:05.471   953   953 D BluetoothMediaControlGattService: updateObjectID
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature CURRENT_TRACK_OBJ_ID(BIT 11) support: false
+11-07 16:05:05.471   953   953 D BluetoothMediaControlGattService: updateObjectID
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature NEXT_TRACK_OBJ_ID(BIT 12) support: false
+11-07 16:05:05.471   953   953 D BluetoothMediaControlGattService: updateObjectID
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature CURRENT_GROUP_OBJ_ID(BIT 13) support: false
+11-07 16:05:05.471   953   953 D BluetoothMediaControlGattService: updateObjectID
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PARENT_GROUP_OBJ_ID(BIT 14) support: false
+11-07 16:05:05.471   953   953 D BluetoothMediaControlGattService: updateObjectID
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature SEARCH_RESULT_OBJ_ID(BIT 20) support: false
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature TRACK_TITLE(BIT 5) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature TRACK_POSITION(BIT 7) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature TRACK_POSITION_NOTIFY support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PLAYBACK_SPEED(BIT 8) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PLAYBACK_SPEED(BIT 8) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PLAYBACK_SPEED(BIT 8) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature SEEKING_SPEED(BIT 9) support: true
+11-07 16:05:05.471   481  1358 I MediaFocusControl: abandonAudioFocus() from uid/pid 10174/3646 clientId=android.media.AudioManager@1bdbf52app.etv.launcher.AthanService$$ExternalSyntheticLambda19@981a223
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature SEEKING_SPEED(BIT 9) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature SEEKING_SPEED(BIT 9) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PLAYING_ORDER_SUPPORTED(BIT 16) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature PLAYING_ORDER(BIT 15) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature MEDIA_CONTROL_POINT_OPCODES_SUPPORTED(BIT 19) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature TRACK_POSITION(BIT 7) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature TRACK_POSITION_NOTIFY support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:05.471   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature TRACK_TITLE(BIT 5) support: true
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature TRACK_TITLE(BIT 5) support: true
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature TRACK_TITLE_NOTIFY support: true
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION_NOTIFY support: true
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature TRACK_DURATION(BIT 6) support: true
+11-07 16:05:05.472   953   953 D BluetoothMediaControlGattService: updateMediaStateChar
+11-07 16:05:05.472   953   953 W BluetoothMediaControlGattService: Feature MEDIA_STATE(BIT 17) support: true
+11-07 16:05:05.472   953   953 D BluetoothMediaControlGattService: updateMediaStateChar setting to state= 0
+11-07 16:05:05.473   953   953 W BluetoothMediaControlGattService: Feature TRACK_CHANGED(BIT 4) support: true
+11-07 16:05:05.473   953   953 D MediaControlProfile: onCurrentPlayerQueueUpdated: not implemented
+11-07 16:05:05.473   953   953 D MediaControlProfile: GMCS processPendingPlayerStateRequest
+11-07 16:05:05.473   953   953 D MediaPlayerList: Removing media player app.etv.launcher
+11-07 16:05:05.473   953   953 D MediaPlayerList: app.etv.launcher doesn't have a browse service. Recycle player ID.
+11-07 16:05:05.473   953   953 W AudioMediaPlayerWrapper: The session was destroyed app.etv.launcher
+11-07 16:05:05.473   953   953 D MediaPlayerList: sessionUpdatedCallback(): packageName: app.etv.launcher
+11-07 16:05:05.473   953   953 D MediaPlayerList: sendMediaUpdate
+11-07 16:05:05.473   953   953 D MediaPlayerList: sendMediaUpdate state=null
+11-07 16:05:05.473   953   953 D AvrcpNativeInterface: sendMediaUpdate: metadata=true playStatus=true queue=true
+11-07 16:05:05.473   953   953 D AvrcpTargetJni: sendMediaUpdateNative
+11-07 16:05:05.473   953   953 I bt_stack: [INFO:avrcp_service.cc(423)] virtual void bluetooth::avrcp::AvrcpService::SendMediaUpdate(bool, bool, bool) track_changed=1 :  play_state=1 :  queue=1
+11-07 16:05:05.473   953   953 D MediaPlayerList: Removing media player app.etv.launcher
+11-07 16:05:05.473   953   953 D MediaPlayerList: app.etv.launcher doesn't have a browse service. Recycle player ID.
+11-07 16:05:05.473   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 1
+11-07 16:05:05.473   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:05.473   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:05.473   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 1
+11-07 16:05:05.473   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:05.473   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:05.473   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 1
+11-07 16:05:05.473   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:05.473   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:05.473   953   953 V MediaPlayerList: onActiveSessionsChanged: number of controllers: 1
+11-07 16:05:05.473   953   953 D MediaPlayerList: onActiveSessionsChanged: controller: com.google.android.googlequicksearchbox
+11-07 16:05:05.473   953   953 D MediaPlayerList: Already have a controller for the player: com.google.android.googlequicksearchbox, updating instead
+11-07 16:05:05.488  3646  3646 W MediaPlayer: mediaplayer went away with unhandled events
+11-07 16:05:05.488  3646  3646 W MediaPlayer: mediaplayer went away with unhandled events
+11-07 16:05:05.640  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3227 
+11-07 16:05:05.641  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 0, unlocked = true
+11-07 16:05:05.641  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=app.etv.launcher fieldId=-1 fieldName=null extras=null}, false)
+11-07 16:05:05.641  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4008 ShouldHideHeaderOnInitialState = false
+11-07 16:05:05.641  1486  1486 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 2, unlocked = true
+11-07 16:05:05.664   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10e590
+11-07 16:05:05.664   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10f250
+11-07 16:05:05.664   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10e590
+11-07 16:05:05.664   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c10f250
+11-07 16:05:05.761   481   684 D CoreBackPreview: Window{bbef412 u0 app.etv.launcher/app.etv.launcher.AthanActivity}: Setting back callback null
+11-07 16:05:05.764   481   684 W InputManager-JNI: Input channel object 'bbef412 app.etv.launcher/app.etv.launcher.AthanActivity (client)' was disposed without first being removed with the input manager!
+11-07 16:05:05.769   481   684 W InputManager-JNI: Input channel object 'Letterbox_left_ActivityRecord{9eac66b u0 app.etv.launcher/.AthanActivity} t16} (client)' was disposed without first being removed with the input manager!
+11-07 16:05:05.770   481   684 W InputManager-JNI: Input channel object 'Letterbox_top_ActivityRecord{9eac66b u0 app.etv.launcher/.AthanActivity} t16} (client)' was disposed without first being removed with the input manager!
+11-07 16:05:05.772   481   684 W InputManager-JNI: Input channel object 'Letterbox_right_ActivityRecord{9eac66b u0 app.etv.launcher/.AthanActivity} t16} (client)' was disposed without first being removed with the input manager!
+11-07 16:05:05.772   481   684 W InputManager-JNI: Input channel object 'Letterbox_bottom_ActivityRecord{9eac66b u0 app.etv.launcher/.AthanActivity} t16} (client)' was disposed without first being removed with the input manager!
+11-07 16:05:05.777   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c110690
+11-07 16:05:05.777   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c110270
+11-07 16:05:05.777   361   372 W TransactionTracing: Could not find layer handle 0x73bf9c111530
+11-07 16:05:06.249   430  5331 D BufferPoolAccessor2.0: evictor expired: 2, evicted: 0
+11-07 16:05:08.539   754   801 D EGL_emulation: app_time_stats: avg=8476.55ms min=8476.55ms max=8476.55ms count=1
+11-07 16:05:10.164   481   684 D OomAdjuster: Not killing cached processes
+11-07 16:05:11.250   430  5331 D BufferPoolAccessor2.0: bufferpool2 0x7bac20655a68 : 0(0 size) total buffers - 0(0 size) used buffers - 220/228 (recycle/alloc) - 8/454 (fetch/transfer)
+11-07 16:05:11.250   430  5331 D BufferPoolAccessor2.0: evictor expired: 1, evicted: 1
+11-07 16:05:11.265   437   790 D BufferPoolAccessor2.0: bufferpool2 0x77bce7aeebf8 : 0(0 size) total buffers - 0(0 size) used buffers - 223/227 (recycle/alloc) - 4/227 (fetch/transfer)
+11-07 16:05:11.265   437   790 D BufferPoolAccessor2.0: evictor expired: 1, evicted: 1
