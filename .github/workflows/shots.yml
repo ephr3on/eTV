@@ -29,6 +29,28 @@ jobs:
           mkdir -p out
           ./scripts/check-sounds.sh > out/sounds.txt 2>&1 || true
 
+      - name: Fetch Let's Encrypt's roots and check archive.org chains to them
+        run: |
+          mkdir -p out/certs
+          cd out/certs
+          for u in https://letsencrypt.org/certs/isrgrootx1.pem https://letsencrypt.org/certs/isrg-root-x2.pem https://letsencrypt.org/certs/gen-y/root-ye.pem https://letsencrypt.org/certs/gen-y/root-yr.pem; do
+            curl -sSL -m 60 -o "$(basename "$u")" "$u" < /dev/null
+          done
+          {
+            for f in *.pem; do echo "== $f"; openssl x509 -in "$f" -noout -subject -issuer -dates -fingerprint -sha256; done
+            for h in dn711001.ca.archive.org dn711007.ca.archive.org dn710102.ca.archive.org; do
+              openssl s_client -connect $h:443 -servername $h -showcerts < /dev/null 2>/dev/null | awk '/BEGIN CERT/{n++} {print > ("served" n ".pem")}'
+              echo "== $h: served certificates"
+              for c in served*.pem; do [ -s "$c" ] && openssl x509 -in "$c" -noout -subject -issuer -enddate 2>/dev/null; done
+              echo "-- verifies with Root YE alone as the trust anchor:"
+              cat served2.pem served3.pem served4.pem 2>/dev/null > untrusted.pem
+              openssl verify -CAfile root-ye.pem -untrusted untrusted.pem served1.pem 2>&1 | tail -2
+              echo "-- verifies with ISRG Root X1 alone (old Android):"
+              openssl verify -CAfile isrgrootx1.pem -untrusted untrusted.pem served1.pem 2>&1 | tail -2
+              rm -f served*.pem untrusted.pem
+            done
+          } > ../certs.txt 2>&1
+
       - name: Take the screenshots
         run: |
           chmod +x gradlew
