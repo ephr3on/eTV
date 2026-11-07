@@ -13,10 +13,10 @@ your apps, home row and settings stay the same.
 | Theme | What it's like |
 |---|---|
 | **Classic** | Today's eTV: the arched doors in a row, greeting and clock above, the dock at the bottom |
-| **Doorway** | Calmer: Search / Inputs / All apps / Settings as round buttons in the top corner, the selected app named under the doors, Now playing at the foot |
+| **Doorway** | Calmer: the prayer times down one top corner and Search / Inputs / All apps / Settings as round buttons down the other, framing the greeting and clock; the selected app named under the doors, Now playing at the foot |
 | **Riad** | Daylight: blue doors with brass studs on a whitewashed wall, tabs along the top, an **Inputs** row (Live TV, HDMI) on the home screen, a band of blue-and-white tiles |
 | **Cartouche** | Pharaonic: lapis and gold, apps as cartouches, the clock in a cartouche, a side rail for the sections, a papyrus frieze (Reem Kufi type) |
-| **Lantern** | One door at a time: the selected app large and lit in the middle, its neighbours fading away |
+| **Lantern** | One door at a time: the selected app large and lit in the middle, its neighbours fading away; along the top, the clock and the buttons mirror each other on either side of the prayer times, all on one line |
 
 The remote works the same everywhere: arrows move within the doors, buttons, inputs or Now playing, stop at the
 ends of a row, and moving back into the doors returns to the app you were on.

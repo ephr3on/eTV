@@ -51,6 +51,15 @@ class MainActivity : EtvActivity() {
         /** Height of the "now playing" bar. */
         private const val NOW_BAR_DP = 44f
 
+        // Lantern's top line (dp): where the prayer line, the clock and the buttons line up.
+        private const val LANTERN_AXIS = 54f
+        private const val DOORWAY_MARGIN = 40f
+        private const val LANTERN_MARGIN = 44f
+        private const val LANTERN_CLOCK_SP = 32f
+        private const val LANTERN_CLOCK_BOX = 38f
+        private const val LANTERN_BUTTON = 38f
+        private const val LANTERN_BUTTON_GAP = 1f
+
     }
 
     private lateinit var root: FrameLayout
@@ -589,16 +598,25 @@ class MainActivity : EtvActivity() {
         archesBackground()
         root.addView(header(Gravity.CENTER_HORIZONTAL, 17f, 54f, 13f, true), at(-1, -2, Gravity.TOP, top = 50f))
 
-        makeDock(false, Gravity.CENTER_VERTICAL)
+        // With the prayer times down the left corner, the buttons go down the right one: the two
+        // columns frame the greeting and clock, the same distance from each edge.
+        val strip = prayerStrip(vertical = true)
+        val column = strip != null
+        makeDock(column, if (column) Gravity.CENTER_HORIZONTAL else Gravity.CENTER_VERTICAL)
         val s = dpi(38f)
-        addToDock(roundButton(0, "Search", R.drawable.ic_search, true, false) { openSearch() }, s, s, 8f)
-        addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, true, false) { showInputs() }, s, s, 8f)
-        addToDock(roundButton(2, "All apps", R.drawable.ic_apps, true, false) { openAllApps() }, s, s, 8f)
-        addToDock(roundButton(3, "Settings", R.drawable.ic_settings, true, updateReady) { openCustomise() }, s, s, 8f)
+        // Spaced so the two columns are the same height.
+        val gap = if (column) ((PrayerStripView.verticalHeightDp(if (prefs.showSunrise) 6 else 5) - 4 * 38f) / 3f).coerceAtLeast(8f) else 8f
+        addToDock(roundButton(0, "Search", R.drawable.ic_search, true, false) { openSearch() }, s, s, gap)
+        addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, true, false) { showInputs() }, s, s, gap)
+        addToDock(roundButton(2, "All apps", R.drawable.ic_apps, true, false) { openAllApps() }, s, s, gap)
+        addToDock(roundButton(3, "Settings", R.drawable.ic_settings, true, updateReady) { openCustomise() }, s, s, gap)
         dockAppsIndex = 2
-        root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = 22f, end = 30f))
-        // The prayer times in the other top corner, one a line.
-        prayerStrip(vertical = true)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.START, start = 36f, top = 26f)) }
+        if (strip != null) {
+            root.addView(strip, at(-2, -2, Gravity.TOP or Gravity.START, start = DOORWAY_MARGIN, top = 28f))
+            root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = 28f, end = DOORWAY_MARGIN))
+        } else {
+            root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = 22f, end = 30f))
+        }
 
         makeRow(HorizontalScrollView(this), Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 48f, 48f)
         root.addView(rowScroll, at(-1, dpi(196f), Gravity.TOP, top = 200f))
@@ -747,7 +765,9 @@ class MainActivity : EtvActivity() {
         clock = c; greeting = g1; greeting2 = g2; date = d
         root.addView(top, at(-2, -2, Gravity.TOP or Gravity.START, start = 118f, top = 34f))
         // The prayer times opposite the clock, each in a cartouche.
-        prayerStrip(columnDp = 78f)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.END, top = 34f, end = 36f)) }
+        prayerStrip(columnDp = 78f)?.let {
+            root.addView(it, at(-2, -2, Gravity.TOP or Gravity.END, top = 75f - PrayerStripView.LINE_DP, end = 39f))
+        }
 
         root.addView(sectionTitle("FAVOURITES", accent), at(-2, -2, Gravity.TOP or Gravity.START, start = 118f, top = 150f))
         makeRow(HorizontalScrollView(this), Gravity.START or Gravity.BOTTOM, 40f, 40f)
@@ -770,29 +790,41 @@ class MainActivity : EtvActivity() {
                 colors = intArrayOf(Look.withAlpha(accent, 0x18), Look.withAlpha(accent, 0))
             }
         }
-        root.addView(glow, at(dpi(560f), dpi(480f), Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 10f))
+        // The glow sits behind the lit door, centred on it.
+        root.addView(glow, at(dpi(560f), dpi(480f), Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 24f))
 
+        // The top: the clock on the left, the buttons on the right, mirror images of each other
+        // (same margin, about the same width), with the prayer times between them. All three sit
+        // on one line: the prayer line, LANTERN_AXIS from the top.
+        val prayersShown = prefs.showPrayers
+        val axis = if (prayersShown) LANTERN_AXIS else 44f
         val time = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.BOTTOM
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.START
         }
-        val c = clockView(24f, Gravity.START)
-        val d = text(11f, 300, color = pal.muted).apply { visibility = if (prefs.showDate) View.VISIBLE else View.GONE }
-        time.addView(c, LinearLayout.LayoutParams(dpi(84f), -2))
-        time.addView(d, LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dpi(3f) })
+        val c = clockView(LANTERN_CLOCK_SP, Gravity.START)
+        val d = text(12.5f, 300, color = pal.muted).apply {
+            visibility = if (prefs.showDate) View.VISIBLE else View.GONE
+            setLineSpacing(dp(2f), 1f)
+        }
+        time.addView(c, LinearLayout.LayoutParams(-2, dpi(LANTERN_CLOCK_BOX)))
+        time.addView(d, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dpi(4f) })
         clock = c; date = d
-        root.addView(time, at(-2, -2, Gravity.TOP or Gravity.START, start = 40f, top = 26f))
+        // The clock's box is centred on the axis; the date hangs below it, like the times below the line.
+        root.addView(time, at(-2, -2, Gravity.TOP or Gravity.START, start = LANTERN_MARGIN, top = axis - LANTERN_CLOCK_BOX / 2f))
 
         makeDock(false, Gravity.CENTER_VERTICAL)
-        val s = dpi(38f)
-        addToDock(roundButton(0, "Search", R.drawable.ic_search, false, false) { openSearch() }, s, s, 4f)
-        addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, false, false) { showInputs() }, s, s, 4f)
-        addToDock(roundButton(2, "All apps", R.drawable.ic_apps, false, false) { openAllApps() }, s, s, 4f)
-        addToDock(roundButton(3, "Settings", R.drawable.ic_settings, false, updateReady) { openCustomise() }, s, s, 4f)
+        val s = dpi(LANTERN_BUTTON)
+        addToDock(roundButton(0, "Search", R.drawable.ic_search, false, false) { openSearch() }, s, s, LANTERN_BUTTON_GAP)
+        addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, false, false) { showInputs() }, s, s, LANTERN_BUTTON_GAP)
+        addToDock(roundButton(2, "All apps", R.drawable.ic_apps, false, false) { openAllApps() }, s, s, LANTERN_BUTTON_GAP)
+        addToDock(roundButton(3, "Settings", R.drawable.ic_settings, false, updateReady) { openCustomise() }, s, s, LANTERN_BUTTON_GAP)
         dockAppsIndex = 2
-        root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = 20f, end = 30f))
-        // The prayer times above the lit door.
-        prayerStrip(columnDp = 76f)?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 14f)) }
+        root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = axis - LANTERN_BUTTON / 2f, end = LANTERN_MARGIN))
+        // The prayer times above the lit door, their line on the axis.
+        prayerStrip(columnDp = 72f)?.let {
+            root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.LINE_DP))
+        }
 
         val scroller = CentreScrollView(this)
         makeRow(scroller, Gravity.BOTTOM, 0f, 0f)
@@ -921,7 +953,8 @@ class MainActivity : EtvActivity() {
         date?.let {
             val pattern = if (theme.layout == Layout.CARTOUCHE || theme.layout == Layout.LANTERN) "EEEE · d MMMM" else "EEEE, d MMMM"
             var text = SimpleDateFormat(pattern, locale).format(now)
-            hijriDate()?.let { h -> text += if (hijriOwnLine) "\n$h" else "  ·  $h" }
+            // On its own line the Arabic would align to the other side; the mark keeps it in line with the date.
+            hijriDate()?.let { h -> text += if (hijriOwnLine) "\n\u200E$h" else "  ·  $h" }
             setIfChanged(it, text)
         }
         updatePrayers()
