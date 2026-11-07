@@ -1,0 +1,48 @@
+name: Screenshots
+
+# Pictures of the home screen and a check of the downloadable recordings, without a TV.
+# Runs for branches named shots*, and by hand; the results go to the branch shots-out.
+on:
+  push:
+    branches: ['shots', 'shots-*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  shots:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Check the recordings
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg file >/dev/null
+          mkdir -p out
+          ./scripts/check-sounds.sh > out/sounds.txt 2>&1 || true
+
+      - name: Take the screenshots
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon testDebugUnitTest --tests '*HomeShots*' > out/gradle.txt 2>&1 || true
+          cp -r app/build/shots/. out/ 2>/dev/null || true
+          cp -r app/build/test-results/testDebugUnitTest/. out/ 2>/dev/null || true
+
+      - name: Publish the results
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd out
+          git init -q
+          git checkout -q -b shots-out
+          git add -A
+          git -c user.name=eTV-ci -c user.email=ci@users.noreply.github.com commit -qm "Results for $GITHUB_SHA"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" shots-out
