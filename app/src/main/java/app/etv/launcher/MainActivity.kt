@@ -953,7 +953,8 @@ class MainActivity : EtvActivity() {
         date?.let {
             val pattern = if (theme.layout == Layout.CARTOUCHE || theme.layout == Layout.LANTERN) "EEEE · d MMMM" else "EEEE, d MMMM"
             var text = SimpleDateFormat(pattern, locale).format(now)
-            hijriDate()?.let { h -> text += if (hijriOwnLine) "\n$h" else "  ·  $h" }
+            // On its own line the Arabic would align to the other side; the mark keeps it in line with the date.
+            hijriDate()?.let { h -> text += if (hijriOwnLine) "\n\u200E$h" else "  ·  $h" }
             setIfChanged(it, text)
         }
         updatePrayers()
