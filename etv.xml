@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <boolean name="setupShown" value="true" />
+    <boolean name="athanSetupShown" value="true" />
+    <boolean name="athanOn" value="true" />
+    <boolean name="athanPause" value="true" />
+    <boolean name="athanResume" value="true" />
+    <int name="athanVolume" value="60" />
+    <string name="athanCodeHash">28d80a9f800488718ccc3afae5106766dc71ab84b9fcacd3cf739bda5b97a764</string>
+    <string name="athanCodeSalt">00112233445566778899aabbccddeeff</string>
+    <int name="athanCodeLength" value="5" />
+    <int name="athanCodeRounds" value="60000" />
+</map>

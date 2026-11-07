@@ -1,0 +1,37 @@
+Performing Streamed Install
+Success
+Performing Streamed Install
+Success
+Success
+Starting: Intent { cmp=app.etv.launcher/.MainActivity }
+Status: ok
+LaunchState: WARM
+Activity: app.etv.launcher/.MainActivity
+TotalTime: 1958
+WaitTime: 1959
+Complete
+[v] will control stream=3 (STREAM_MUSIC)
+[v] will set volume to index=9
+[v] Connecting to AudioService
+Starting: Intent { cmp=app.etv.fakeplayer/.PlayerActivity }
+Status: ok
+LaunchState: COLD
+Activity: app.etv.fakeplayer/.PlayerActivity
+TotalTime: 879
+WaitTime: 888
+Complete
+Broadcasting: Intent { act=app.etv.launcher.ATHAN_ALARM flg=0x400000 cmp=app.etv.launcher/.AthanReceiver (has extras) }
+Broadcast completed: result=0
+Starting: Intent { cmp=app.etv.fakeplayer/.PlayerActivity (has extras) }
+Warning: Activity not started, its current task has been brought to the front
+Starting: Intent { cmp=app.etv.fakeplayer/.PlayerActivity }
+Status: ok
+LaunchState: COLD
+Activity: app.etv.launcher/.MainActivity
+TotalTime: 94
+WaitTime: 102
+Complete
+Broadcasting: Intent { act=app.etv.launcher.ATHAN_ALARM flg=0x400000 cmp=app.etv.launcher/.AthanReceiver (has extras) }
+Broadcast completed: result=0
+Broadcasting: Intent { act=app.etv.launcher.ATHAN_ALARM flg=0x400000 cmp=app.etv.launcher/.AthanReceiver (has extras) }
+Broadcast completed: result=0

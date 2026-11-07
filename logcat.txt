@@ -1,0 +1,130 @@
+--------- beginning of main
+11-07 16:02:55.522  2058  2268 D EGL_emulation: eglMakeCurrent: 0x7e29e371b5c0: ver 3 0 (tinfo 0x7e29e3775900)
+11-07 16:02:55.526  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:55.530  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:55.531  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-07 16:02:55.532  3324  3406 D EGL_emulation: eglMakeCurrent: 0x7e29df779900: ver 3 0 (tinfo 0x7e2a2f341aa0)
+11-07 16:02:55.535  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:55.567  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-07 16:02:55.588  2058  2428 D HostConnection: HostConnection::get() New Host Connection established 0x7e2a2f848d00, tid 2428
+11-07 16:02:55.591  2058  2428 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-07 16:02:55.592  2058  2428 D EGL_emulation: eglCreateContext: 0x7e2a2f848da0: maj 3 min 0 rcv 3
+11-07 16:02:55.592  2058  2428 D EGL_emulation: eglMakeCurrent: 0x7e2a2f848da0: ver 3 0 (tinfo 0x7e29e0889d00)
+11-07 16:02:55.605  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-07 16:02:55.635  1698  1713 I chatty  : uid=1000(system) HwBinder:1698_1 identical 1 line
+11-07 16:02:55.654  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-07 16:02:55.655  2058  2268 D EGL_emulation: eglMakeCurrent: 0x7e29e371b5c0: ver 3 0 (tinfo 0x7e29e3775900)
+11-07 16:02:55.657  3324  3406 D EGL_emulation: eglMakeCurrent: 0x7e29df779900: ver 3 0 (tinfo 0x7e2a2f341aa0)
+11-07 16:02:55.659  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:55.660  3324  3406 D EGL_emulation: eglMakeCurrent: 0x7e29df779900: ver 3 0 (tinfo 0x7e2a2f341aa0)
+11-07 16:02:55.693  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:55.716  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-07 16:02:55.725  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-07 16:02:55.737  2058  2058 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-07 16:02:55.739  2058  2268 D EGL_emulation: eglMakeCurrent: 0x7e29e371b5c0: ver 3 0 (tinfo 0x7e29e3775900)
+11-07 16:02:55.748  4483  4483 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-07 16:02:55.753  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-07 16:02:55.763  4483  4483 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-07 16:02:55.763  4483  4483 I AndroidRuntime: Using default boot image
+11-07 16:02:55.763  4483  4483 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-07 16:02:55.763  4483  4483 I AndroidRuntime: Leaving lock profiling enabled
+11-07 16:02:55.763  4483  4483 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-07 16:02:55.764  4483  4483 I app_process: Core platform API reporting enabled, enforcing=false
+11-07 16:02:55.777  2058  2268 D EGL_emulation: eglMakeCurrent: 0x7e29e371b5c0: ver 3 0 (tinfo 0x7e29e3775900)
+11-07 16:02:55.788  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+--------- beginning of system
+11-07 16:02:55.791  1900  1932 I WindowManager: Screen frozen for +403ms due to Window{9fe267 u0 NavigationBar0}
+11-07 16:02:55.795  2058  2268 D EGL_emulation: eglMakeCurrent: 0x7e29e371b5c0: ver 3 0 (tinfo 0x7e29e3775900)
+11-07 16:02:55.808  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-07 16:02:55.821  2058  2268 D EGL_emulation: eglMakeCurrent: 0x7e29e371b5c0: ver 3 0 (tinfo 0x7e29e3775900)
+11-07 16:02:55.827  2058  2268 D EGL_emulation: eglMakeCurrent: 0x7e29e371b5c0: ver 3 0 (tinfo 0x7e29e3775900)
+11-07 16:02:55.846  4483  4483 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-07 16:02:55.848  4483  4483 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-07 16:02:55.849  4483  4483 I app_process: The ClassLoaderContext is a special shared library.
+11-07 16:02:55.740  4483  4483 W app_process: type=1400 audit(0.0:89): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=765 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-07 16:02:55.760  4483  4483 I chatty  : uid=2000(shell) app_process identical 1 line
+11-07 16:02:55.760  4483  4483 W app_process: type=1400 audit(0.0:91): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=765 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-07 16:02:55.866  4483  4483 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-07 16:02:55.869  4483  4483 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-07 16:02:55.872  1900  1928 D AutofillManagerService: Close system dialogs
+11-07 16:02:55.873  2058  2058 V StatusBar: mStatusBarWindow: com.android.systemui.statusbar.phone.StatusBarWindowView{1d074f7 V.E...... ........ 0,0-2400,63} canPanelBeCollapsed(): false
+11-07 16:02:55.874  1900  1929 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=app.etv.launcher/.MainActivity (has extras)} from uid 0
+11-07 16:02:55.877  4483  4483 D AndroidRuntime: Shutting down VM
+11-07 16:02:57.808  1900  1931 I system_server: Explicit concurrent copying GC freed 14132(1092KB) AllocSpace objects, 6(184KB) LOS objects, 42% free, 6692KB/11MB, paused 375us total 14.053ms
+11-07 16:02:58.111  1801  1801 E netmgr  : Failed to open QEMU pipe 'qemud:network': Invalid argument
+11-07 16:02:58.237  1817  1817 E wifi_forwarder: RemoteConnection failed to initialize: RemoteConnection failed to open pipe
+11-07 16:02:58.396  1900  2503 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-07 16:02:58.501  1674  1674 W audio_hw_generic: Not supplying enough data to HAL, expected position 33502244 , only wrote 16752384
+11-07 16:02:58.928  1900  3639 I MediaFocusControl: requestAudioFocus() from uid/pid 10116/3324 clientId=android.media.AudioManager@c7c2633app.etv.launcher.AthanService$$ExternalSyntheticLambda19@2f1fdf0 callingPack=app.etv.launcher req=2 flags=0x0 sdk=35
+11-07 16:02:58.930  1900  3639 I ActivityTaskManager: START u0 {flg=0x10020000 cmp=app.etv.launcher/.AthanActivity} from uid 10116
+11-07 16:02:58.933  1900  1932 E system_server: Invalid ID 0x00000000.
+11-07 16:02:58.936  1900  3639 W InputReader: Device has associated, but no associated display id.
+11-07 16:02:58.936  1900  3639 I chatty  : uid=1000(system) Binder:1900_13 identical 8 lines
+11-07 16:02:58.936  1900  3639 W InputReader: Device has associated, but no associated display id.
+11-07 16:02:58.939  3324  3324 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@4086f69
+11-07 16:02:58.953  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:59.024  1698  1713 I chatty  : uid=1000(system) HwBinder:1698_1 identical 2 lines
+11-07 16:02:59.035  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:59.058  3324  3406 D EGL_emulation: eglMakeCurrent: 0x7e29df779900: ver 3 0 (tinfo 0x7e2a2f341aa0)
+11-07 16:02:59.097  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:59.102  3324  3406 D EGL_emulation: eglMakeCurrent: 0x7e29df779900: ver 3 0 (tinfo 0x7e2a2f341aa0)
+11-07 16:02:59.134  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:02:59.161  3324  3406 D EGL_emulation: eglMakeCurrent: 0x7e29df779900: ver 3 0 (tinfo 0x7e2a2f341aa0)
+11-07 16:02:59.181  1785  2972 D NuPlayerDriver: NuPlayerDriver(0xecd1a100) created, clientPid(3324)
+11-07 16:02:59.192  1785  2972 I Codec2Client: Creating a Codec2 client to service "software"
+11-07 16:02:59.192  1785  2972 I Codec2Client: Client to Codec2 service "software" created
+11-07 16:02:59.197  1785  4509 D GenericSource: FileSource remote
+11-07 16:02:59.202  1785  4508 I GenericSource: start
+11-07 16:02:59.204  1900  1900 D MediaSessionService: Media button session is changed to app.etv.launcher/eTV athan (userId=0)
+11-07 16:02:59.210  1785  4513 I OMXClient: IOmx service obtained
+11-07 16:02:59.210  1791  2166 I OMXMaster: makeComponentInstance(OMX.google.mp3.decoder) in android.hardwar process
+11-07 16:02:59.213  1791  2166 E OMXNodeInstance: setConfig(0xedb832a0:google.mp3.decoder, ConfigPriority(0x6f800002)) ERROR: Undefined(0x80001001)
+11-07 16:02:59.213  1785  4513 I ACodec  : codec does not support config priority (err -2147483648)
+11-07 16:02:59.213  1791  2166 E OMXNodeInstance: getConfig(0xedb832a0:google.mp3.decoder, ConfigAndroidVendorExtension(0x6f100004)) ERROR: Undefined(0x80001001)
+11-07 16:02:59.226  1785  4513 I MediaCodec: MediaCodec will operate in async mode
+11-07 16:02:59.318  1711  2661 W AudioFlinger: createTrack_l(): mismatch between requested flags (00000008) and output flags (00000006)
+11-07 16:02:59.318  1711  2661 D AudioFlinger: Client defaulted notificationFrames to 11088 for frameCount 22176
+11-07 16:02:59.323  1711  2661 D AF::TrackHandle: OpPlayAudio: track:60 usage:1 not muted
+11-07 16:02:59.345  1674  3665 W audio_hw_generic: Not supplying enough data to HAL, expected position 16752418 , only wrote 16752384
+11-07 16:02:59.355  1785  2972 D AudioTrack: getTimestamp_l(13): device stall time corrected using current time 428412164330
+11-07 16:03:00.002  2058  2058 D KeyguardClockSwitch: Updating clock: 403
+11-07 16:03:03.978  4519  4519 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-07 16:03:03.970  4519  4519 W app_process: type=1400 audit(0.0:92): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=765 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-07 16:03:03.979  4519  4519 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-07 16:03:03.979  4519  4519 I AndroidRuntime: Using default boot image
+11-07 16:03:03.970  4519  4519 W app_process: type=1400 audit(0.0:93): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=765 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-07 16:03:03.979  4519  4519 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-07 16:03:03.979  4519  4519 I AndroidRuntime: Leaving lock profiling enabled
+11-07 16:03:03.970  4519  4519 W app_process: type=1400 audit(0.0:94): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=765 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-07 16:03:03.979  4519  4519 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-07 16:03:03.980  4519  4519 I app_process: Core platform API reporting enabled, enforcing=false
+11-07 16:03:04.002  4519  4519 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-07 16:03:04.003  4519  4519 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-07 16:03:04.005  4519  4519 I app_process: The ClassLoaderContext is a special shared library.
+11-07 16:03:04.010  4519  4519 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-07 16:03:04.012  4519  4519 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-07 16:03:04.022  4519  4519 D AndroidRuntime: Shutting down VM
+11-07 16:03:04.281  1785  2972 D NuPlayerDriver: stop(0xecd1a100)
+11-07 16:03:04.282  3324  3324 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-07 16:03:04.282  3324  3324 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-07 16:03:04.282  1785  2972 D NuPlayerDriver: reset(0xecd1a100) at state 8
+11-07 16:03:04.285  1785  4508 D NuPlayerDriver: notifyResetComplete(0xecd1a100)
+11-07 16:03:04.285  1785  2972 W AMessage: failed to post message as target looper for handler 0 is gone.
+11-07 16:03:04.286  1900  3639 D MediaSessionService: Media button session is changed to null
+11-07 16:03:04.286  1900  2820 I MediaFocusControl: abandonAudioFocus() from uid/pid 10116/3324 clientId=android.media.AudioManager@c7c2633app.etv.launcher.AthanService$$ExternalSyntheticLambda19@2f1fdf0
+11-07 16:03:04.292  1900  1936 E memtrack: Couldn't load memtrack module
+11-07 16:03:04.292  1900  1936 W android.os.Debug: failed to get memory consumption info: -1
+11-07 16:03:04.295  1900  3639 W InputReader: Device has associated, but no associated display id.
+11-07 16:03:04.295  1900  3639 I chatty  : uid=1000(system) Binder:1900_13 identical 8 lines
+11-07 16:03:04.295  1900  3639 W InputReader: Device has associated, but no associated display id.
+11-07 16:03:04.322  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:03:04.327  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:03:04.327  3324  3406 D EGL_emulation: eglMakeCurrent: 0x7e29df779900: ver 3 0 (tinfo 0x7e2a2f341aa0)
+11-07 16:03:04.328  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:03:04.390  1698  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-07 16:03:04.485  1900  3646 D HostConnection: HostConnection::get() New Host Connection established 0x7e29d2d67c20, tid 3646
+11-07 16:03:04.490  1900  3646 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-07 16:03:04.507  1900  3646 D EGL_emulation: eglCreateContext: 0x7e29d2d67d60: maj 3 min 0 rcv 3
+11-07 16:03:04.507  1900  3646 D EGL_emulation: eglMakeCurrent: 0x7e29d2d67d60: ver 3 0 (tinfo 0x7e2a2f9e2ea0)
+11-07 16:03:04.527  2058  2078 I ndroid.systemu: NativeAlloc concurrent copying GC freed 59819(3005KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 5642KB/11MB, paused 6.616ms total 116.030ms
+11-07 16:03:07.335  1674  1674 W audio_hw_generic: Not supplying enough data to HAL, expected position 17455178 , only wrote 17104697
