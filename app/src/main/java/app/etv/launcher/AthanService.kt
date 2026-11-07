@@ -24,6 +24,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.os.PowerManager
+import android.view.KeyEvent
 
 /**
  * Sets an alarm for the next athan. Android wakes eTV for it even when another app is in front;
@@ -177,23 +178,33 @@ class AthanService : Service() {
         }
 
         /**
-         * The only way to end the athan early: your own code, typed on the remote's number keys.
-         * You set it on the TV (Settings → Athan); it never leaves the TV and isn't in eTV's code.
-         * Only a slow, salted hash of it is kept, so it can't simply be read back.
+         * The only way to end the athan early: the code typed on the remote's number keys. eTV
+         * comes with one built in; Settings → Athan can replace it with your own. This repository
+         * is public, so neither is ever kept as digits: only a slow, salted hash of it.
          */
-        fun hasCode(ctx: Context) = Prefs(ctx).athanCodeHash.isNotEmpty()
+        private const val BUILT_IN_SALT = "23ebccfd4f591bfcd89d80d1ff6cdf2f"
+        private const val BUILT_IN_HASH = "f4080c4044024f58920bc2844846740ae35231a53ec65f64bcc95d381fd4e9cb"
+        private const val BUILT_IN_LENGTH = 9
+        private const val BUILT_IN_ROUNDS = 150_000
+        private const val OWN_ROUNDS = 150_000
 
-        /** How many digits the code has (0 when there's none). */
-        fun codeLength(ctx: Context) = Prefs(ctx).athanCodeLength
+        /** You've replaced the built-in code with your own. */
+        fun hasOwnCode(ctx: Context) = Prefs(ctx).athanCodeHash.isNotEmpty()
 
-        /** True when [digits] is the code. */
+        /** How many digits the code has. */
+        fun codeLength(ctx: Context) = if (hasOwnCode(ctx)) Prefs(ctx).athanCodeLength else BUILT_IN_LENGTH
+
+        /** True when [digits] is the code. Slow on purpose: call it off the main thread. */
         fun isCode(ctx: Context, digits: String): Boolean {
             val p = Prefs(ctx)
-            if (p.athanCodeHash.isEmpty() || digits.length != p.athanCodeLength) return false
-            return hash(digits, p.athanCodeSalt) == p.athanCodeHash
+            return if (p.athanCodeHash.isNotEmpty()) {
+                digits.length == p.athanCodeLength && hash(digits, p.athanCodeSalt, p.athanCodeRounds) == p.athanCodeHash
+            } else {
+                digits.length == BUILT_IN_LENGTH && hash(digits, BUILT_IN_SALT, BUILT_IN_ROUNDS) == BUILT_IN_HASH
+            }
         }
 
-        /** Sets the code, or removes it with an empty [digits]. */
+        /** Sets your own code, or goes back to the built-in one with an empty [digits]. */
         fun setCode(ctx: Context, digits: String) {
             val p = Prefs(ctx)
             if (digits.isEmpty()) {
@@ -205,12 +216,14 @@ class AthanService : Service() {
             val salt = ByteArray(16).also { java.security.SecureRandom().nextBytes(it) }
                 .joinToString("") { "%02x".format(it) }
             p.athanCodeSalt = salt
-            p.athanCodeHash = hash(digits, salt)
+            p.athanCodeRounds = OWN_ROUNDS
+            p.athanCodeHash = hash(digits, salt, OWN_ROUNDS)
             p.athanCodeLength = digits.length
         }
 
-        private fun hash(digits: String, salt: String): String {
-            val spec = javax.crypto.spec.PBEKeySpec(digits.toCharArray(), salt.toByteArray(), 20_000, 256)
+        /** PBKDF2-HMAC-SHA1 of [digits], hex. */
+        internal fun hash(digits: String, salt: String, rounds: Int): String {
+            val spec = javax.crypto.spec.PBEKeySpec(digits.toCharArray(), salt.toByteArray(), rounds, 256)
             val key = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1").generateSecret(spec).encoded
             return key.joinToString("") { "%02x".format(it) }
         }
@@ -244,6 +257,12 @@ class AthanService : Service() {
 
     /** The sound is the athan's: everything else has been paused and the athan is playing. */
     private var started = false
+
+    /** Something was playing that eTV couldn't see: it was paused with the remote's Pause key. */
+    private var pausedByKey = false
+
+    /** The apps eTV paused, by package: their media sessions are looked up again to carry on. */
+    private val pausedPackages = LinkedHashSet<String>()
     private var focusLost = false
     private var lastScreenAt = 0L
 
@@ -277,8 +296,8 @@ class AthanService : Service() {
                     requestFocus(transient = p.athanResume)
                 }
             }
-            if (!AthanActivity.visible && System.currentTimeMillis() - lastScreenAt > 1_500L) showScreen()
-            handler.postDelayed(this, 1_000L)
+            if (!AthanActivity.visible && System.currentTimeMillis() - lastScreenAt > 1_200L) showScreen()
+            handler.postDelayed(this, 500L)
         }
     }
 
@@ -317,6 +336,8 @@ class AthanService : Service() {
         test = isTest
         usedFallback = false
         paused = ArrayList()
+        pausedPackages.clear()
+        pausedByKey = false
         val p = Prefs(this)
 
         try {
@@ -328,22 +349,30 @@ class AthanService : Service() {
         goForeground()
         handler.postDelayed(timeout, MAX_MS)
 
-        // 1. Stop whatever is playing, and cover the screen.
-        if (p.athanPause) pauseOthers()
+        // 1. Stop whatever is playing: through its own media controls, or (for anything eTV can't
+        // see) the remote's Pause key; and the audio focus, which makes the rest pause too. Then
+        // cover the screen.
+        if (p.athanPause) {
+            val soundBefore = audio().isMusicActive
+            pauseOthers()
+            if (soundBefore && paused.isEmpty()) {
+                pausedByKey = true
+                mediaKey(KeyEvent.KEYCODE_MEDIA_PAUSE)
+            }
+            requestFocus(transient = p.athanResume)
+        }
         showScreen()
-        if (p.athanPause) requestFocus(transient = p.athanResume)
 
-        // 2. Once it has really stopped (or after two seconds at most), the athan.
+        // 2. Once the TV has really gone quiet (three seconds at most), the athan.
         val since = System.currentTimeMillis()
         val waitForQuiet = object : Runnable {
             override fun run() {
                 if (finished) return
                 val waited = System.currentTimeMillis() - since
-                val quiet = paused.none { isPlaying(it) }
-                // Without the apps' media controls, give them a moment to pause for the audio focus.
-                val enough = if (NowPlayingWatcher.hasAccess(this@AthanService)) quiet else waited >= 700L
-                if (!enough && waited < 2_000L) {
-                    handler.postDelayed(this, 120L)
+                val quiet = paused.none { isPlaying(it) } && !audio().isMusicActive
+                if (!quiet && waited < 3_000L) {
+                    if (waited > 1_000L) pauseOthers() // something slow to listen: ask again
+                    handler.postDelayed(this, 100L)
                     return
                 }
                 started = true
@@ -469,28 +498,55 @@ class AthanService : Service() {
                 if (c.packageName == packageName || !isPlaying(c)) continue
                 try { c.transportControls.pause() } catch (_: Exception) {}
                 if (paused.none { it.sessionToken == c.sessionToken }) paused.add(c)
+                pausedPackages.add(c.packageName)
             }
+        } catch (_: Exception) {
+        }
+    }
+
+    /** Presses a media key on the remote's behalf; it goes to the app that's playing. */
+    private fun mediaKey(code: Int) {
+        try {
+            val am = audio()
+            am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, code))
+            am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, code))
         } catch (_: Exception) {
         }
     }
 
     /**
      * Carries on with what was playing: once the athan screen has gone and the app is in front
-     * again, and once more a little later if it didn't take the first time.
+     * again, and again a little later if it didn't take. Apps often rebuild their player while
+     * hidden, so their media sessions are looked up afresh each time, by app.
      */
-    private fun resumeOthers(list: List<MediaController>) {
-        if (list.isEmpty()) return
+    private fun resumeOthers(packages: Set<String>, old: List<MediaController>, byKey: Boolean) {
+        if (packages.isEmpty() && !byKey) return
+        val app = applicationContext
         val main = Handler(Looper.getMainLooper())
-        fun playPaused() {
-            for (c in list) {
+        fun sessionsNow(): List<MediaController> {
+            if (!NowPlayingWatcher.hasAccess(app)) return old
+            return try {
+                val msm = app.getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
+                msm.getActiveSessions(NowPlayingWatcher.component(app)).filter { it.packageName in packages }
+            } catch (_: Exception) {
+                old
+            }
+        }
+        fun carryOn() {
+            if (current === this@AthanService || isPlaying) return // another athan began meanwhile
+            for (c in sessionsNow().ifEmpty { old }) {
                 try {
                     if (!isPlaying(c)) c.transportControls.play()
                 } catch (_: Exception) {
                 }
             }
+            if (byKey && !(app.getSystemService(Context.AUDIO_SERVICE) as AudioManager).isMusicActive) {
+                mediaKey(KeyEvent.KEYCODE_MEDIA_PLAY)
+            }
         }
-        main.postDelayed({ playPaused() }, 1_500L)
-        main.postDelayed({ playPaused() }, 4_000L)
+        main.postDelayed({ carryOn() }, 1_200L)
+        main.postDelayed({ carryOn() }, 3_000L)
+        main.postDelayed({ carryOn() }, 6_000L)
     }
 
     private fun audio() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -648,8 +704,12 @@ class AthanService : Service() {
         if (current === this) current = null
         AthanActivity.closeNow()
         val was = paused.toList()
+        val packages = LinkedHashSet(pausedPackages)
+        val byKey = pausedByKey
         paused = ArrayList()
-        if (Prefs(this).athanResume) resumeOthers(was)
+        pausedPackages.clear()
+        pausedByKey = false
+        if (Prefs(this).athanResume) resumeOthers(packages, was, byKey)
         started = false
         try { wake?.release() } catch (_: Exception) {}
         wake = null

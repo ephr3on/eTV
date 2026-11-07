@@ -296,7 +296,7 @@ class Prefs(context: Context) {
         get() = int("hijriAdjust", 0)
         set(v) = putInt("hijriAdjust", v)
 
-    /** Your code to end the athan early: a salted hash of it, its salt and its length (never the code). */
+    /** Your own code to end the athan early: a salted hash of it, its salt and its length (never the code). Empty: the built-in one. */
     var athanCodeHash: String
         get() = sp.getString("athanCodeHash", "") ?: ""
         set(v) = sp.edit().putString("athanCodeHash", v).apply()
@@ -308,6 +308,11 @@ class Prefs(context: Context) {
     var athanCodeLength: Int
         get() = int("athanCodeLength", 0)
         set(v) = putInt("athanCodeLength", v)
+
+    /** How many rounds the hash of your code took (codes set in 1.8.5 used 20,000). */
+    var athanCodeRounds: Int
+        get() = int("athanCodeRounds", 20_000)
+        set(v) = putInt("athanCodeRounds", v)
 
     /** The last athan played, as "<day>-<prayer>", so none plays twice. */
     var lastAthan: String

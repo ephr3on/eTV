@@ -42,6 +42,9 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
             signingConfig = signingConfigs.getByName(if (hasEtvKey) "etv" else "debug")
+            // Only for the athan rehearsal on an emulator (scripts/athan-e2e.sh), which sets its
+            // settings through run-as; builds for the TV are never debuggable.
+            if (System.getenv("ETV_E2E") != null) isDebuggable = true
         }
     }
 
