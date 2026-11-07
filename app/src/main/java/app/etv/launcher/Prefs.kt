@@ -138,6 +138,7 @@ class Prefs(context: Context) {
     private val LOOK_KEYS = setOf(
         "accent", "palette", "greeting", "clock24", "showDate", "tileSize", "nameMode", "iconStyle",
         "arches", "favs", "hidden", "updateCode", "nowPlaying", "theme",
+        "showPrayers", "showSunrise", "showHijri", "hijriAdjust", "locName",
     )
 
     /** Show the "now playing" card when another app plays in the background. */
@@ -170,4 +171,133 @@ class Prefs(context: Context) {
     var extraHomes: Set<String>
         get() = HashSet(sp.getStringSet("extraHomes", emptySet()) ?: emptySet())
         set(v) = sp.edit().putStringSet("extraHomes", HashSet(v)).apply()
+
+    // ---- Athan and prayer times (see PrayerTimes, AthanService) ----
+
+    /** The athan sounds at prayer times. The times can still show on the home screen when it's off. */
+    var athanOn: Boolean
+        get() = bool("athanOn", true)
+        set(v) = putBool("athanOn", v)
+
+    /** Where the prayer times are for; null until a city is chosen. */
+    var place: Place?
+        get() {
+            val name = sp.getString("locName", null) ?: return null
+            val lat = sp.getString("locLat", null)?.toDoubleOrNull() ?: return null
+            val lon = sp.getString("locLon", null)?.toDoubleOrNull() ?: return null
+            return Place(name, lat, lon, sp.getString("locTz", null) ?: java.util.TimeZone.getDefault().id)
+        }
+        set(v) {
+            val e = sp.edit()
+            if (v == null) {
+                e.remove("locName").remove("locLat").remove("locLon").remove("locTz")
+            } else {
+                e.putString("locName", v.name).putString("locLat", v.lat.toString())
+                    .putString("locLon", v.lon.toString()).putString("locTz", v.tz)
+            }
+            e.apply()
+        }
+
+    /** One of PrayerStore.SRC_ONLINE (aladhan.com), SRC_MOSQUE (Mawaqit) or SRC_DEVICE (calculated here). */
+    var prayerSource: Int
+        get() = int("prayerSource", PrayerStore.SRC_ONLINE)
+        set(v) = putInt("prayerSource", v)
+
+    /** The calculation method, by its aladhan.com number (3 = Muslim World League). */
+    var athanMethod: Int
+        get() = int("athanMethod", 3)
+        set(v) = putInt("athanMethod", v)
+
+    /** Asr when a shadow is twice an object's length (Hanafi) instead of once. */
+    var asrHanafi: Boolean
+        get() = bool("asrHanafi", false)
+        set(v) = putBool("asrHanafi", v)
+
+    /** Fajr and Isha far from the equator: 0 angle-based, 1 middle of the night, 2 one seventh of the night. */
+    var highLat: Int
+        get() = int("highLat", 0)
+        set(v) = putInt("highLat", v)
+
+    /** The Mawaqit mosque whose times are used (its address on mawaqit.net), and its name. */
+    var mosqueSlug: String?
+        get() = sp.getString("mosqueSlug", null)
+        set(v) = sp.edit().putString("mosqueSlug", v).apply()
+
+    var mosqueName: String?
+        get() = sp.getString("mosqueName", null)
+        set(v) = sp.edit().putString("mosqueName", v).apply()
+
+    /** The athan is played for this prayer (the time still shows when it's off). */
+    fun athanFor(p: Prayer): Boolean = p.hasAthan && bool("athan_${p.key}", true)
+    fun setAthanFor(p: Prayer, on: Boolean) = putBool("athan_${p.key}", on)
+
+    /** Which recording each prayer's athan uses (see AthanSounds). Makkah, and Makkah's own Fajr athan. */
+    fun athanSound(p: Prayer): String =
+        sp.getString("sound_${p.key}", null) ?: if (p == Prayer.FAJR) AthanSounds.DEFAULT_FAJR else AthanSounds.DEFAULT
+    fun setAthanSound(p: Prayer, id: String) = sp.edit().putString("sound_${p.key}", id).apply()
+
+    /** Minutes added to (or taken from) a prayer's time. */
+    fun offset(p: Prayer): Int = int("offset_${p.key}", 0)
+    fun setOffset(p: Prayer, minutes: Int) = putInt("offset_${p.key}", minutes)
+
+    /** A fixed time for a prayer (minutes after midnight), or -1 to follow the source. */
+    fun fixedTime(p: Prayer): Int = int("fixed_${p.key}", -1)
+    fun setFixedTime(p: Prayer, minutes: Int) = putInt("fixed_${p.key}", minutes)
+
+    /** Your own recordings, by link. */
+    var customAthanUrl: String
+        get() = sp.getString("customAthanUrl", "") ?: ""
+        set(v) = sp.edit().putString("customAthanUrl", v).apply()
+
+    var customDuaUrl: String
+        get() = sp.getString("customDuaUrl", "") ?: ""
+        set(v) = sp.edit().putString("customDuaUrl", v).apply()
+
+    /** The dua after the athan: a sound id from AthanSounds.duas, AthanSounds.CUSTOM_DUA, or "" for none. */
+    var dua: String
+        get() = sp.getString("dua", null) ?: AthanSounds.DEFAULT_DUA
+        set(v) = sp.edit().putString("dua", v).apply()
+
+    /** Pause whatever is playing on the TV while the athan and the dua play. */
+    var athanPause: Boolean
+        get() = bool("athanPause", true)
+        set(v) = putBool("athanPause", v)
+
+    /** ...and carry on with it afterwards. */
+    var athanResume: Boolean
+        get() = bool("athanResume", true)
+        set(v) = putBool("athanResume", v)
+
+    /** Volume for the athan in percent, or -1 to leave the TV's volume as it is. */
+    var athanVolume: Int
+        get() = int("athanVolume", -1)
+        set(v) = putInt("athanVolume", v)
+
+    /** Prayer times on the home screen, with or without sunrise, and the Hijri date under the date. */
+    var showPrayers: Boolean
+        get() = bool("showPrayers", true)
+        set(v) = putBool("showPrayers", v)
+
+    var showSunrise: Boolean
+        get() = bool("showSunrise", true)
+        set(v) = putBool("showSunrise", v)
+
+    var showHijri: Boolean
+        get() = bool("showHijri", true)
+        set(v) = putBool("showHijri", v)
+
+    /** Days added to the Hijri date (-2 to 2), for when the month starts by sighting. */
+    var hijriAdjust: Int
+        get() = int("hijriAdjust", 0)
+        set(v) = putInt("hijriAdjust", v)
+
+    /** The last athan played, as "<day>-<prayer>", so none plays twice. */
+    var lastAthan: String
+        get() = sp.getString("lastAthan", "") ?: ""
+        set(v) = sp.edit().putString("lastAthan", v).commit().let { }
+
+    /** The city picker has been offered once. */
+    var athanSetupShown: Boolean
+        get() = bool("athanSetupShown", false)
+        set(v) = putBool("athanSetupShown", v)
 }

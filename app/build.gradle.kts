@@ -12,8 +12,8 @@ android {
         minSdk = 21
         targetSdk = 35
         // GitHub sets ETV_VERSION_CODE (100 + the build number) so every build counts as newer.
-        versionCode = System.getenv("ETV_VERSION_CODE")?.toIntOrNull() ?: 5
-        versionName = "1.7"
+        versionCode = System.getenv("ETV_VERSION_CODE")?.toIntOrNull() ?: 6
+        versionName = "1.8"
     }
 
     // One fixed key, so every new build installs over the previous one.
@@ -52,6 +52,11 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
+    }
+
+    // The athan recordings are played straight from the APK, so they must stay uncompressed.
+    androidResources {
+        noCompress += "mp3"
     }
 
     lint {
