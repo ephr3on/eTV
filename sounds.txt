@@ -1,0 +1,217 @@
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/
+http=200 bytes=194600 type=text/html; charset=UTF-8 final=https://archive.org/download/azaan-of-world-mosques-english/ redirects=0
+HTTP/2 200 
+content-type: text/html; charset=UTF-8
+HTML document, Unicode text, UTF-8 text, with very long lines (3941)
+/tmp/snd/725183da: Invalid data found when processing input
+decode errors: 3
+==================================================
+https://archive.org/download/Islamic_Tape-258_uP_bY_mUSLEm/sharawy_doaa_24.mp3
+http=200 bytes=352947 type=audio/mpeg final=https://dn711001.ca.archive.org/0/items/Islamic_Tape-258_uP_bY_mUSLEm/sharawy_doaa_24.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn711001.ca.archive.org/0/items/Islamic_Tape-258_uP_bY_mUSLEm/sharawy_doaa_24.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 352947
+Audio file with ID3 version 2.3.0, contains: MPEG ADTS, layer III, v1, 32 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=32000
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=68.342256
+decode errors: 0
+==================================================
+https://archive.org/download/alshaarawi/alshaarawi-doaa-24.mp3
+http=200 bytes=274560 type=audio/mpeg final=https://dn711007.ca.archive.org/0/items/alshaarawi/alshaarawi-doaa-24.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn711007.ca.archive.org/0/items/alshaarawi/alshaarawi-doaa-24.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 274560
+Audio file with ID3 version 2.3.0, contains: MPEG ADTS, layer III, v1, 32 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=32000
+format|format_name=mp3|duration=68.342250
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/4th%20Haram%20Makkah%20by%20Mulla.mp3
+http=200 bytes=2556187 type=audio/mpeg final=https://ia800906.us.archive.org/27/items/azaan-of-world-mosques-english/4th%20Haram%20Makkah%20by%20Mulla.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://ia800906.us.archive.org/27/items/azaan-of-world-mosques-english/4th%20Haram%20Makkah%20by%20Mulla.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 2556187
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=110865|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=175.621224
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D8%A7%D9%84%D9%85%D9%84%D8%A7_%D9%85%D9%83%D8%A9%20%28www.alqurantranslation.com%29.mp3
+http=200 bytes=4044886 type=audio/mpeg final=https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D8%A7%D9%84%D9%85%D9%84%D8%A7_%D9%85%D9%83%D8%A9%20%28www.alqurantranslation.com%29.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D8%A7%D9%84%D9%85%D9%84%D8%A7_%D9%85%D9%83%D8%A9%20%28www.alqurantranslation.com%29.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 4044886
+Audio file with ID3 version 2.3.0, contains: MPEG ADTS, layer III, v1, 160 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=160000
+format|format_name=mp3|duration=202.141900
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/3rd%20Haram%20Makkah.mp3
+http=500 bytes=170 type=text/html; charset=UTF-8 final=https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/3rd%20Haram%20Makkah.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/3rd%20Haram%20Makkah.mp3
+HTTP/2 500 
+content-length: 170
+HTML document, ASCII text, with CRLF line terminators
+/tmp/snd/6d4918bf: Invalid data found when processing input
+decode errors: 3
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/Al-Aqsa%20Masjid%20Naaji%20Qazzaaz.mp3
+http=200 bytes=3231893 type=audio/mpeg final=https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Al-Aqsa%20Masjid%20Naaji%20Qazzaaz.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Al-Aqsa%20Masjid%20Naaji%20Qazzaaz.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 3231893
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=109674|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=226.768980
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/Cairo%20Abdul%20Baset.mp3
+http=200 bytes=2878432 type=audio/mpeg final=https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Cairo%20Abdul%20Baset.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Cairo%20Abdul%20Baset.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 2878432
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=109845|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=200.698776
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/Cairo%20Al%20Hosari.mp3
+http=200 bytes=1648399 type=audio/mpeg final=https://ia600906.us.archive.org/27/items/azaan-of-world-mosques-english/Cairo%20Al%20Hosari.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://ia600906.us.archive.org/27/items/azaan-of-world-mosques-english/Cairo%20Al%20Hosari.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 1648399
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=95764|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=127.555918
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/Cairo%20Mohammed%20Al%20Banna.mp3
+http=200 bytes=2245182 type=audio/mpeg final=https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Cairo%20Mohammed%20Al%20Banna.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Cairo%20Mohammed%20Al%20Banna.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 2245182
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=109775|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=154.723265
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/Cairo%20Shuaisha.mp3
+http=200 bytes=3445839 type=audio/mpeg final=https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Cairo%20Shuaisha.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Cairo%20Shuaisha.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 3445839
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=113526|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=234.135510
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/Cairo%20AlFajr.mp3
+http=200 bytes=3563106 type=audio/mpeg final=https://ia800906.us.archive.org/27/items/azaan-of-world-mosques-english/Cairo%20AlFajr.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://ia800906.us.archive.org/27/items/azaan-of-world-mosques-english/Cairo%20AlFajr.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 3563106
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=111554|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=246.674286
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/AlFajr%20Umm%20alQaiwain.mp3
+http=500 bytes=170 type=text/html; charset=UTF-8 final=https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/AlFajr%20Umm%20alQaiwain.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/AlFajr%20Umm%20alQaiwain.mp3
+HTTP/2 500 
+content-length: 170
+HTML document, ASCII text, with CRLF line terminators
+/tmp/snd/c2ad2e91: Invalid data found when processing input
+decode errors: 3
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/Tunisia.mp3
+http=200 bytes=2078014 type=audio/mpeg final=https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Tunisia.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://dn710102.ca.archive.org/0/items/azaan-of-world-mosques-english/Tunisia.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 2078014
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=110100|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=142.132245
+decode errors: 0
+==================================================
+https://archive.org/download/azaan-of-world-mosques-english/Oman.mp3
+http=200 bytes=2036509 type=audio/mpeg final=https://ia600906.us.archive.org/27/items/azaan-of-world-mosques-english/Oman.mp3 redirects=1
+HTTP/2 302 
+content-type: text/html; charset=UTF-8
+location: https://ia600906.us.archive.org/27/items/azaan-of-world-mosques-english/Oman.mp3
+HTTP/2 200 
+content-type: audio/mpeg
+content-length: 2036509
+Audio file with ID3 version 2.4.0, contains: MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, JntStereo
+stream|codec_name=mp3|codec_long_name=MP3 (MPEG audio layer 3)|sample_rate=44100|channels=2|bit_rate=100352|
+stream|codec_name=mjpeg|codec_long_name=Motion JPEG|bit_rate=N/A
+format|format_name=mp3|duration=152.633469
+decode errors: 0
+==================================================
+Certificates (the TV must trust the top one)
+--- archive.org
+ 0 s:CN = *.archive.org
+   i:C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", OU = http://certs.godaddy.com/repository/, CN = Go Daddy Secure Certificate Authority - G2
+ 1 s:C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", OU = http://certs.godaddy.com/repository/, CN = Go Daddy Secure Certificate Authority - G2
+   i:C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", CN = Go Daddy Root Certificate Authority - G2
+ 2 s:C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", CN = Go Daddy Root Certificate Authority - G2
+   i:C = US, O = "The Go Daddy Group, Inc.", OU = Go Daddy Class 2 Certification Authority
+ 3 s:C = US, O = "The Go Daddy Group, Inc.", OU = Go Daddy Class 2 Certification Authority
+   i:C = US, O = "The Go Daddy Group, Inc.", OU = Go Daddy Class 2 Certification Authority
+--- dn711001.ca.archive.org
+ 0 s:CN = dn711001.ca.archive.org
+   i:C = US, O = Let's Encrypt, CN = YE1
+ 1 s:C = US, O = Let's Encrypt, CN = YE1
+   i:C = US, O = ISRG, CN = Root YE
+ 2 s:C = US, O = ISRG, CN = Root YE
+   i:C = US, O = Internet Security Research Group, CN = ISRG Root X2
+ 3 s:C = US, O = Internet Security Research Group, CN = ISRG Root X2
+   i:C = US, O = Internet Security Research Group, CN = ISRG Root X1

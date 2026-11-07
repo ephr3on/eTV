@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.etv.launcher.HomeShots" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-07T18:04:44.118Z" hostname="runnervm7aw5e" time="5.014">
+  <properties/>
+  <testcase name="lanternPrayers" classname="app.etv.launcher.HomeShots" time="3.82"/>
+  <testcase name="home" classname="app.etv.launcher.HomeShots" time="1.194"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+android.os.ServiceManager$ServiceNotFoundException: No service published for: tv_input
+	at android.os.ServiceManager.getServiceOrThrow(ServiceManager.java:166)
+	at android.app.SystemServiceRegistry$76.createService(SystemServiceRegistry.java:975)
+	at android.app.SystemServiceRegistry$76.createService(SystemServiceRegistry.java:972)
+	at android.app.SystemServiceRegistry$CachedServiceFetcher.getService(SystemServiceRegistry.java:1971)
+	at android.app.SystemServiceRegistry.getSystemService(SystemServiceRegistry.java:1645)
+	at android.app.ContextImpl.getSystemService(ContextImpl.java:2212)
+	at jdk.internal.reflect.GeneratedMethodAccessor27.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at org.robolectric.shadows.ShadowContextImpl$_ContextImpl_$$Reflector70.getSystemService(Unknown Source)
+	at org.robolectric.shadows.ShadowContextImpl.getSystemService(ShadowContextImpl.java:84)
+	at android.app.ContextImpl.getSystemService(ContextImpl.java)
+	at android.view.ContextThemeWrapper.getSystemService(ContextThemeWrapper.java:188)
+	at android.app.Activity.getSystemService(Activity.java:7365)
+	at app.etv.launcher.MainActivity.passthroughInputs(MainActivity.kt:1446)
+	at app.etv.launcher.MainActivity.buildInputs(MainActivity.kt:900)
+	at app.etv.launcher.MainActivity.render(MainActivity.kt:324)
+	at app.etv.launcher.MainActivity.onCreate(MainActivity.kt:152)
+	at android.app.Activity.performCreate(Activity.java:8595)
+	at android.app.Activity.performCreate(Activity.java:8573)
+	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1456)
+	at org.robolectric.android.internal.RoboMonitoringInstrumentation.callActivityOnCreate(RoboMonitoringInstrumentation.java:382)
+	at org.robolectric.android.controller.ActivityController.lambda$create$0(ActivityController.java:138)
+	at org.robolectric.shadows.ShadowPausedLooper.runPaused(ShadowPausedLooper.java:243)
+	at org.robolectric.android.controller.ActivityController.create(ActivityController.java:136)
+	at org.robolectric.android.controller.ActivityController.create(ActivityController.java:146)
+	at org.robolectric.android.controller.ActivityController.setup(ActivityController.java:341)
+	at app.etv.launcher.HomeShots.home(HomeShots.kt:133)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:502)
+	at org.robolectric.internal.SandboxTestRunner$2.lambda$evaluate$2(SandboxTestRunner.java:285)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:104)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Invalid ID 0x00000000.
+android.os.ServiceManager$ServiceNotFoundException: No service published for: tv_input
+	at android.os.ServiceManager.getServiceOrThrow(ServiceManager.java:166)
+	at android.app.SystemServiceRegistry$76.createService(SystemServiceRegistry.java:975)
+	at android.app.SystemServiceRegistry$76.createService(SystemServiceRegistry.java:972)
+	at android.app.SystemServiceRegistry$CachedServiceFetcher.getService(SystemServiceRegistry.java:1971)
+	at android.app.SystemServiceRegistry.getSystemService(SystemServiceRegistry.java:1645)
+	at android.app.ContextImpl.getSystemService(ContextImpl.java:2212)
+	at jdk.internal.reflect.GeneratedMethodAccessor27.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at org.robolectric.shadows.ShadowContextImpl$_ContextImpl_$$Reflector70.getSystemService(Unknown Source)
+	at org.robolectric.shadows.ShadowContextImpl.getSystemService(ShadowContextImpl.java:84)
+	at android.app.ContextImpl.getSystemService(ContextImpl.java)
+	at android.view.ContextThemeWrapper.getSystemService(ContextThemeWrapper.java:188)
+	at android.app.Activity.getSystemService(Activity.java:7365)
+	at app.etv.launcher.MainActivity.passthroughInputs(MainActivity.kt:1446)
+	at app.etv.launcher.MainActivity.buildInputs(MainActivity.kt:900)
+	at app.etv.launcher.MainActivity.render(MainActivity.kt:324)
+	at app.etv.launcher.MainActivity.onCreate(MainActivity.kt:152)
+	at android.app.Activity.performCreate(Activity.java:8595)
+	at android.app.Activity.performCreate(Activity.java:8573)
+	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1456)
+	at org.robolectric.android.internal.RoboMonitoringInstrumentation.callActivityOnCreate(RoboMonitoringInstrumentation.java:382)
+	at org.robolectric.android.controller.ActivityController.lambda$create$0(ActivityController.java:138)
+	at org.robolectric.shadows.ShadowPausedLooper.runPaused(ShadowPausedLooper.java:243)
+	at org.robolectric.android.controller.ActivityController.create(ActivityController.java:136)
+	at org.robolectric.android.controller.ActivityController.create(ActivityController.java:146)
+	at org.robolectric.android.controller.ActivityController.setup(ActivityController.java:341)
+	at app.etv.launcher.HomeShots.home(HomeShots.kt:133)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:502)
+	at org.robolectric.internal.SandboxTestRunner$2.lambda$evaluate$2(SandboxTestRunner.java:285)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:104)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+]]></system-err>
+</testsuite>

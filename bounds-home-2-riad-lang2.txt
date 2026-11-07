@@ -1,0 +1,26 @@
+dp: left top right bottom | centre-x  (screen 960 x 540, centre 480)
+FrameLayout 0 0 960 540 | 480
+  TileBandView 0 526 960 540 | 480
+  LinearLayout 48 22 148 64 | 98
+    View 48 31 66 55 | 57
+    LinearLayout 76 22 148 64 | 112
+      TextView 76 22 148 46 | 112  "eTV"
+      TextView 76 46 148 64 | 112  "Good evening"
+  LinearLayout 742 20 912 91 | 827
+    TextView 742 20 912 61 | 827  "18:04"
+    TextView 742 61 912 91 | 827  "Saturday, 7 November / ‎27 Jumada al-Ula"
+  LinearLayout 284 26 676 58 | 480
+    TextView 284 26 354 58 | 319  "Home"
+    TextView 358 26 421 58 | 389  "Apps"
+    TextView 425 26 498 58 | 461  "Inputs"
+    TextView 502 26 576 58 | 539  "Search"
+    TextView 580 26 676 58 | 628  "Settings  •"
+  TextView 48 84 138 102 | 93  "FAVOURITES"
+  HorizontalScrollView 0 96 960 292 | 480
+  TextView 48 306 103 324 | 76  "INPUTS"
+  LinearLayout 48 324 147 368 | 98
+    LinearLayout 48 326 147 366 | 98
+      View 58 336 74 357 | 66
+      TextView 84 335 131 357 | 108  "Live TV"
+  TextView 48 386 153 404 | 100  "PRAYER TIMES"
+  PrayerStripView 48 408 564 502 | 306

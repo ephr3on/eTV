@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.etv.launcher.AthanLockTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-07T18:04:28.310Z" hostname="runnervm7aw5e" time="15.765">
+  <properties/>
+  <testcase name="onlyTheCodeEndsIt" classname="app.etv.launcher.AthanLockTest" time="15.679"/>
+  <testcase name="hashMatchesTheReference" classname="app.etv.launcher.AthanLockTest" time="0.085"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Invalid ID 0x00000000.
+]]></system-err>
+</testsuite>
