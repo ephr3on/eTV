@@ -31,6 +31,7 @@ jobs:
 
       - name: Fetch Let's Encrypt's roots and check archive.org chains to them
         run: |
+          set +e
           mkdir -p out/certs
           cd out/certs
           for u in https://letsencrypt.org/certs/isrgrootx1.pem https://letsencrypt.org/certs/isrg-root-x2.pem https://letsencrypt.org/certs/gen-y/root-ye.pem https://letsencrypt.org/certs/gen-y/root-yr.pem; do
@@ -41,7 +42,7 @@ jobs:
             for h in dn711001.ca.archive.org dn711007.ca.archive.org dn710102.ca.archive.org; do
               openssl s_client -connect $h:443 -servername $h -showcerts < /dev/null 2>/dev/null | awk '/BEGIN CERT/{n++} {print > ("served" n ".pem")}'
               echo "== $h: served certificates"
-              for c in served*.pem; do [ -s "$c" ] && openssl x509 -in "$c" -noout -subject -issuer -enddate 2>/dev/null; done
+              for c in served*.pem; do if [ -s "$c" ]; then openssl x509 -in "$c" -noout -subject -issuer -enddate 2>/dev/null; fi; done
               echo "-- verifies with Root YE alone as the trust anchor:"
               cat served2.pem served3.pem served4.pem 2>/dev/null > untrusted.pem
               openssl verify -CAfile root-ye.pem -untrusted untrusted.pem served1.pem 2>&1 | tail -2
@@ -50,6 +51,7 @@ jobs:
               rm -f served*.pem untrusted.pem
             done
           } > ../certs.txt 2>&1
+          true
 
       - name: Take the screenshots
         run: |

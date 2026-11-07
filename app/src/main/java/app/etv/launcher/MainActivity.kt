@@ -562,7 +562,7 @@ class MainActivity : EtvActivity() {
         strip?.let { root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 16f)) }
         root.addView(
             header(Gravity.CENTER_HORIZONTAL, 18f, if (strip != null) 52f else 58f, 13f, true),
-            at(-1, -2, Gravity.TOP, top = if (strip != null) 112f else 70f),
+            at(-1, -2, Gravity.TOP, top = if (strip != null) 116f else 70f),
         )
         makeRow(HorizontalScrollView(this), Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 48f, 48f)
         root.addView(rowScroll, at(-1, dpi(190f), Gravity.TOP, top = 232f))

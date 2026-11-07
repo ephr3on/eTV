@@ -89,7 +89,7 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
     var columnDp = 84f
 
     /** Vertical: the whole width. */
-    var widthDp = 214f
+    var widthDp = 190f
 
     private val nameSp get() = if (vertical) 15f else 15.5f
     private val timeSp get() = if (vertical) 15f else 18f
@@ -189,12 +189,7 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
             shape.strokeWidth = 2f * d
             shape.color = Look.withAlpha(colors.accent, 200)
             c.drawLine(first, ly, x, ly, shape)
-            // Now.
-            if (nowPos < n - 1) {
-                shape.style = Paint.Style.FILL
-                shape.color = colors.accent
-                c.drawCircle(x, ly, 3f * d, shape)
-            }
+            if (nowPos < n - 1) nowMark(c, x, ly)
         }
 
         for ((i, cell) in cells.withIndex()) {
@@ -259,11 +254,7 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
             shape.strokeWidth = 2f * d
             shape.color = Look.withAlpha(colors.accent, 200)
             c.drawLine(lineX, ys.first(), lineX, ny, shape)
-            if (nowPos < cells.size - 1) {
-                shape.style = Paint.Style.FILL
-                shape.color = colors.accent
-                c.drawCircle(lineX, ny, 3f * d, shape)
-            }
+            if (nowPos < cells.size - 1) nowMark(c, lineX, ny)
         }
 
         for ((i, cell) in cells.withIndex()) {
@@ -298,6 +289,17 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
 
     // ---------------- markers ----------------
 
+    /** Now: a small light with a soft glow around it, so it never looks like a prayer. */
+    private fun nowMark(c: Canvas, x: Float, y: Float) {
+        shape.style = Paint.Style.FILL
+        shape.color = Look.withAlpha(colors.accent, 50)
+        c.drawCircle(x, y, 8f * d, shape)
+        shape.color = colors.bg
+        c.drawCircle(x, y, 4.6f * d, shape)
+        shape.color = colors.accent
+        c.drawCircle(x, y, 3.4f * d, shape)
+    }
+
     /** A dot on the line: filled once passed, open while still to come; the next prayer a small doorway. */
     private fun marker(c: Canvas, cell: PrayerCell, x: Float, y: Float) {
         if (cell.next) {
@@ -321,16 +323,17 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
         val r = if (cell.quiet) 2.6f * d else 3.6f * d
         shape.style = Paint.Style.FILL
         if (cell.past) {
+            // Passed: a small solid bead on the passed line.
             shape.color = Look.withAlpha(colors.accent, 200)
-            c.drawCircle(x, y, r, shape)
-        } else {
-            // An open ring: the wall shows through, so the line stops at it.
-            shape.color = colors.bg
-            c.drawCircle(x, y, r, shape)
-            shape.style = Paint.Style.STROKE
-            shape.strokeWidth = 1.3f * d
-            shape.color = if (cell.quiet) colors.muted else colors.name
-            c.drawCircle(x, y, r, shape)
+            c.drawCircle(x, y, if (cell.quiet) 2.2f * d else 3f * d, shape)
+            return
         }
+        // Still to come: an open ring; the wall shows through, so the line stops at it.
+        shape.color = colors.bg
+        c.drawCircle(x, y, r, shape)
+        shape.style = Paint.Style.STROKE
+        shape.strokeWidth = 1.3f * d
+        shape.color = if (cell.quiet) colors.muted else colors.name
+        c.drawCircle(x, y, r, shape)
     }
 }
