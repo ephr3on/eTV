@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Older Android TVs don't know Let's Encrypt's newer roots yet, and some sites eTV downloads from
+  (archive.org's file servers: the athan recordings and the dua) already use them. So eTV also
+  trusts Let's Encrypt's own roots, from res/raw, alongside the TV's usual ones. Nothing else changes:
+  every connection is still HTTPS and still checked.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="@raw/isrg_root_x1" />
+            <certificates src="@raw/isrg_root_x2" />
+            <certificates src="@raw/isrg_root_ye" />
+            <certificates src="@raw/isrg_root_yr" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
