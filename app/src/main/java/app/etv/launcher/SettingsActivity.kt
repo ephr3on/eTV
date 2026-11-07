@@ -1,6 +1,5 @@
 package app.etv.launcher
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -27,6 +26,8 @@ class SettingsActivity : EtvActivity() {
     companion object {
         /** Open on Athan and ask for the city straight away (the first time eTV needs it). */
         const val EXTRA_CHOOSE_CITY = "app.etv.launcher.CHOOSE_CITY"
+        /** Open on this category (its number in the list). */
+        const val EXTRA_CATEGORY = "app.etv.launcher.CATEGORY"
         private const val ATHAN = 2
     }
 
@@ -71,6 +72,12 @@ class SettingsActivity : EtvActivity() {
 
     private val prayersChanged: () -> Unit = { render() }
 
+    /** The option you were last on in each category, so going back in returns you there. */
+    private val lastOption = HashMap<Int, String>()
+
+    /** The recording playing in a panel, if any (stopped whenever Customise goes away). */
+    internal var preview: AthanPreview? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         root = FrameLayout(this)
@@ -102,6 +109,9 @@ class SettingsActivity : EtvActivity() {
         paneScroll = ScrollView(this).apply {
             isVerticalScrollBarEnabled = false
             overScrollMode = View.OVER_SCROLL_NEVER
+            // A soft fade where the list goes on past the screen.
+            isVerticalFadingEdgeEnabled = true
+            setFadingEdgeLength(dpi(36f))
             clipToPadding = false
             setPadding(0, 0, 0, dpi(48f))
         }
@@ -112,6 +122,10 @@ class SettingsActivity : EtvActivity() {
         root.addView(columns, FrameLayout.LayoutParams(-1, -1))
         setContentView(root)
 
+        intent?.getIntExtra(EXTRA_CATEGORY, -1)?.takeIf { it in categories.indices }?.let {
+            current = it
+            focusKey = "cat:$it"
+        }
         if (intent?.getBooleanExtra(EXTRA_CHOOSE_CITY, false) == true) {
             current = ATHAN
             focusKey = "location"
@@ -133,6 +147,7 @@ class SettingsActivity : EtvActivity() {
     }
 
     override fun onPause() {
+        preview?.stop()
         Updater.onChange = null
         AthanSounds.onChange = null
         PrayerStore.listeners.remove(prayersChanged)
@@ -272,18 +287,17 @@ class SettingsActivity : EtvActivity() {
 
     private fun lookPane() {
         val theme = Look.theme(prefs)
-        row("theme", "Theme", theme.name, rerender = false) { pickTheme() }
-        note(theme.blurb)
-        row("accent", "Highlight colour", Look.accentName(prefs), swatch = accent) {
+        row("theme", "Theme", theme.name, detail = theme.blurb, opens = true, rerender = false) { pickTheme() }
+        row("accent", "Highlight colour", Look.accentName(prefs), swatch = accent, detail = "OK for the next one") {
             prefs.accent = next(theme.accents, prefs.accent)
         }
         if (theme.palettes.size > 1) {
-            row("palette", "Background", pal.name, swatch = pal.tile) {
+            row("palette", "Background", pal.name, swatch = pal.tile, detail = "OK for the next one") {
                 prefs.palette = next(theme.palettes, prefs.palette)
             }
         }
         if (theme.layout == Layout.CLASSIC || theme.layout == Layout.DOORWAY) {
-            row("arches", "Arches in the background", if (prefs.arches) "On" else "Off") { prefs.arches = !prefs.arches }
+            row("arches", "Arches in the background", toggle = prefs.arches) { prefs.arches = !prefs.arches }
         }
     }
 
@@ -295,7 +309,7 @@ class SettingsActivity : EtvActivity() {
             prefs.greeting = next(greetings, prefs.greeting)
         }
         row("clock", "Clock", if (prefs.clock24) "24-hour" else "12-hour") { prefs.clock24 = !prefs.clock24 }
-        row("date", "Date", if (prefs.showDate) "Shown" else "Hidden") { prefs.showDate = !prefs.showDate }
+        row("date", "Date", toggle = prefs.showDate) { prefs.showDate = !prefs.showDate }
 
         group("Apps on the home screen")
         val sizes = listOf("Compact", "Normal", "Large")
@@ -312,12 +326,13 @@ class SettingsActivity : EtvActivity() {
 
         group("Now playing")
         val npAccess = NowPlayingWatcher.hasAccess(this)
-        val npValue = when {
-            !prefs.nowPlaying -> "Off"
-            !npAccess -> "Needs one permission"
-            else -> "On"
-        }
-        row("nowplaying", "Show what's playing in the background", npValue, rerender = false) {
+        row(
+            "nowplaying", "Show what's playing in the background",
+            value = if (prefs.nowPlaying && !npAccess) "Needs one permission" else "",
+            detail = "A slim bar between the doors and the dock, with play / pause",
+            toggle = prefs.nowPlaying,
+            rerender = false,
+        ) {
             if (prefs.nowPlaying && !npAccess) explainNowPlayingAccess() else {
                 prefs.nowPlaying = !prefs.nowPlaying
                 render()
@@ -327,16 +342,16 @@ class SettingsActivity : EtvActivity() {
 
     private fun appsPane() {
         val hiddenCount = prefs.hidden.size
-        row("hidden", "Hidden apps", if (hiddenCount == 0) "None" else "$hiddenCount hidden", rerender = false) {
+        row("hidden", "Hidden apps", if (hiddenCount == 0) "None" else "$hiddenCount hidden", opens = hiddenCount > 0, rerender = false) {
             editHidden()
         }
-        row("reset", "Reset the home row", "", rerender = false) { confirmReset() }
+        row("reset", "Reset the home row", "", detail = "Back to the first TV apps on this device", opens = true, rerender = false) { confirmReset() }
         note("To add an app to the home screen, hide it or uninstall it, hold OK on it in All apps.")
     }
 
     private fun homeButtonPane() {
         val handled = HomeSetup.homeHandled(this)
-        row("home", "Home button opens eTV", if (handled) "Yes" else "Set up", rerender = false) {
+        row("home", "Home button opens eTV", if (handled) "Yes" else "Set up", opens = true, rerender = false) {
             startActivity(Intent(this, SetupActivity::class.java))
         }
         note(
@@ -363,7 +378,7 @@ class SettingsActivity : EtvActivity() {
                 else -> Updater.check(this)
             }
         }
-        row("autoupdate", "Look for new versions by itself", if (prefs.autoUpdate) "Twice a day" else "Off") {
+        row("autoupdate", "Look for new versions by itself", detail = "Twice a day; you choose when to install", toggle = prefs.autoUpdate) {
             prefs.autoUpdate = !prefs.autoUpdate
         }
         note("You have eTV ${Updater.installedName(this)}, build ${Updater.installedCode(this)}.")
@@ -386,7 +401,7 @@ class SettingsActivity : EtvActivity() {
     }
 
     private fun aboutPane() {
-        row("system", "Android TV settings", "", rerender = false) {
+        row("system", "Android TV settings", "", opens = true, rerender = false) {
             AppRepo.tryStart(this, Intent(Settings.ACTION_SETTINGS))
         }
         note("eTV ${Updater.installedName(this)}  ·  build ${Updater.installedCode(this)}\ngithub.com/${Updater.REPO}")
@@ -433,23 +448,68 @@ class SettingsActivity : EtvActivity() {
         pane.addView(line, LinearLayout.LayoutParams(-1, -2))
     }
 
+    /**
+     * One option. [value] shows on the right, [detail] in a quiet line under the label; [toggle]
+     * shows a switch instead (for options that are simply on or off), [opens] a "›" for options
+     * that open a panel or another screen.
+     */
     internal fun row(
         key: String,
         label: String,
-        value: String,
+        value: String = "",
         swatch: Int? = null,
+        detail: String = "",
+        toggle: Boolean? = null,
+        opens: Boolean = false,
         rerender: Boolean = true,
         onPress: () -> Unit,
-    ) {
-        val r = settingRow(this, pal, accent, label, value, swatch)
+    ): View {
+        val r = optionRow(this, pal, accent, label, value, detail, swatch, toggle, opens)
         r.tag = key
         r.setOnClickListener {
             focusKey = key
             onPress()
             if (rerender) render()
         }
-        r.setOnFocusChangeListener { _, has -> if (has && !rebuilding) focusKey = key }
-        pane.addView(r, LinearLayout.LayoutParams(-1, dpi(52f)).apply { topMargin = dpi(4f) })
+        r.setOnFocusChangeListener { v, has ->
+            if (has && !rebuilding) {
+                focusKey = key
+                lastOption[current] = key
+                // The first option: show the heading above it too.
+                if (v === firstOption()) paneScroll.smoothScrollTo(0, 0)
+            }
+        }
+        pane.addView(r, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(4f) })
+        return r
+    }
+
+    /** A panel at the right edge (see [Sheet]), in Customise's colours. */
+    internal fun sheet(
+        title: String,
+        note: String = "",
+        hint: String = "OK chooses  ·  Back closes",
+        fill: Sheet.() -> Unit,
+    ): Sheet = Sheet(this, pal, accent, title, note, hint, fill)
+
+    /** A panel with a few plain choices; [onPick] gets the one chosen (the panel closes first). */
+    internal fun menu(
+        title: String,
+        items: List<String>,
+        note: String = "",
+        details: List<String> = emptyList(),
+        current: Int = -1,
+        onPick: (Int) -> Unit,
+    ): Sheet {
+        val s = sheet(title, note) {
+            for ((i, label) in items.withIndex()) {
+                item("m$i", label, detail = details.getOrElse(i) { "" }, checked = if (current >= 0) i == current else null) {
+                    dismiss()
+                    onPick(i)
+                }
+            }
+        }
+        s.show()
+        return s
     }
 
     // ---------------- moving between the two sides ----------------
@@ -464,8 +524,10 @@ class SettingsActivity : EtvActivity() {
     private fun firstOption(): View? =
         (0 until pane.childCount).map { pane.getChildAt(it) }.firstOrNull { it.isFocusable }
 
+    /** Into the options: where you were last time in this category, else the first. */
     private fun enterPane() {
-        firstOption()?.requestFocus()
+        val last = lastOption[current]?.let { pane.findViewWithTag<View>(it) }
+        (last?.takeIf { it.isFocusable } ?: firstOption())?.requestFocus()
     }
 
     private fun inMenu(v: View?) = v != null && v.parent === menu
@@ -514,84 +576,78 @@ class SettingsActivity : EtvActivity() {
 
     // ---------------- dialogs ----------------
 
+    /** Every hidden app with a switch: OK shows it again (or hides it again, if you change your mind). */
     private fun editHidden() {
         val all = AppRepo.all(this)
-        val hidden = prefs.hidden
-        val apps = all.filter { it.pkg in hidden }
+        val apps = all.filter { it.pkg in prefs.hidden }
         if (apps.isEmpty()) {
-            AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-                .setTitle("Hidden apps")
-                .setMessage("Nothing is hidden. In All apps, hold OK on an app and choose \"Hide from All apps\".")
-                .setPositiveButton("OK", null)
-                .show()
+            menu("Hidden apps", listOf("OK"), note = "Nothing is hidden. In All apps, hold OK on an app and choose \"Hide from All apps\".") {}
             return
         }
-        val labels = apps.map { it.label }.toTypedArray()
-        val checked = BooleanArray(apps.size) { true }
-        AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-            .setTitle("Untick to show again")
-            .setMultiChoiceItems(labels, checked) { _, which, isChecked -> checked[which] = isChecked }
-            .setPositiveButton("Done") { _, _ ->
-                val keep = HashSet(hidden)
-                apps.forEachIndexed { i, a -> if (!checked[i]) keep.remove(a.pkg) }
-                prefs.hidden = keep
-                render()
+        val s = sheet("Hidden apps", note = "Switched on: hidden from All apps. OK switches it.", hint = "OK switches  ·  Back closes") {
+            for (a in apps) {
+                val hidden = a.pkg in prefs.hidden
+                item("app:${a.pkg}", a.label, toggle = hidden) {
+                    val set = HashSet(prefs.hidden)
+                    if (!set.remove(a.pkg)) set.add(a.pkg)
+                    prefs.hidden = set
+                    refresh()
+                }
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+        s.onClose = { render() }
+        s.show()
     }
 
     /** The card needs notification access; TVs hide that switch, so offer both ways to give it. */
     internal fun explainNowPlayingAccess() {
         val canOpen = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
             .resolveActivity(packageManager) != null
-        val msg = "To show what's playing, Android needs to let eTV see media from other apps " +
+        val msg = "To pause other apps and show what's playing, Android needs to let eTV see media from other apps " +
             "(\"notification access\"). eTV only reads what's playing; it ignores every notification.\n\n" +
-            (if (canOpen) "Choose Open settings and switch on \"eTV Now playing\".\n\nOr, from your Mac:\n"
+            (if (canOpen) "Choose Open settings and switch on \"eTV Now playing\". Or, from your Mac:\n"
             else "This TV hides that switch, so give it once from your Mac:\n") +
             "adb shell cmd notification allow_listener app.etv.launcher/app.etv.launcher.MediaListener"
-        val b = AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-            .setTitle("One permission for Now playing")
-            .setMessage(msg)
-            .setNegativeButton("Turn it off") { _, _ ->
-                prefs.nowPlaying = false
-                render()
-            }
-            .setNeutralButton("Close", null)
-        if (canOpen) {
-            b.setPositiveButton("Open settings") { _, _ ->
-                AppRepo.tryStart(this, Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+        val items = ArrayList<String>()
+        if (canOpen) items.add("Open settings")
+        items.add("Turn Now playing off")
+        items.add("Close")
+        menu("One permission", items, note = msg) { which ->
+            when (items[which]) {
+                "Open settings" -> AppRepo.tryStart(this, Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+                "Turn Now playing off" -> {
+                    prefs.nowPlaying = false
+                    render()
+                }
             }
         }
-        b.show()
     }
 
     /** Every theme with a line about it; picking one shows it at once. */
     private fun pickTheme() {
-        val labels = Look.themes.map { "${it.name}  —  ${it.blurb}" }.toTypedArray()
-        AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-            .setTitle("Theme")
-            .setSingleChoiceItems(labels, prefs.theme.coerceIn(0, Look.themes.size - 1)) { d, which ->
-                if (which != prefs.theme) {
-                    // Each theme has its own colours: start from its first ones.
-                    prefs.accent = 0
-                    prefs.palette = 0
-                    prefs.theme = which
-                }
-                d.dismiss()
-                focusKey = "theme"
-                render()
+        menu(
+            "Theme",
+            Look.themes.map { it.name },
+            note = "Each theme changes the whole home screen. Your apps and settings stay the same.",
+            details = Look.themes.map { it.blurb },
+            current = prefs.theme.coerceIn(0, Look.themes.size - 1),
+        ) { which ->
+            if (which != prefs.theme) {
+                // Each theme has its own colours: start from its first ones.
+                prefs.accent = 0
+                prefs.palette = 0
+                prefs.theme = which
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+            focusKey = "theme"
+            render()
+        }
     }
 
     private fun confirmReset() {
-        AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-            .setTitle("Reset the home row?")
-            .setMessage("Your home row goes back to the first TV apps on this device.")
-            .setPositiveButton("Reset") { _, _ -> prefs.resetHomeRow() }
-            .setNegativeButton("Cancel", null)
-            .show()
+        menu(
+            "Reset the home row?",
+            listOf("Reset", "Cancel"),
+            note = "Your home row goes back to the first TV apps on this device. Hidden apps stay hidden.",
+        ) { which -> if (which == 0) prefs.resetHomeRow() }
     }
 }

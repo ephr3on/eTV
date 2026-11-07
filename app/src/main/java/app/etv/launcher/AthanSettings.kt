@@ -2,63 +2,103 @@ package app.etv.launcher
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.graphics.drawable.GradientDrawable
 import android.text.InputType
+import android.view.Gravity
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 
 /*
- * Customise → Athan: where you are, where the times come from, the athan for each prayer, the dua
- * after it, what happens to whatever is playing, and what the home screen shows.
+ * Customise → Athan, in the order you'd set it up:
+ *  - the athan on or off, and today's times at a glance (they change as you change the options);
+ *  - where the times come from: the city, the source, the calculation;
+ *  - the athan: the recordings (each one can be heard before you choose it), the dua, listening;
+ *  - each prayer: its athan, its recording, moving it or fixing its time, without leaving the panel;
+ *  - while the athan plays, and what the home screen shows.
+ * When the athan is off, only what still matters (the times on the home screen) is shown.
  */
 
 internal fun SettingsActivity.athanPane() {
     val p = Prefs(this)
     val place = p.place
 
-    group("Athan")
-    row("athan", "Athan at prayer times", if (p.athanOn) "On" else "Off") {
+    row(
+        "athan", "Athan at prayer times",
+        detail = if (p.athanOn) "The athan at each prayer, then the dua; what's playing pauses"
+        else "Off. The times still show on the home screen.",
+        toggle = p.athanOn,
+    ) {
         p.athanOn = !p.athanOn
         AthanScheduler.schedule(this)
         if (p.athanOn) AthanSounds.ensureChosen(this)
     }
-    row("location", "City", place?.name ?: "Choose your city", rerender = false) { pickLocation() }
+    todayCard(p)
+
+    group("Prayer times")
+    row("location", "City", place?.name ?: "Choose your city", opens = true, rerender = false) { pickLocation() }
     val source = when (p.prayerSource) {
-        PrayerStore.SRC_MOSQUE -> "Mosque: ${p.mosqueName ?: "choose one"}"
+        PrayerStore.SRC_MOSQUE -> p.mosqueName ?: "A mosque: choose one"
         PrayerStore.SRC_DEVICE -> "Worked out on the TV"
         else -> "aladhan.com"
     }
-    row("source", "Prayer times from", source, rerender = false) { pickSource() }
+    row("source", "Times from", source, opens = true, rerender = false) { pickSource() }
     if (p.prayerSource != PrayerStore.SRC_MOSQUE) {
-        row("method", "Calculation method", Methods.byId(p.athanMethod).name, rerender = false) { pickMethod() }
-        row("asr", "Asr", if (p.asrHanafi) "Hanafi" else "Shafi'i, Maliki, Hanbali") {
+        row("method", "Calculation method", Methods.byId(p.athanMethod).name, opens = true, rerender = false) { pickMethod() }
+        row(
+            "asr", "Asr", if (p.asrHanafi) "Hanafi" else "Shafi'i, Maliki, Hanbali",
+            detail = if (p.asrHanafi) "The later Asr time" else "The earlier Asr time; OK for Hanafi",
+        ) {
             p.asrHanafi = !p.asrHanafi
             timesChanged()
         }
-        row("highlat", "Fajr and Isha in summer", Methods.highLatNames[p.highLat.coerceIn(0, 2)]) {
+        row(
+            "highlat", "Fajr and Isha in summer", Methods.highLatNames[p.highLat.coerceIn(0, 2)],
+            detail = "Far north the twilight can last all night; this decides how they're worked out then",
+        ) {
             p.highLat = (p.highLat + 1) % 3
             timesChanged()
         }
     }
     note(statusLine(p))
 
-    group("Recordings")
-    row("fajrsound", "Fajr athan", soundValue(p.athanSound(Prayer.FAJR)), rerender = false) { pickSound(listOf(Prayer.FAJR)) }
-    val others = Prayer.withAthan - Prayer.FAJR
-    val otherIds = others.map { p.athanSound(it) }.distinct()
-    row("othersound", "Athan for the other prayers", if (otherIds.size == 1) soundValue(otherIds[0]) else "Different for each", rerender = false) {
-        pickSound(others)
-    }
-    row("dua", "After the athan", if (p.dua.isEmpty()) "No dua" else "Dua  ·  ${soundValue(p.dua)}", rerender = false) { pickDua() }
-    val missing = AthanSounds.missing(this)
-    if (missing.isNotEmpty() && p.athanOn) {
-        val busy = missing.any { AthanSounds.isDownloading(it) }
-        row("download", "Recordings to fetch", if (busy) "Downloading…" else "${missing.size} not on the TV yet  ·  Fetch now") {
-            AthanSounds.ensureChosen(this, force = true)
+    if (p.athanOn) {
+        group("The athan")
+        row(
+            "fajrsound", "Fajr athan", soundValue(p.athanSound(Prayer.FAJR)),
+            detail = "Hear each one before you choose", opens = true, rerender = false,
+        ) { pickSound(listOf(Prayer.FAJR)) }
+        val others = Prayer.withAthan - Prayer.FAJR
+        val otherIds = others.map { p.athanSound(it) }.distinct()
+        row(
+            "othersound", "Athan for the other prayers",
+            if (otherIds.size == 1) soundValue(otherIds[0]) else "Different for each",
+            detail = "Dhuhr, Asr, Maghrib and Isha", opens = true, rerender = false,
+        ) { pickSound(others) }
+        row(
+            "dua", "After the athan", if (p.dua.isEmpty()) "No dua" else soundValue(p.dua),
+            detail = if (p.dua.isEmpty()) "Nothing after the athan" else "The dua after the athan", opens = true, rerender = false,
+        ) { pickDua() }
+        val missing = AthanSounds.missing(this)
+        if (missing.isNotEmpty()) {
+            val busy = missing.any { AthanSounds.isDownloading(it) }
+            row(
+                "download", "Recordings to fetch", if (busy) "Downloading…" else "${missing.size} not on the TV yet",
+                detail = "Until then Makkah's athan plays. Fetched once from the Internet Archive; OK to fetch now",
+            ) {
+                AthanSounds.ensureChosen(this, force = true)
+            }
         }
-        note("Until a recording is on the TV, Makkah's athan plays instead. They're fetched once from the Internet Archive.")
+        row(
+            "test", "Listen now", detail = "The next athan and the dua in full, just as at prayer time", opens = true, rerender = false,
+        ) {
+            val next = PrayerStore.next(this, p, System.currentTimeMillis(), athanOnly = false)?.prayer ?: Prayer.DHUHR
+            if (!AthanService.start(this, next, test = true)) toast("Couldn't play the athan")
+        }
     }
 
     group("Each prayer")
@@ -67,60 +107,152 @@ internal fun SettingsActivity.athanPane() {
     val times = PrayerStore.times(this, p, today)
     val friday = Days.isFriday(today, tz)
     for (pr in Prayer.withAthan) {
-        val time = times?.let { "  ·  ${Days.clock(it[pr.ordinal], p.clock24)}" } ?: ""
-        row("prayer_${pr.key}", "${pr.arName(friday)}   ${pr.enName(friday)}$time", prayerSummary(p, pr), rerender = false) {
-            editPrayer(pr)
-        }
+        row(
+            "prayer_${pr.key}", "${pr.enName(friday)}   ${pr.arName(friday)}",
+            times?.let { Days.clock(it[pr.ordinal], p.clock24) } ?: "",
+            detail = prayerSummary(p, pr), opens = true, rerender = false,
+        ) { editPrayer(pr) }
     }
-    note("Choose a prayer to switch its athan off, give it its own recording, move it a few minutes, or set a fixed time.")
 
-    group("While the athan plays")
-    val pauseValue = when {
-        !p.athanPause -> "Keep playing"
-        p.athanResume -> "Pause, then carry on"
-        else -> "Pause"
-    }
-    row("pause", "What's playing on the TV", pauseValue) {
-        when {
-            p.athanPause && p.athanResume -> p.athanResume = false
-            p.athanPause -> p.athanPause = false
-            else -> {
-                p.athanPause = true
-                p.athanResume = true
+    if (p.athanOn) {
+        group("While the athan plays")
+        val pauseValue = when {
+            !p.athanPause -> "Keep playing"
+            p.athanResume -> "Pause, then carry on"
+            else -> "Pause"
+        }
+        row(
+            "pause", "What's playing on the TV", pauseValue,
+            detail = when {
+                !p.athanPause -> "The athan plays over it"
+                p.athanResume -> "It carries on by itself after the dua"
+                else -> "It stays paused afterwards"
+            },
+        ) {
+            when {
+                p.athanPause && p.athanResume -> p.athanResume = false
+                p.athanPause -> p.athanPause = false
+                else -> {
+                    p.athanPause = true
+                    p.athanResume = true
+                }
             }
         }
-    }
-    if (p.athanPause && !NowPlayingWatcher.hasAccess(this)) {
-        row("pauseaccess", "Pause every app reliably", "Needs one permission", rerender = false) { explainNowPlayingAccess() }
-    }
-    val volumes = listOf(-1, 25, 40, 55, 70, 85, 100)
-    row("volume", "Athan volume", if (p.athanVolume <= 0) "As the TV is" else "${p.athanVolume}%") {
-        val i = volumes.indexOf(p.athanVolume)
-        p.athanVolume = volumes[(i + 1) % volumes.size]
-    }
-    row("code", "Code to end the athan early", if (AthanService.hasOwnCode(this)) "Your own" else "Built in", rerender = false) {
-        changeCode()
-    }
-    row("test", "Listen now", "The next athan and the dua, to the end", rerender = false) {
-        val next = PrayerStore.next(this, p, System.currentTimeMillis(), athanOnly = false)?.prayer ?: Prayer.DHUHR
-        if (!AthanService.start(this, next, test = true)) toast("Couldn't play the athan")
+        if (p.athanPause && !NowPlayingWatcher.hasAccess(this)) {
+            row("pauseaccess", "Pause every app reliably", "Needs one permission", opens = true, rerender = false) { explainNowPlayingAccess() }
+        }
+        row(
+            "volume", "Athan volume", if (p.athanVolume <= 0) "As the TV is" else "${p.athanVolume}%",
+            detail = if (p.athanVolume <= 0) "OK to set a level; it un-mutes the TV" else "Un-mutes the TV, and puts the volume back afterwards",
+            opens = true, rerender = false,
+        ) { pickVolume() }
+        row(
+            "code", "Code to end the athan early", if (AthanService.hasOwnCode(this)) "Your own" else "Built in",
+            detail = "Typed on the remote's number keys during the athan", opens = true, rerender = false,
+        ) { changeCode() }
     }
 
     group("On the home screen")
-    row("prayers", "Prayer times", if (p.showPrayers) "Shown" else "Hidden") { p.showPrayers = !p.showPrayers }
-    row("sunrise", "Sunrise among them", if (p.showSunrise) "Shown" else "Hidden") { p.showSunrise = !p.showSunrise }
-    val lanternNames = listOf("A line through the day", "The sun's path", "One at a time", "At the foot")
-    row("lanternprayers", "In Lantern", lanternNames[p.lanternPrayers.coerceIn(0, 3)]) {
-        p.lanternPrayers = (p.lanternPrayers + 1) % lanternNames.size
+    row("prayers", "Prayer times", toggle = p.showPrayers) { p.showPrayers = !p.showPrayers }
+    if (p.showPrayers) {
+        row("sunrise", "Sunrise among them", toggle = p.showSunrise) { p.showSunrise = !p.showSunrise }
+        val lanternNames = listOf("A line through the day", "The sun's path", "One at a time", "At the foot")
+        row(
+            "lanternprayers", "In the Lantern theme", lanternNames[p.lanternPrayers.coerceIn(0, 3)], opens = true, rerender = false,
+        ) {
+            menu("Prayer times in Lantern", lanternNames, current = p.lanternPrayers.coerceIn(0, 3)) { i ->
+                p.lanternPrayers = i
+                focusKey = "lanternprayers"
+                render()
+            }
+        }
     }
-    row("hijri", "Hijri date, under the date", if (p.showHijri) "Shown" else "Hidden") { p.showHijri = !p.showHijri }
+    row("hijri", "Hijri date, under the date", toggle = p.showHijri) { p.showHijri = !p.showHijri }
     if (p.showHijri) {
         val adjust = listOf(0, 1, 2, -2, -1)
         val names = mapOf(0 to "None", 1 to "+1 day", 2 to "+2 days", -1 to "−1 day", -2 to "−2 days")
-        row("hijriadj", "Hijri date adjustment", names[p.hijriAdjust] ?: "None") {
+        row(
+            "hijriadj", "Hijri date adjustment", names[p.hijriAdjust] ?: "None",
+            detail = "For when the month starts a day earlier or later where you are",
+        ) {
             val i = adjust.indexOf(p.hijriAdjust).coerceAtLeast(0)
             p.hijriAdjust = adjust[(i + 1) % adjust.size]
         }
+    }
+}
+
+// ---------------- today at a glance ----------------
+
+/**
+ * Today's times in a quiet frame under the switch, the next one lit with how long until it, so
+ * every change to the city, method or a prayer shows straight away.
+ */
+private fun SettingsActivity.todayCard(p: Prefs) {
+    val place = p.place ?: return
+    val tz = Days.tz(place)
+    val today = Days.today(tz)
+    val t = PrayerStore.times(this, p, today) ?: return
+    val friday = Days.isFriday(today, tz)
+    val now = System.currentTimeMillis()
+    val next = PrayerStore.next(this, p, now, athanOnly = false)
+    val card = LinearLayout(this).apply {
+        orientation = LinearLayout.HORIZONTAL
+        setPadding(dpi(10f), dpi(12f), dpi(10f), dpi(12f))
+        background = GradientDrawable().apply {
+            cornerRadius = dp(14f)
+            setStroke(dpi(1f), pal.tileStroke)
+        }
+    }
+    for (pr in Prayer.values()) {
+        val isNext = next != null && next.day == today && next.prayer == pr
+        val muted = pr == Prayer.SUNRISE
+        val cell = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+        }
+        cell.addView(TextView(this).apply {
+            text = pr.arName(friday)
+            typeface = Fonts.display(this@todayCard, 500)
+            sp(13f)
+            setTextColor(if (isNext) accent else if (muted) pal.muted else pal.label)
+            gravity = Gravity.CENTER
+        })
+        cell.addView(TextView(this).apply {
+            text = Days.clock(t[pr.ordinal], p.clock24)
+            typeface = Fonts.body(this@todayCard, if (isNext) 500 else 400)
+            sp(16f)
+            setTextColor(if (isNext) accent else if (muted) pal.muted else pal.text)
+            gravity = Gravity.CENTER
+        })
+        cell.addView(TextView(this).apply {
+            text = if (isNext) inTime(next!!.at - now) else pr.enName(friday)
+            typeface = Fonts.body(this@todayCard, 300)
+            sp(11.5f)
+            setTextColor(if (isNext) accent else pal.muted)
+            gravity = Gravity.CENTER
+        })
+        card.addView(cell, LinearLayout.LayoutParams(0, -2, 1f))
+    }
+    pane.addView(card, LinearLayout.LayoutParams(-1, -2).apply {
+        topMargin = dpi(10f)
+        marginStart = dpi(4f)
+        marginEnd = dpi(4f)
+    })
+    if (next != null && next.day != today) {
+        note("Next: ${next.prayer.enName(next.friday)} tomorrow at ${Days.clock(next.minutes, p.clock24)}")
+    }
+}
+
+/** "in 1 h 42 min", "in 42 min". */
+private fun inTime(ms: Long): String {
+    val mins = ((ms + 59_999L) / 60_000L).toInt().coerceAtLeast(0)
+    val h = mins / 60
+    val m = mins % 60
+    return when {
+        h > 0 && m == 0 -> "in $h h"
+        h > 0 -> "in $h h $m min"
+        mins <= 1 -> "now"
+        else -> "in $m min"
     }
 }
 
@@ -149,19 +281,21 @@ private fun SettingsActivity.soundValue(id: String): String {
     return if (st.isEmpty()) s.name else "${s.name}  ($st)"
 }
 
+/** One prayer's options in a few words, for the line under it. */
 private fun SettingsActivity.prayerSummary(p: Prefs, pr: Prayer): String {
     val parts = ArrayList<String>()
-    parts.add(if (p.athanFor(pr)) AthanSounds.name(this, p.athanSound(pr)) else "No athan")
+    if (p.athanOn) parts.add(if (p.athanFor(pr)) AthanSounds.name(this, p.athanSound(pr)) else "No athan")
     val fixed = p.fixedTime(pr)
     val off = p.offset(pr)
-    if (fixed >= 0) parts.add("always ${Days.clock(fixed, p.clock24)}")
+    if (fixed >= 0) parts.add("always at ${Days.clock(fixed, p.clock24)}")
     else if (off != 0) parts.add(offsetText(off))
+    if (parts.isEmpty()) parts.add("On time")
     return parts.joinToString("  ·  ")
 }
 
 private fun offsetText(m: Int) = when {
-    m > 0 -> "+$m min"
-    m < 0 -> "−${-m} min"
+    m > 0 -> "$m min later"
+    m < 0 -> "${-m} min earlier"
     else -> "On time"
 }
 
@@ -174,8 +308,12 @@ private fun SettingsActivity.timesChanged() {
 // ---------------- the city ----------------
 
 internal fun SettingsActivity.pickLocation() {
-    val items = arrayOf("Search for a city…", "Find it from the TV's internet connection")
-    choose("City for the prayer times", items) { which ->
+    val place = Prefs(this).place
+    menu(
+        "City for the prayer times",
+        listOf("Search for a city…", "Find it from the TV's internet connection"),
+        note = if (place != null) "Now: ${place.name}" else "The prayer times are worked out for this city.",
+    ) { which ->
         when (which) {
             0 -> askText("Search for a city", "For example Hannover, or القاهرة", "", InputType.TYPE_CLASS_TEXT) { q ->
                 if (q.isNotBlank()) searchCity(q)
@@ -189,24 +327,24 @@ internal fun SettingsActivity.pickLocation() {
 }
 
 private fun SettingsActivity.searchCity(q: String) {
-    work("Searching…", { Geo.search(q) }) { list ->
+    work("Searching for \"$q\"…", { Geo.search(q) }) { list ->
         when {
             list == null -> toast("Couldn't search. Is the TV online?")
             list.isEmpty() -> toast("Nothing found for \"$q\"")
-            else -> choose("Choose your city", list.map { it.name }.toTypedArray()) { i -> setPlace(list[i]) }
+            else -> menu("Choose your city", list.map { it.short }, details = list.map { it.name }) { i -> setPlace(list[i]) }
         }
     }
 }
 
 private fun SettingsActivity.confirmPlace(pl: Place) {
-    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        .setTitle("Is this right?")
-        .setMessage("${pl.name}\n\nIt's worked out from the TV's internet connection, so it can be a nearby city.")
-        .setPositiveButton("Use it") { _, _ -> setPlace(pl) }
-        .setNegativeButton("Search instead") { _, _ ->
-            askText("Search for a city", "For example Hannover", "", InputType.TYPE_CLASS_TEXT) { q -> if (q.isNotBlank()) searchCity(q) }
-        }
-        .show()
+    menu(
+        "Is this right?",
+        listOf("Use ${pl.short}", "Search instead"),
+        note = "${pl.name}\n\nIt's worked out from the TV's internet connection, so it can be a nearby city.",
+    ) { which ->
+        if (which == 0) setPlace(pl)
+        else askText("Search for a city", "For example Hannover", "", InputType.TYPE_CLASS_TEXT) { q -> if (q.isNotBlank()) searchCity(q) }
+    }
 }
 
 private fun SettingsActivity.setPlace(pl: Place) {
@@ -228,36 +366,35 @@ private fun SettingsActivity.afterSourceChange() {
 
 private fun SettingsActivity.pickSource() {
     val p = Prefs(this)
-    val items = arrayOf(
-        "aladhan.com  —  worked out online for your city",
-        "A mosque  —  the times it publishes on mawaqit.net",
-        "On the TV  —  worked out here, no internet needed",
-    )
-    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        .setTitle("Prayer times from")
-        .setSingleChoiceItems(items, p.prayerSource.coerceIn(0, 2)) { d, which ->
-            d.dismiss()
-            focusKey = "source"
-            when (which) {
-                PrayerStore.SRC_MOSQUE -> pickMosque()
-                else -> {
-                    p.prayerSource = which
-                    afterSourceChange()
-                }
+    menu(
+        "Prayer times from",
+        listOf("aladhan.com", "A mosque", "On the TV"),
+        details = listOf(
+            "Worked out online for your city; the default",
+            if (p.mosqueName != null) "Now: ${p.mosqueName}. The times it publishes on mawaqit.net" else "The times a mosque publishes on mawaqit.net",
+            "Worked out here, no internet needed",
+        ),
+        current = p.prayerSource.coerceIn(0, 2),
+    ) { which ->
+        focusKey = "source"
+        when (which) {
+            PrayerStore.SRC_MOSQUE -> pickMosque()
+            else -> {
+                p.prayerSource = which
+                afterSourceChange()
             }
         }
-        .setNegativeButton("Cancel", null)
-        .show()
+    }
 }
 
 private fun SettingsActivity.pickMosque() {
     val place = Prefs(this).place
     val items = ArrayList<String>()
     if (place != null) items.add("Mosques near ${place.short}")
-    items.add("Search for a mosque by name or town…")
-    choose("Mosque", items.toTypedArray()) { which ->
+    items.add("Search by name or town…")
+    menu("Mosque", items) { which ->
         if (place != null && which == 0) {
-            work("Looking for mosques…", { Mawaqit.search(null, place) }) { showMosques(it) }
+            work("Looking for mosques near ${place.short}…", { Mawaqit.search(null, place) }) { showMosques(it) }
         } else {
             askText("Search for a mosque", "Its name, or the town", "", InputType.TYPE_CLASS_TEXT) { q ->
                 if (q.isNotBlank()) work("Searching…", { Mawaqit.search(q, null) }) { showMosques(it) }
@@ -270,10 +407,7 @@ private fun SettingsActivity.showMosques(list: List<Mawaqit.Mosque>?) {
     when {
         list == null -> toast("mawaqit.net didn't answer. Try again later, or choose aladhan.com.")
         list.isEmpty() -> toast("No mosques found")
-        else -> {
-            val labels = list.map { m -> if (m.where.isNotBlank()) "${m.name}  —  ${m.where}" else m.name }.toTypedArray()
-            choose("Choose the mosque", labels) { i -> setMosque(list[i]) }
-        }
+        else -> menu("Choose the mosque", list.map { it.name }, details = list.map { it.where }) { i -> setMosque(list[i]) }
     }
 }
 
@@ -298,40 +432,120 @@ private fun SettingsActivity.setMosque(m: Mawaqit.Mosque) {
 private fun SettingsActivity.pickMethod() {
     val p = Prefs(this)
     val list = Methods.list
-    val current = list.indexOfFirst { it.id == p.athanMethod }.coerceAtLeast(0)
-    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        .setTitle("Calculation method")
-        .setSingleChoiceItems(list.map { it.name }.toTypedArray(), current) { d, which ->
-            d.dismiss()
-            p.athanMethod = list[which].id
-            focusKey = "method"
-            render()
-            timesChanged()
-        }
-        .setNegativeButton("Cancel", null)
-        .show()
+    menu(
+        "Calculation method",
+        list.map { it.name },
+        note = "How the times are worked out from the sun. Choose the one used where you are, or by your mosque.",
+        current = list.indexOfFirst { it.id == p.athanMethod }.coerceAtLeast(0),
+    ) { which ->
+        p.athanMethod = list[which].id
+        focusKey = "method"
+        render()
+        timesChanged()
+    }
+}
+
+private fun SettingsActivity.pickVolume() {
+    val p = Prefs(this)
+    val volumes = listOf(-1, 25, 40, 55, 70, 85, 100)
+    menu(
+        "Athan volume",
+        volumes.map { if (it <= 0) "As the TV is" else "$it%" },
+        note = "A set level un-mutes the TV for the athan and puts its volume back afterwards. The volume keys still work.",
+        current = volumes.indexOf(p.athanVolume).let { if (it < 0) 0 else it },
+    ) { which ->
+        p.athanVolume = volumes[which]
+        focusKey = "volume"
+        render()
+    }
 }
 
 // ---------------- recordings ----------------
 
-/** Chooses the athan for [prayers] (Fajr alone, or the other four together). */
-private fun SettingsActivity.pickSound(prayers: List<Prayer>) {
+/** What to say under a recording in the list. */
+private fun SettingsActivity.soundDetail(s: AthanSounds.Sound, forFajr: Boolean): String {
+    val where = when {
+        s.asset != null -> "Comes with eTV"
+        AthanSounds.isReady(this, s) -> "On the TV"
+        AthanSounds.isDownloading(s) -> "Downloading…"
+        AthanSounds.hasFailed(s) -> "Couldn't download: ${AthanSounds.whyFailed(s)}"
+        else -> "Fetched once when you listen or choose it"
+    }
+    val fajr = if (s.fajr && !forFajr) "Recorded for Fajr  ·  " else ""
+    return fajr + where
+}
+
+/**
+ * A panel of recordings you can listen to: moving onto one plays it, OK chooses it. [extra] adds
+ * rows after the recordings ("your own link", "no dua"). [onChosen] gets the chosen id.
+ */
+private fun SettingsActivity.soundSheet(
+    title: String,
+    note: String,
+    sounds: List<AthanSounds.Sound>,
+    currentId: String,
+    forFajr: Boolean,
+    extra: Sheet.(stopPreview: () -> Unit) -> Unit,
+    onChosen: (String) -> Unit,
+    then: (() -> Unit)? = null,
+) {
+    lateinit var sh: Sheet
+    val base = HashMap<String, String>()
+    val pv = AthanPreview(this) { s, text ->
+        sh.setDetail("snd:${s.id}", text.ifEmpty { base[s.id] ?: "" }, if (text.isEmpty()) 0 else sh.accent)
+    }
+    preview?.stop()
+    preview = pv
+    sh = sheet(
+        title,
+        note,
+        hint = "Move to a recording to hear it  ·  OK chooses it  ·  Play / Pause  ·  Back",
+    ) {
+        for (s in sounds) {
+            val d = soundDetail(s, forFajr)
+            base[s.id] = d
+            item("snd:${s.id}", s.name, detail = d, checked = s.id == currentId, onFocus = { pv.want(s) }) {
+                pv.stop()
+                dismiss()
+                onChosen(s.id)
+            }
+        }
+        this.extra { pv.stop() }
+    }
+    sh.onPlayPause = { pv.toggle() }
+    sh.onClose = {
+        pv.stop()
+        if (preview === pv) preview = null
+        then?.invoke()
+    }
+    sh.show()
+}
+
+/** Chooses the athan for [prayers] (Fajr alone, the other four together, or any one). */
+internal fun SettingsActivity.pickSound(prayers: List<Prayer>, then: (() -> Unit)? = null) {
     val p = Prefs(this)
-    val forFajr = prayers == listOf(Prayer.FAJR)
+    val forFajr = prayers == listOf(Prayer.FAJR) || (prayers.size == 1 && p.athanSound(prayers[0]).let { id -> AthanSounds.find(this, id)?.fajr == true })
     // The recordings made for Fajr first when choosing Fajr's, last otherwise.
-    val list = AthanSounds.athans.sortedBy { if (it.fajr == forFajr) 0 else 1 }
-    val labels = list.map { s ->
-        val tag = if (s.fajr && !forFajr) "  ·  Fajr's athan" else ""
-        val st = AthanSounds.statusOf(this, s)
-        s.name + tag + if (st.isEmpty()) "" else "  ($st)"
-    } + "Your own recording, from a link…"
-    val currentId = p.athanSound(prayers[0])
-    val checked = list.indexOfFirst { it.id == currentId }.let { if (it < 0 && currentId == AthanSounds.CUSTOM) list.size else it }
-    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        .setTitle(if (forFajr) "Fajr athan" else "Athan for Dhuhr, Asr, Maghrib and Isha")
-        .setSingleChoiceItems(labels.toTypedArray(), checked) { d, which ->
-            d.dismiss()
-            if (which == list.size) {
+    val list = ArrayList(AthanSounds.athans.sortedBy { if (it.fajr == forFajr) 0 else 1 })
+    AthanSounds.find(this, AthanSounds.CUSTOM)?.let { list.add(it) }
+    val title = when {
+        prayers == listOf(Prayer.FAJR) -> "Fajr athan"
+        prayers.size == 1 -> "Athan for ${prayers[0].en}"
+        else -> "Athan for the other prayers"
+    }
+    val note = when {
+        prayers.size == 1 -> "Move to a recording and it plays, so you can hear it before choosing."
+        else -> "For Dhuhr, Asr, Maghrib and Isha. Move to a recording and it plays, so you can hear it before choosing."
+    }
+    soundSheet(
+        title, note, list, p.athanSound(prayers[0]), forFajr,
+        extra = { stopPreview ->
+            group("Your own")
+            item(
+                "newlink", if (p.customAthanUrl.isBlank()) "A recording from a link…" else "A different link…",
+                detail = "Any MP3 on the internet", opens = true, onFocus = stopPreview,
+            ) {
+                dismiss()
                 askText("Link to an athan recording", "https://…  (an MP3 or similar)", p.customAthanUrl, InputType.TYPE_TEXT_VARIATION_URI) { url ->
                     if (url.startsWith("http")) {
                         p.customAthanUrl = url
@@ -340,12 +554,11 @@ private fun SettingsActivity.pickSound(prayers: List<Prayer>) {
                         toast("That doesn't look like a link")
                     }
                 }
-            } else {
-                useSound(prayers, list[which].id)
             }
-        }
-        .setNegativeButton("Cancel", null)
-        .show()
+        },
+        onChosen = { id -> useSound(prayers, id) },
+        then = then,
+    )
 }
 
 private fun SettingsActivity.useSound(prayers: List<Prayer>, id: String) {
@@ -360,52 +573,51 @@ private fun SettingsActivity.useSound(prayers: List<Prayer>, id: String) {
     }
 }
 
-private fun SettingsActivity.pickDua() {
+internal fun SettingsActivity.pickDua() {
     val p = Prefs(this)
-    val list = AthanSounds.duas
-    val labels = list.map { s ->
-        val st = AthanSounds.statusOf(this, s)
-        s.name + if (st.isEmpty()) "" else "  ($st)"
-    } + listOf("Your own recording, from a link…", "No dua")
-    val checked = when (p.dua) {
-        "" -> list.size + 1
-        AthanSounds.CUSTOM_DUA -> list.size
-        else -> list.indexOfFirst { it.id == p.dua }
-    }
-    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        .setTitle("Dua after the athan")
-        .setSingleChoiceItems(labels.toTypedArray(), checked) { d, which ->
-            d.dismiss()
-            focusKey = "dua"
-            when {
-                which < list.size -> {
-                    p.dua = list[which].id
-                    render()
-                    val s = list[which]
-                    if (!AthanSounds.isReady(this, s)) {
-                        AthanSounds.ensure(this, s, force = true) { ok ->
-                            toast(if (ok) "The dua is ready" else "Couldn't download the dua: ${AthanSounds.whyFailed(s)}")
-                        }
-                    }
-                }
-                which == list.size -> askText("Link to a dua recording", "https://…  (an MP3 or similar)", p.customDuaUrl, InputType.TYPE_TEXT_VARIATION_URI) { url ->
+    focusKey = "dua"
+    val list = ArrayList(AthanSounds.duas)
+    AthanSounds.find(this, AthanSounds.CUSTOM_DUA)?.let { list.add(it) }
+    soundSheet(
+        "After the athan",
+        "Move to a recording and it plays, so you can hear it before choosing.",
+        list, p.dua, forFajr = false,
+        extra = { stopPreview ->
+            group("Or")
+            item(
+                "newlink", if (p.customDuaUrl.isBlank()) "A recording from a link…" else "A different link…",
+                detail = "Any MP3 on the internet", opens = true, onFocus = stopPreview,
+            ) {
+                dismiss()
+                askText("Link to a dua recording", "https://…  (an MP3 or similar)", p.customDuaUrl, InputType.TYPE_TEXT_VARIATION_URI) { url ->
                     if (url.startsWith("http")) {
                         p.customDuaUrl = url
-                        p.dua = AthanSounds.CUSTOM_DUA
-                        render()
-                        AthanSounds.find(this, AthanSounds.CUSTOM_DUA)?.let { s ->
-                            AthanSounds.ensure(this, s, force = true) { ok -> if (!ok) toast("Couldn't download that recording: ${AthanSounds.whyFailed(s)}") }
-                        }
+                        useDua(AthanSounds.CUSTOM_DUA)
+                    } else if (url.isNotEmpty()) {
+                        toast("That doesn't look like a link")
                     }
                 }
-                else -> {
-                    p.dua = ""
-                    render()
-                }
             }
+            item("nodua", "No dua", detail = "The athan screen closes after the athan", checked = p.dua.isEmpty(), onFocus = stopPreview) {
+                dismiss()
+                p.dua = ""
+                render()
+            }
+        },
+        onChosen = { id -> useDua(id) },
+    )
+}
+
+private fun SettingsActivity.useDua(id: String) {
+    val p = Prefs(this)
+    p.dua = id
+    render()
+    val s = AthanSounds.find(this, id) ?: return
+    if (!AthanSounds.isReady(this, s)) {
+        AthanSounds.ensure(this, s, force = true) { ok ->
+            toast(if (ok) "The dua is ready" else "Couldn't download the dua: ${AthanSounds.whyFailed(s)}")
         }
-        .setNegativeButton("Cancel", null)
-        .show()
+    }
 }
 
 // ---------------- the code ----------------
@@ -460,61 +672,86 @@ private fun SettingsActivity.askNewCode() {
 
 // ---------------- one prayer ----------------
 
-private fun SettingsActivity.editPrayer(pr: Prayer) {
+/**
+ * One prayer's options in a panel that stays open while you change them: its athan on or off,
+ * its recording, and its time moved with Left / Right (a minute at a time) or fixed (five minutes
+ * at a time). The time it will be today is written at the top and follows every change.
+ */
+internal fun SettingsActivity.editPrayer(pr: Prayer) {
     val p = Prefs(this)
     focusKey = "prayer_${pr.key}"
-    val fixed = p.fixedTime(pr)
-    val items = arrayOf(
-        "Athan:  " + if (p.athanFor(pr)) "On" else "Off (the time still shows)",
-        "Recording:  " + AthanSounds.name(this, p.athanSound(pr)),
-        "Move the time:  " + offsetText(p.offset(pr)),
-        "Fixed time:  " + if (fixed >= 0) Days.clock(fixed, p.clock24) else "Off",
-        "Listen to it now",
-    )
-    choose("${pr.ar}  ·  ${pr.en}", items) { which ->
-        when (which) {
-            0 -> {
+    val place = p.place
+    val tz = Days.tz(place)
+    val today = Days.today(tz)
+    val friday = Days.isFriday(today, tz)
+    fun todayAt(): String = PrayerStore.times(this, p, today)?.let { "Today at ${Days.clock(it[pr.ordinal], p.clock24)}" } ?: ""
+    fun changed() {
+        AthanScheduler.schedule(this)
+        render()
+    }
+    lateinit var sh: Sheet
+    sh = sheet("${pr.enName(friday)}   ${pr.arName(friday)}", todayAt(), hint = "OK changes  ·  ‹ › moves the time  ·  Back closes") {
+        note = todayAt()
+        if (p.athanOn) {
+            item("on", "Athan", detail = if (p.athanFor(pr)) "Plays at this prayer" else "Off; the time still shows", toggle = p.athanFor(pr)) {
                 p.setAthanFor(pr, !p.athanFor(pr))
-                AthanScheduler.schedule(this)
-                render()
-                editPrayer(pr)
+                changed()
+                sh.refresh()
             }
-            1 -> pickSound(listOf(pr))
-            2 -> pickOffset(pr)
-            3 -> askText(
-                "Fixed time for ${pr.en}",
-                "For example 13:30. Leave it empty to follow the prayer times.",
-                if (fixed >= 0) Days.clock(fixed, true) else "",
-                InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_TIME,
-            ) { text ->
-                if (text.isEmpty()) {
-                    p.setFixedTime(pr, -1)
-                } else {
-                    val m = Days.parseClock(text)
-                    if (m == null) toast("Write the time like 13:30") else p.setFixedTime(pr, m)
+            if (p.athanFor(pr)) {
+                item("sound", "Recording", AthanSounds.name(this@editPrayer, p.athanSound(pr)), detail = "Hear each one before you choose", opens = true) {
+                    pickSound(listOf(pr)) { sh.refresh() }
                 }
-                AthanScheduler.schedule(this)
-                render()
             }
-            4 -> if (!AthanService.start(this, pr, test = true)) toast("Couldn't play the athan")
+        }
+        val fixed = p.fixedTime(pr)
+        if (fixed < 0) {
+            val off = p.offset(pr)
+            item(
+                "offset", "Move the time", "‹  ${offsetText(off)}  ›",
+                detail = if (off == 0) "Left / Right, a minute at a time" else "Left / Right a minute at a time  ·  OK puts it back",
+                onStep = { d ->
+                    p.setOffset(pr, (p.offset(pr) + d).coerceIn(-60, 60))
+                    changed()
+                    sh.refresh()
+                },
+            ) {
+                if (p.offset(pr) != 0) {
+                    p.setOffset(pr, 0)
+                    changed()
+                    sh.refresh()
+                }
+            }
+        }
+        fun startFixed(): Int {
+            val now = PrayerStore.times(this@editPrayer, p, today)?.get(pr.ordinal) ?: (13 * 60)
+            return (now + 4) / 5 * 5 % (24 * 60)
+        }
+        item(
+            "fixed", "Fixed time", if (fixed >= 0) "‹  ${Days.clock(fixed, p.clock24)}  ›" else "Off",
+            detail = if (fixed >= 0) "Every day at this time  ·  Left / Right five minutes  ·  OK turns it off"
+            else "OK to set the same time every day (Jumu'ah, say)",
+            toggle = fixed >= 0,
+            onStep = { d ->
+                val cur = p.fixedTime(pr).let { if (it < 0) startFixed() - 5 * d else it }
+                p.setFixedTime(pr, ((cur + 5 * d) % (24 * 60) + 24 * 60) % (24 * 60))
+                changed()
+                sh.refresh()
+            },
+        ) {
+            p.setFixedTime(pr, if (p.fixedTime(pr) >= 0) -1 else startFixed())
+            changed()
+            sh.refresh()
+        }
+        if (p.athanOn && p.athanFor(pr)) {
+            group("Listen")
+            item("listen", "Play this athan now", detail = "In full, with the dua, just as at prayer time", opens = true) {
+                if (!AthanService.start(this@editPrayer, pr, test = true)) toast("Couldn't play the athan")
+            }
         }
     }
-}
-
-private fun SettingsActivity.pickOffset(pr: Prayer) {
-    val p = Prefs(this)
-    val values = listOf(-30, -20, -15, -10, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 10, 15, 20, 30)
-    val labels = values.map { offsetText(it) }.toTypedArray()
-    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        .setTitle("Move ${pr.en} by")
-        .setSingleChoiceItems(labels, values.indexOf(p.offset(pr)).coerceAtLeast(0)) { d, which ->
-            d.dismiss()
-            p.setOffset(pr, values[which])
-            AthanScheduler.schedule(this)
-            render()
-        }
-        .setNegativeButton("Cancel", null)
-        .show()
+    sh.onClose = { render() }
+    sh.show()
 }
 
 // ---------------- small helpers ----------------
@@ -564,16 +801,16 @@ internal fun Activity.askText(title: String, hint: String, initial: String, inpu
 }
 
 /**
- * Does [job] off the main thread with a "please wait" box, then [then] with its result
- * (null when it failed). Cancelling the box drops the result.
+ * Does [job] off the main thread with a "please wait" panel, then [then] with its result
+ * (null when it failed). Closing the panel drops the result.
  */
-private fun <T> Activity.work(message: String, job: () -> T, then: (T?) -> Unit) {
+private fun <T> SettingsActivity.work(message: String, job: () -> T, then: (T?) -> Unit) {
     var cancelled = false
-    val d = AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        .setMessage(message)
-        .setNegativeButton("Cancel") { _, _ -> cancelled = true }
-        .setOnCancelListener { cancelled = true }
-        .show()
+    val d = sheet(message, hint = "Back cancels") {
+        item("cancel", "Cancel") { dismiss() }
+    }
+    d.onClose = { cancelled = true }
+    d.show()
     Thread {
         val result = try {
             job()
@@ -582,6 +819,7 @@ private fun <T> Activity.work(message: String, job: () -> T, then: (T?) -> Unit)
         }
         runOnUiThread {
             if (isFinishing || cancelled) return@runOnUiThread
+            d.onClose = null
             try { d.dismiss() } catch (_: Exception) {}
             then(result)
         }

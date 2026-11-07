@@ -426,22 +426,64 @@ fun settingRow(
     label: String,
     value: String,
     swatch: Int? = null,
+): LinearLayout = optionRow(context, pal, accent, label, value, swatch = swatch)
+
+/**
+ * A row of Customise or of a [Sheet]: an optional doorway mark (filled when it's the chosen one),
+ * the label with a quiet line under it, then the value, a colour, an on / off switch, or a "›" for
+ * rows that open something. [setRowValue], [setRowDetail] and [setRowToggle] change it in place.
+ */
+fun optionRow(
+    context: Context,
+    pal: Palette,
+    accent: Int,
+    label: String,
+    value: String = "",
+    detail: String = "",
+    swatch: Int? = null,
+    toggle: Boolean? = null,
+    opens: Boolean = false,
+    checked: Boolean? = null,
 ): LinearLayout {
     val row = LinearLayout(context).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
-        setPadding(context.dpi(18f), 0, context.dpi(18f), 0)
+        minimumHeight = context.dpi(52f)
+        setPadding(context.dpi(18f), context.dpi(9f), context.dpi(18f), context.dpi(9f))
         isFocusable = true
         isClickable = true
         background = pillBackground(context, 14f, Color.TRANSPARENT, pal.card, accent)
     }
-    val name = TextView(context).apply {
+    if (checked != null) {
+        val mark = View(context).apply {
+            tag = "check"
+            background = doorMark(context, pal, accent, checked)
+        }
+        row.addView(mark, LinearLayout.LayoutParams(context.dpi(12f), context.dpi(16f)).apply {
+            marginEnd = context.dpi(14f)
+        })
+    }
+    val texts = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
+    texts.addView(TextView(context).apply {
+        tag = "label"
         text = label
-        typeface = Fonts.body(context, 400)
+        typeface = Fonts.body(context, if (checked == true) 500 else 400)
         sp(15f)
         setTextColor(pal.text)
-    }
-    row.addView(name, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+    })
+    texts.addView(TextView(context).apply {
+        tag = "detail"
+        text = detail
+        typeface = Fonts.body(context, 300)
+        sp(12.5f)
+        setLineSpacing(0f, 1.15f)
+        setTextColor(focusColors(pal.label, pal.muted))
+        isDuplicateParentStateEnabled = true
+        visibility = if (detail.isEmpty()) View.GONE else View.VISIBLE
+    }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+        topMargin = context.dpi(2f)
+    })
+    row.addView(texts, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
     if (swatch != null) {
         val dot = View(context).apply {
             background = GradientDrawable().apply {
@@ -451,20 +493,117 @@ fun settingRow(
             }
         }
         row.addView(dot, LinearLayout.LayoutParams(context.dpi(14f), context.dpi(14f)).apply {
+            marginStart = context.dpi(12f)
             marginEnd = context.dpi(10f)
         })
     }
-    if (value.isNotEmpty()) {
-        val v = TextView(context).apply {
-            text = value
-            typeface = Fonts.body(context, 400)
-            sp(14f)
+    row.addView(TextView(context).apply {
+        tag = "value"
+        text = value
+        typeface = Fonts.body(context, 400)
+        sp(14f)
+        setTextColor(focusColors(accent, pal.muted))
+        isDuplicateParentStateEnabled = true
+        visibility = if (value.isEmpty()) View.GONE else View.VISIBLE
+    }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+        marginStart = context.dpi(12f)
+    })
+    if (toggle != null) {
+        val sw = SwitchView(context).apply {
+            tag = "switch"
+            on = toggle
+            onColor = accent
+            offColor = pal.muted
+            thumbOn = pal.onAccent
+            thumbOff = pal.muted
+        }
+        row.addView(sw, LinearLayout.LayoutParams(context.dpi(34f), context.dpi(18f)).apply {
+            marginStart = context.dpi(14f)
+        })
+    }
+    if (opens) {
+        row.addView(TextView(context).apply {
+            text = "›"
+            typeface = Fonts.body(context, 300)
+            sp(20f)
+            includeFontPadding = false
             setTextColor(focusColors(accent, pal.muted))
             isDuplicateParentStateEnabled = true
-        }
-        row.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+            marginStart = context.dpi(12f)
+        })
     }
     return row
+}
+
+fun setRowValue(row: View, text: String) {
+    row.findViewWithTag<TextView>("value")?.apply {
+        if (this.text?.toString() != text) this.text = text
+        visibility = if (text.isEmpty()) View.GONE else View.VISIBLE
+    }
+}
+
+/** Changes the quiet line under a row's label; [color] (e.g. the highlight colour) or 0 for the usual. */
+fun setRowDetail(row: View, text: String, pal: Palette, color: Int = 0) {
+    row.findViewWithTag<TextView>("detail")?.apply {
+        if (this.text?.toString() != text) this.text = text
+        visibility = if (text.isEmpty()) View.GONE else View.VISIBLE
+        if (color != 0) setTextColor(color) else setTextColor(focusColors(pal.label, pal.muted))
+    }
+}
+
+fun setRowToggle(row: View, on: Boolean) {
+    row.findViewWithTag<SwitchView>("switch")?.on = on
+}
+
+/** The small doorway that marks a choice: an outline, or filled with the highlight colour when chosen. */
+fun doorMark(context: Context, pal: Palette, accent: Int, chosen: Boolean): GradientDrawable = GradientDrawable().apply {
+    val top = context.dp(6f)
+    val bottom = context.dp(1.5f)
+    cornerRadii = floatArrayOf(top, top, top, top, bottom, bottom, bottom, bottom)
+    if (chosen) setColor(accent) else {
+        setColor(Color.TRANSPARENT)
+        setStroke(context.dpi(1f), pal.tileStroke)
+    }
+}
+
+/** A small on / off switch for options that are simply on or off. */
+class SwitchView(context: Context) : View(context) {
+    var on = false
+        set(v) {
+            if (field != v) {
+                field = v
+                invalidate()
+            }
+        }
+    var onColor = 0
+    var offColor = 0
+    var thumbOn = 0
+    var thumbOff = 0
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val rect = RectF()
+
+    override fun onDraw(canvas: Canvas) {
+        val d = resources.displayMetrics.density
+        val w = width.toFloat()
+        val h = height.toFloat()
+        val inset = 0.75f * d
+        rect.set(inset, inset, w - inset, h - inset)
+        val r = rect.height() / 2f
+        if (on) {
+            paint.style = Paint.Style.FILL
+            paint.color = onColor
+        } else {
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = 1.5f * d
+            paint.color = offColor
+        }
+        canvas.drawRoundRect(rect, r, r, paint)
+        paint.style = Paint.Style.FILL
+        paint.color = if (on) thumbOn else thumbOff
+        val thumb = h / 2f - 4f * d
+        canvas.drawCircle(if (on) w - h / 2f else h / 2f, h / 2f, thumb, paint)
+    }
 }
 
 
