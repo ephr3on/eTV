@@ -152,7 +152,7 @@ class PrayerStripView(context: Context, private val style: StripStyle) : LinearL
                 cell.addView(name, LayoutParams(-1, -2))
                 cell.addView(time, LayoutParams(-1, -2).apply { topMargin = context.dpi(4f) })
                 cell.addView(note, LayoutParams(-1, -2).apply { topMargin = context.dpi(3f) })
-                val w = if (style == StripStyle.RIAD) 66f else 60f
+                val w = if (style == StripStyle.RIAD) 62f else 60f
                 val h = if (style == StripStyle.RIAD) 62f else 68f
                 addView(cell, LayoutParams(context.dpi(w), context.dpi(h)).apply {
                     if (i > 0) marginStart = context.dpi(if (style == StripStyle.RIAD) 8f else 4f)

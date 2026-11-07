@@ -1,8 +1,9 @@
 # eTV — a calm Sidi Bou Said launcher for Android TV
 
-A home screen with arched-door app tiles, a quiet clock and greeting, and nothing that moves on its own.
-No libraries, no ads, no autoplaying previews. The only thing it ever connects to is this repository on GitHub,
-to look for a new version of itself (you can switch that off).
+A home screen with arched-door app tiles, a quiet clock and greeting, today's prayer times, and nothing that
+moves on its own. No libraries, no ads, no autoplaying previews. It connects to this repository on GitHub to look
+for a new version of itself (you can switch that off), and, for the athan, to the prayer-time source you choose
+and the Internet Archive for the recordings you pick.
 
 ## Themes
 
@@ -33,6 +34,7 @@ Made with the Philips remote in mind (works with any Android TV remote).
 | 1 – 9 | Open the app in that spot on the home row |
 | 0 or Red | All apps |
 | Green or Sources | Inputs (HDMI etc.) |
+| Back, during the athan | Ends the athan |
 | Yellow | Search |
 | Blue, or Options with nothing selected | Customise |
 | Down | Dock: Search, Inputs, All apps, Settings |
@@ -69,6 +71,46 @@ adb shell cmd notification allow_listener app.etv.launcher/app.etv.launcher.Medi
 ```
 
 Customise → Now playing shows whether it's set up, and turns the card off.
+
+## Athan
+
+The five prayer times (and sunrise) are on the home screen in every theme, the next prayer marked with how
+long until it, and the Hijri date sits under the date. When a prayer's time comes, the athan plays:
+
+- whatever is playing on the TV (YouTube, SmartTube, music, a film) pauses, and the athan screen comes up;
+- after the athan, Sheikh al-Sha'rawi's dua after the athan (دعاء الشعراوي بعد الأذان);
+- then the athan screen closes and what was playing carries on.
+
+**OK**, **Back** or the remote's **Stop / Pause** end it early. Volume works as always.
+
+Everything is in **Settings → Athan**:
+
+| Option | What it does |
+|---|---|
+| Athan at prayer times | On / off for all of it (the times still show on the home screen) |
+| City | Search for your city, or let the TV find it from its internet connection |
+| Prayer times from | **aladhan.com** (worked out online for your city; the default), **a mosque** (the times it publishes on mawaqit.net: mosques near your city, or search by name), or **on the TV** (no internet) |
+| Calculation method, Asr, Fajr and Isha in summer | How the times are worked out (Muslim World League, Egyptian, Umm al-Qura, Diyanet, ...) |
+| Fajr athan / Athan for the other prayers | Makkah's Fajr athan and Makkah's athan by default; also Ali Mulla, Al-Aqsa, Cairo (Abdul Basit, Al-Husary, ...), Tunisia, or your own recording from a link |
+| After the athan | Sheikh al-Sha'rawi's dua, your own recording from a link, or no dua |
+| Each prayer | Switch one prayer's athan off, give it its own recording, move it by a few minutes, or set a fixed time |
+| What's playing on the TV | Pause, then carry on (default) / Pause / Keep playing |
+| Athan volume | As the TV is, or a set level (it un-mutes the TV and puts the volume back afterwards) |
+| Listen now | Plays the next athan and the dua straight away |
+| On the home screen | Prayer times, sunrise, Hijri date (and a ±day adjustment for the month's start) |
+
+The times from aladhan.com or the mosque are kept on the TV, so they work without internet; whenever they're
+missing, the TV works them out itself with the same method. Makkah's athan and Makkah's Fajr athan are inside eTV;
+the other recordings and the dua are fetched once when you choose them and kept on the TV (until then Makkah's athan
+plays). The built-in recordings are from *Azaan of World Mosques* on the Internet Archive, marked public domain.
+
+The athan only plays while the TV is on (not in standby). To pause other apps most reliably eTV uses the same
+permission as *Now playing*; to bring the athan screen up over any app it uses the Home button helper or the
+"display over other apps" permission, which `make-default.sh` gives:
+
+```sh
+adb shell appops set app.etv.launcher SYSTEM_ALERT_WINDOW allow
+```
 
 ## Making the Home button open eTV
 
@@ -180,12 +222,20 @@ app/src/main/java/app/etv/launcher/
   Nav.kt                where you were, so Home can bring you back there
   NowPlaying.kt         the Now playing card and how it picks what to show
   Updater.kt            checks GitHub releases, downloads and installs new versions
+  PrayerTimes.kt        prayers, calculation methods, the TV's own calculation, Hijri dates, the stored times
+  PrayerSources.kt      aladhan.com, Mawaqit mosques, city search, keeping the times fresh
+  PrayerStrip.kt        the prayer times on the home screen, styled for each theme
+  AthanSounds.kt        the athan recordings and the dua: built in, or fetched once
+  AthanService.kt       the athan alarm, and playing the athan and dua while pausing the rest of the TV
+  AthanActivity.kt      the athan screen
+  AthanSettings.kt      Customise → Athan
   BootReceiver.kt       opens eTV when the TV starts
   Views.kt              arch shape, arch tile, background arches, door studs, rows, focus helpers
   AppRepo.kt            lists, caches and launches apps
   Look.kt               colour palettes and fonts
   Prefs.kt              all saved options
 app/src/main/assets/fonts/   El Messiri, Reem Kufi and Readex Pro (SIL Open Font License, see OFL files)
+app/src/main/assets/athan/   Makkah's athan and Fajr athan (public domain, see CREDITS.txt)
 install.sh, make-default.sh  one-command install and Home setup from a Mac
 ```
 

@@ -24,6 +24,8 @@ object AthanSounds {
         /** Inside the APK, under assets/. */
         val asset: String? = null,
         val url: String? = null,
+        /** Another copy, tried when [url] doesn't work. */
+        val mirror: String? = null,
     )
 
     const val DEFAULT = "makkah"
@@ -53,7 +55,11 @@ object AthanSounds {
     )
 
     val duas: List<Sound> = listOf(
-        Sound(DEFAULT_DUA, "Sheikh al-Sha'rawi", url = "https://archive.org/download/alshaarawi/alshaarawi-doaa-24.mp3"),
+        Sound(
+            DEFAULT_DUA, "Sheikh al-Sha'rawi",
+            url = "https://archive.org/download/Islamic_Tape-258_uP_bY_mUSLEm/sharawy_doaa_24.mp3",
+            mirror = "https://archive.org/download/Islamic_Tape-258_uP_bY_mUSLEm/sharawy_doaa_24.ogg",
+        ),
     )
 
     /** A sound by id, including your own links. */
@@ -121,8 +127,15 @@ object AthanSounds {
         Thread {
             val tmp = File(target.path + ".part")
             val ok = try {
-                Net.download(url, tmp)
-                if (!playable(tmp)) throw IllegalStateException("not a sound")
+                val got = listOfNotNull(url, s.mirror).any { u ->
+                    try {
+                        Net.download(u, tmp)
+                        playable(tmp)
+                    } catch (e: Exception) {
+                        false
+                    }
+                }
+                if (!got) throw IllegalStateException("not a sound")
                 // Drop older copies of the same sound (an earlier link).
                 dir(app).listFiles()?.filter { it.name.startsWith("${s.id}-") && it.name != target.name }?.forEach { it.delete() }
                 tmp.renameTo(target)
