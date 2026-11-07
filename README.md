@@ -51,6 +51,11 @@ background (Sea blue, Night, Dusk), background arches, greeting (Arabic and Engl
 12- or 24-hour clock, date, arch size, app icon or letter inside each arch, when app names show, hidden apps,
 and resetting the home row. It also lists the remote shortcuts and opens the Home button setup.
 
+Options that are simply on or off have a switch; a line under each option says what it does; options with a
+**›** open a panel at the right edge, in the theme's colours, where the current choice has a filled doorway.
+Up / Down stop at the ends, **OK** chooses, **Back** closes. Going back into a category returns to the option you
+were on.
+
 ## Now playing
 
 When another app plays in the background (say you press Home while a SmartTube video is running), a slim bar
@@ -88,7 +93,16 @@ this repository only holds a salted hash of it), and Settings → Athan → Code
 with your own. Volume works as always. Afterwards the TV's volume and mute are put back exactly, and what was
 playing carries on by itself.
 
-Everything is in **Settings → Athan**:
+Everything is in **Settings → Athan**. Under the switch, today's times show in a small frame with the next one
+lit, so every change to the city, the method or a prayer shows straight away. With the athan off, only the
+options for the times on the home screen remain.
+
+**Hearing a recording before you choose it.** In the Fajr athan, the other prayers' athan, a single prayer's
+recording or the dua, moving onto a recording plays it (after a moment, so passing over one stays quiet), fading
+in from the start, with the time under it. **OK** chooses it, **Play / Pause** pauses it or plays it again, moving
+on stops it. A recording that isn't on the TV yet is fetched first, once, and kept. This is only a preview: it
+doesn't lock the remote or change the volume, unlike *Listen now*.
+
 
 | Option | What it does |
 |---|---|
@@ -96,9 +110,9 @@ Everything is in **Settings → Athan**:
 | City | Search for your city, or let the TV find it from its internet connection |
 | Prayer times from | **aladhan.com** (worked out online for your city; the default), **a mosque** (the times it publishes on mawaqit.net: mosques near your city, or search by name), or **on the TV** (no internet) |
 | Calculation method, Asr, Fajr and Isha in summer | How the times are worked out (Muslim World League, Egyptian, Umm al-Qura, Diyanet, ...) |
-| Fajr athan / Athan for the other prayers | Makkah's Fajr athan and Makkah's athan by default; also Ali Mulla, Al-Aqsa, Cairo (Abdul Basit, Al-Husary, ...), Tunisia, or your own recording from a link |
+| Fajr athan / Athan for the other prayers | Makkah's Fajr athan and Makkah's athan by default; also Ali Mulla, Al-Aqsa, Cairo (Abdul Basit, Al-Husary, ...), Tunisia, or your own recording from a link. Each one plays as you move onto it |
 | After the athan | Sheikh al-Sha'rawi's dua, your own recording from a link, or no dua |
-| Each prayer | Switch one prayer's athan off, give it its own recording, move it by a few minutes, or set a fixed time |
+| Each prayer | A panel that stays open: its athan on / off, its own recording, **Left / Right** to move it a minute at a time (OK puts it back), or a fixed time (OK, then Left / Right five minutes at a time); the time it will be today follows each change |
 | What's playing on the TV | Pause, then carry on (default) / Pause / Keep playing |
 | Athan volume | As the TV is, or a set level (it un-mutes the TV and puts the volume back afterwards) |
 | Code to end the athan early | The built-in code, or your own 4–12 digit one (asks for the current code first); typed on the remote's number keys during the athan, it ends it |
@@ -223,6 +237,8 @@ app/src/main/java/app/etv/launcher/
   MainActivity.kt       home screen: greeting, clock, arch row, dock, move mode, remote keys, inputs, search
   AppsActivity.kt       All apps grid with add/hide/info/uninstall
   SettingsActivity.kt   Customise
+  Sheet.kt              the panels Customise opens at the right edge
+  AthanPreview.kt       hearing a recording in Customise before choosing it
   SetupActivity.kt      Home button setup with live status
   HomeButtonService.kt  the Home button helper (accessibility service)
   HomeSetup.kt          who answers Home, and whether eTV is in charge

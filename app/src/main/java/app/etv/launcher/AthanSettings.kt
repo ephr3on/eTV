@@ -40,7 +40,7 @@ internal fun SettingsActivity.athanPane() {
     todayCard(p)
 
     group("Prayer times")
-    row("location", "City", place?.name ?: "Choose your city", opens = true, rerender = false) { pickLocation() }
+    row("location", "City", place?.short ?: "Choose your city", opens = true, rerender = false) { pickLocation() }
     val source = when (p.prayerSource) {
         PrayerStore.SRC_MOSQUE -> p.mosqueName ?: "A mosque: choose one"
         PrayerStore.SRC_DEVICE -> "Worked out on the TV"
@@ -499,7 +499,7 @@ private fun SettingsActivity.soundSheet(
     sh = sheet(
         title,
         note,
-        hint = "Move to a recording to hear it  ·  OK chooses it  ·  Play / Pause  ·  Back",
+        hint = "OK chooses  ·  Play / Pause  ·  Back closes",
     ) {
         for (s in sounds) {
             val d = soundDetail(s, forFajr)
@@ -534,8 +534,8 @@ internal fun SettingsActivity.pickSound(prayers: List<Prayer>, then: (() -> Unit
         else -> "Athan for the other prayers"
     }
     val note = when {
-        prayers.size == 1 -> "Move to a recording and it plays, so you can hear it before choosing."
-        else -> "For Dhuhr, Asr, Maghrib and Isha. Move to a recording and it plays, so you can hear it before choosing."
+        prayers.size == 1 -> "Each one plays as you move onto it."
+        else -> "For Dhuhr, Asr, Maghrib and Isha. Each one plays as you move onto it."
     }
     soundSheet(
         title, note, list, p.athanSound(prayers[0]), forFajr,
@@ -580,7 +580,7 @@ internal fun SettingsActivity.pickDua() {
     AthanSounds.find(this, AthanSounds.CUSTOM_DUA)?.let { list.add(it) }
     soundSheet(
         "After the athan",
-        "Move to a recording and it plays, so you can hear it before choosing.",
+        "Each one plays as you move onto it.",
         list, p.dua, forFajr = false,
         extra = { stopPreview ->
             group("Or")
@@ -709,7 +709,7 @@ internal fun SettingsActivity.editPrayer(pr: Prayer) {
             val off = p.offset(pr)
             item(
                 "offset", "Move the time", "‹  ${offsetText(off)}  ›",
-                detail = if (off == 0) "Left / Right, a minute at a time" else "Left / Right a minute at a time  ·  OK puts it back",
+                detail = if (off == 0) "‹ › a minute at a time" else "‹ › a minute  ·  OK puts it back",
                 onStep = { d ->
                     p.setOffset(pr, (p.offset(pr) + d).coerceIn(-60, 60))
                     changed()
@@ -728,9 +728,8 @@ internal fun SettingsActivity.editPrayer(pr: Prayer) {
             return (now + 4) / 5 * 5 % (24 * 60)
         }
         item(
-            "fixed", "Fixed time", if (fixed >= 0) "‹  ${Days.clock(fixed, p.clock24)}  ›" else "Off",
-            detail = if (fixed >= 0) "Every day at this time  ·  Left / Right five minutes  ·  OK turns it off"
-            else "OK to set the same time every day (Jumu'ah, say)",
+            "fixed", "Fixed time", if (fixed >= 0) "‹  ${Days.clock(fixed, p.clock24)}  ›" else "",
+            detail = if (fixed >= 0) "Every day  ·  ‹ › five minutes" else "The same time every day",
             toggle = fixed >= 0,
             onStep = { d ->
                 val cur = p.fixedTime(pr).let { if (it < 0) startFixed() - 5 * d else it }
