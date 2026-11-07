@@ -82,9 +82,11 @@ long until it, and the Hijri date sits under the date. When a prayer's time come
 - then the athan screen closes and what was playing carries on.
 
 Nothing on the remote ends it early: OK, Back, Stop and Pause do nothing, and if Home or an app's button hides
-the athan screen it comes straight back, with anything that started playing paused again. Only your own code, typed
-on the number keys, ends it before the athan and the dua are over: set it on the TV in Settings → Athan → Code to
-end the athan early (it stays on the TV, as a salted hash; without one the athan always plays to the end). Volume works as always.
+the athan screen it comes straight back, with anything that started playing paused again. Only the code, typed
+on the number keys, ends it before the athan and the dua are over. eTV comes with one built in (the owner knows it;
+this repository only holds a salted hash of it), and Settings → Athan → Code to end the athan early can replace it
+with your own. Volume works as always. Afterwards the TV's volume and mute are put back exactly, and what was
+playing carries on by itself.
 
 Everything is in **Settings → Athan**:
 
@@ -99,7 +101,7 @@ Everything is in **Settings → Athan**:
 | Each prayer | Switch one prayer's athan off, give it its own recording, move it by a few minutes, or set a fixed time |
 | What's playing on the TV | Pause, then carry on (default) / Pause / Keep playing |
 | Athan volume | As the TV is, or a set level (it un-mutes the TV and puts the volume back afterwards) |
-| Code to end the athan early | Your own 4–12 digit code; typed on the remote's number keys during the athan, it ends it. Without one, nothing does |
+| Code to end the athan early | The built-in code, or your own 4–12 digit one (asks for the current code first); typed on the remote's number keys during the athan, it ends it |
 | Listen now | Plays the next athan and the dua straight away (to the end, like the real one) |
 | On the home screen | Prayer times, sunrise, Hijri date (and a ±day adjustment for the month's start) |
 | In Lantern | One at a time (the next prayer large, its neighbours fading; the default), a line through the day, the sun's path over the lit door, or at the foot of the screen |
@@ -234,6 +236,8 @@ app/src/main/java/app/etv/launcher/
   AthanService.kt       the athan alarm, and playing the athan and dua while pausing the rest of the TV
   AthanActivity.kt      the athan screen
   AthanSettings.kt      Customise → Athan
+fakeplayer/                  a stand-in film app, only for the athan rehearsal on an emulator
+scripts/athan-e2e.sh         that rehearsal (.github/workflows/e2e.yml, for branches e2e*)
   BootReceiver.kt       opens eTV when the TV starts
   Views.kt              arch shape, arch tile, background arches, door studs, rows, focus helpers
   AppRepo.kt            lists, caches and launches apps
