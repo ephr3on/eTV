@@ -495,11 +495,7 @@ class MainActivity : EtvActivity() {
             gravity = Gravity.CENTER_HORIZONTAL
         }
         val name = text(nameSp, 500, display = true, gravity = Gravity.CENTER).apply { maxLines = 1 }
-        val hint = text(11f, 300, color = pal.muted, gravity = Gravity.CENTER).apply {
-            text = "OK to open  ·  hold OK for options"
-        }
         box.addView(name, LinearLayout.LayoutParams(-1, -2))
-        box.addView(hint, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(2f) })
         caption = name
         return box
     }

@@ -2,49 +2,93 @@ package app.etv.launcher
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.provider.Settings
+import android.view.FocusFinder
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 
-/** "Customise": every option changes with a single press of OK and shows instantly. */
+/**
+ * "Customise", laid out like the TV's own settings: categories on the left, their options on the
+ * right. Moving through the categories shows their options straight away; Right goes into them,
+ * Left or Back comes out again. Every option changes with one press of OK and shows instantly.
+ */
 class SettingsActivity : EtvActivity() {
 
+    private class Category(val name: String, val about: String)
+
+    private val categories = listOf(
+        Category("Look", "The theme, its colours and its background."),
+        Category("Home screen", "What the home screen shows, and how the apps look on it."),
+        Category("Apps", "Hidden apps and your home row."),
+        Category("Home button", "Making the remote's Home button open eTV."),
+        Category("Updates", "New versions of eTV, straight from GitHub."),
+        Category("Remote", "Shortcuts that work on the home screen."),
+        Category("About", "This version of eTV, and the TV's own settings."),
+    )
+
     private lateinit var root: FrameLayout
-    private lateinit var list: LinearLayout
     private lateinit var title: TextView
+    private lateinit var menu: LinearLayout
+    private lateinit var paneScroll: ScrollView
+    private lateinit var pane: LinearLayout
     private var pal: Palette = Look.palettes[0]
     private var accent = 0
-    private var focusKey: String? = null
+
+    /** The category whose options are showing. */
+    private var current = 0
+
+    /** What to select after redrawing: "cat:<n>" or an option's key. */
+    private var focusKey: String? = "cat:0"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         root = FrameLayout(this)
-        val scroll = ScrollView(this).apply {
-            isFillViewport = true
-            isVerticalScrollBarEnabled = false
-            overScrollMode = View.OVER_SCROLL_NEVER
+        val columns = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(dpi(56f), dpi(40f), dpi(56f), 0)
         }
-        val column = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_HORIZONTAL
-            setPadding(0, dpi(40f), 0, dpi(56f))
-        }
+
+        // Left: the title and the categories.
+        val left = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         title = TextView(this).apply {
             text = "Customise"
-            typeface = Fonts.display(this@SettingsActivity, 500)
-            sp(30f)
+            sp(28f)
+            includeFontPadding = false
         }
-        column.addView(title, LinearLayout.LayoutParams(dpi(560f), -2))
-        list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        column.addView(list, LinearLayout.LayoutParams(dpi(560f), -2).apply { topMargin = dpi(12f) })
-        scroll.addView(column, FrameLayout.LayoutParams(-1, -2))
-        root.addView(scroll, FrameLayout.LayoutParams(-1, -1))
+        left.addView(title, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dpi(22f) })
+        menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        left.addView(menu, LinearLayout.LayoutParams(-1, -2))
+        columns.addView(left, LinearLayout.LayoutParams(dpi(230f), -1))
+
+        // A hairline between the two.
+        columns.addView(View(this).also { it.tag = "divider" }, LinearLayout.LayoutParams(dpi(1f), -1).apply {
+            marginStart = dpi(28f)
+            marginEnd = dpi(36f)
+            bottomMargin = dpi(40f)
+        })
+
+        // Right: the options of the current category.
+        paneScroll = ScrollView(this).apply {
+            isVerticalScrollBarEnabled = false
+            overScrollMode = View.OVER_SCROLL_NEVER
+            clipToPadding = false
+            setPadding(0, 0, 0, dpi(48f))
+        }
+        pane = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        paneScroll.addView(pane, FrameLayout.LayoutParams(-1, -2))
+        columns.addView(paneScroll, LinearLayout.LayoutParams(0, -1, 1f))
+
+        root.addView(columns, FrameLayout.LayoutParams(-1, -1))
         setContentView(root)
     }
 
@@ -62,6 +106,8 @@ class SettingsActivity : EtvActivity() {
 
     private fun <T> next(options: List<T>, current: Int): Int = (current + 1) % options.size
 
+    // ---------------- drawing ----------------
+
     private fun render() {
         pal = Look.palette(prefs)
         accent = Look.accent(prefs)
@@ -69,52 +115,110 @@ class SettingsActivity : EtvActivity() {
         root.setBackgroundColor(pal.bg)
         title.setTextColor(pal.text)
         title.typeface = Fonts.display(this, 500)
-        list.removeAllViews()
+        root.findViewWithTag<View>("divider")?.setBackgroundColor(pal.tileStroke)
 
-        section("Home button")
-        row("home", "Home button opens eTV", if (HomeSetup.homeHandled(this)) "Yes" else "Set up", rerender = false) {
-            startActivity(Intent(this, SetupActivity::class.java))
-        }
+        menu.removeAllViews()
+        for ((i, c) in categories.withIndex()) menu.addView(categoryButton(i, c), LinearLayout.LayoutParams(-1, dpi(46f)).apply {
+            topMargin = dpi(4f)
+        })
+        showPane(current)
 
-        section("Now playing")
-        val npAccess = NowPlayingWatcher.hasAccess(this)
-        val npValue = when {
-            !prefs.nowPlaying -> "Off"
-            !npAccess -> "Needs one permission"
-            else -> "On"
-        }
-        row("nowplaying", "Card for music and videos playing in the background", npValue, rerender = false) {
-            if (prefs.nowPlaying && !npAccess) explainNowPlayingAccess() else {
-                prefs.nowPlaying = !prefs.nowPlaying
-                render()
+        val key = focusKey
+        val target = when {
+            key == null -> null
+            key.startsWith("cat:") -> menu.getChildAt(key.substring(4).toIntOrNull() ?: 0)
+            else -> pane.findViewWithTag(key)
+        } ?: menu.getChildAt(current)
+        target?.post { target.requestFocus() }
+    }
+
+    /** A category on the left: a small doorway marks the one whose options are showing. */
+    private fun categoryButton(index: Int, c: Category): LinearLayout {
+        val isCurrent = index == current
+        val b = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dpi(14f), 0, dpi(14f), 0)
+            isFocusable = true
+            isClickable = true
+            tag = "cat:$index"
+            background = pillBackground(this@SettingsActivity, 14f, Color.TRANSPARENT, pal.card, accent)
+            setOnClickListener { enterPane() }
+            setOnFocusChangeListener { _, has ->
+                if (has) {
+                    focusKey = "cat:$index"
+                    if (current != index) {
+                        current = index
+                        refreshMenuMarks()
+                        showPane(index)
+                    }
+                }
             }
         }
-
-        section("Updates")
-        val release = Updater.available
-        val updateValue = when {
-            Updater.busy -> Updater.status
-            release != null && (Updater.status.isEmpty() || Updater.status.endsWith("is ready")) ->
-                "Install ${release.title}"
-            release != null -> Updater.status // a failed download or install says to try again
-            Updater.status.isNotEmpty() -> "${Updater.status}  ·  Check again"
-            prefs.updateCode > 0 -> "A new version is ready  ·  Check"
-            else -> "Check now"
+        val mark = View(this).apply { tag = "mark" }
+        b.addView(mark, LinearLayout.LayoutParams(dpi(12f), dpi(16f)))
+        val name = TextView(this).apply {
+            text = c.name
+            tag = "name"
+            sp(15f)
         }
-        row("update", "New version from GitHub", updateValue, rerender = false) {
-            when {
-                Updater.busy -> Unit
-                release != null -> Updater.install(this, release)
-                else -> Updater.check(this)
+        b.addView(name, LinearLayout.LayoutParams(0, -2, 1f).apply { marginStart = dpi(12f) })
+        styleCategory(b, isCurrent)
+        return b
+    }
+
+    private fun styleCategory(b: View, isCurrent: Boolean) {
+        val radii = floatArrayOf(dp(6f), dp(6f), dp(6f), dp(6f), dp(1.5f), dp(1.5f), dp(1.5f), dp(1.5f))
+        b.findViewWithTag<View>("mark")?.background = GradientDrawable().apply {
+            cornerRadii = radii
+            if (isCurrent) setColor(accent) else {
+                setColor(Color.TRANSPARENT)
+                setStroke(dpi(1f), pal.tileStroke)
             }
         }
-        row("autoupdate", "Look for new versions by itself", if (prefs.autoUpdate) "Twice a day" else "Off") {
-            prefs.autoUpdate = !prefs.autoUpdate
+        b.findViewWithTag<TextView>("name")?.apply {
+            typeface = Fonts.body(this@SettingsActivity, if (isCurrent) 500 else 400)
+            setTextColor(if (isCurrent) pal.text else pal.label)
         }
+    }
 
-        section("Look")
+    private fun refreshMenuMarks() {
+        for (i in 0 until menu.childCount) styleCategory(menu.getChildAt(i), i == current)
+    }
+
+    /** Fills the right side with one category's options. */
+    private fun showPane(index: Int) {
+        pane.removeAllViews()
+        paneScroll.scrollTo(0, 0)
+        val c = categories[index]
+        pane.addView(TextView(this).apply {
+            text = c.name
+            typeface = Fonts.display(this@SettingsActivity, 500)
+            sp(22f)
+            includeFontPadding = false
+            setTextColor(pal.text)
+        }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(6f) })
+        pane.addView(noteText(this, pal, c.about), LinearLayout.LayoutParams(-1, -2).apply {
+            topMargin = dpi(6f)
+            bottomMargin = dpi(14f)
+        })
+        when (index) {
+            0 -> lookPane()
+            1 -> homeScreenPane()
+            2 -> appsPane()
+            3 -> homeButtonPane()
+            4 -> updatesPane()
+            5 -> remotePane()
+            6 -> aboutPane()
+        }
+    }
+
+    // ---------------- the categories ----------------
+
+    private fun lookPane() {
         val theme = Look.theme(prefs)
         row("theme", "Theme", theme.name, rerender = false) { pickTheme() }
+        note(theme.blurb)
         row("accent", "Highlight colour", Look.accentName(prefs), swatch = accent) {
             prefs.accent = next(theme.accents, prefs.accent)
         }
@@ -126,8 +230,11 @@ class SettingsActivity : EtvActivity() {
         if (theme.layout == Layout.CLASSIC || theme.layout == Layout.DOORWAY) {
             row("arches", "Arches in the background", if (prefs.arches) "On" else "Off") { prefs.arches = !prefs.arches }
         }
+    }
 
-        section("Top of the screen")
+    private fun homeScreenPane() {
+        val theme = Look.theme(prefs)
+        group("Top of the screen")
         val greetings = listOf("Arabic and English", "Arabic", "English", "Off")
         row("greeting", "Greeting", greetings[prefs.greeting.coerceIn(0, 3)]) {
             prefs.greeting = next(greetings, prefs.greeting)
@@ -135,11 +242,11 @@ class SettingsActivity : EtvActivity() {
         row("clock", "Clock", if (prefs.clock24) "24-hour" else "12-hour") { prefs.clock24 = !prefs.clock24 }
         row("date", "Date", if (prefs.showDate) "Shown" else "Hidden") { prefs.showDate = !prefs.showDate }
 
-        section("Apps")
+        group("Apps on the home screen")
         val sizes = listOf("Compact", "Normal", "Large")
-        row("size", "Arch size", sizes[prefs.tileSize.coerceIn(0, 2)]) { prefs.tileSize = next(sizes, prefs.tileSize) }
+        row("size", "Size", sizes[prefs.tileSize.coerceIn(0, 2)]) { prefs.tileSize = next(sizes, prefs.tileSize) }
         val styles = listOf("App icon", "Letter")
-        row("style", "Inside each arch", styles[prefs.iconStyle.coerceIn(0, 1)]) {
+        row("style", "Inside each door", styles[prefs.iconStyle.coerceIn(0, 1)]) {
             prefs.iconStyle = next(styles, prefs.iconStyle)
         }
         if (theme.layout != Layout.DOORWAY && theme.layout != Layout.LANTERN) {
@@ -147,13 +254,67 @@ class SettingsActivity : EtvActivity() {
             val names = listOf("Always", "Only on the selected app", "Never")
             row("names", "App names", names[prefs.nameMode.coerceIn(0, 2)]) { prefs.nameMode = next(names, prefs.nameMode) }
         }
+
+        group("Now playing")
+        val npAccess = NowPlayingWatcher.hasAccess(this)
+        val npValue = when {
+            !prefs.nowPlaying -> "Off"
+            !npAccess -> "Needs one permission"
+            else -> "On"
+        }
+        row("nowplaying", "Show what's playing in the background", npValue, rerender = false) {
+            if (prefs.nowPlaying && !npAccess) explainNowPlayingAccess() else {
+                prefs.nowPlaying = !prefs.nowPlaying
+                render()
+            }
+        }
+    }
+
+    private fun appsPane() {
         val hiddenCount = prefs.hidden.size
         row("hidden", "Hidden apps", if (hiddenCount == 0) "None" else "$hiddenCount hidden", rerender = false) {
             editHidden()
         }
         row("reset", "Reset the home row", "", rerender = false) { confirmReset() }
+        note("To add an app to the home screen, hide it or uninstall it, hold OK on it in All apps.")
+    }
 
-        section("Remote shortcuts on the home screen")
+    private fun homeButtonPane() {
+        val handled = HomeSetup.homeHandled(this)
+        row("home", "Home button opens eTV", if (handled) "Yes" else "Set up", rerender = false) {
+            startActivity(Intent(this, SetupActivity::class.java))
+        }
+        note(
+            if (handled) "Home already brings you here. The setup page shows how, and can change it."
+            else "Your TV still opens its own home screen. The setup page walks you through it.",
+        )
+    }
+
+    private fun updatesPane() {
+        val release = Updater.available
+        val updateValue = when {
+            Updater.busy -> Updater.status
+            release != null && (Updater.status.isEmpty() || Updater.status.endsWith("is ready")) ->
+                "Install ${release.title}"
+            release != null -> Updater.status // a failed download or install says to try again
+            Updater.status.isNotEmpty() -> "${Updater.status}  ·  Check again"
+            prefs.updateCode > 0 -> "A new version is ready  ·  Check"
+            else -> "Check now"
+        }
+        row("update", "New version", updateValue, rerender = false) {
+            when {
+                Updater.busy -> Unit
+                release != null -> Updater.install(this, release)
+                else -> Updater.check(this)
+            }
+        }
+        row("autoupdate", "Look for new versions by itself", if (prefs.autoUpdate) "Twice a day" else "Off") {
+            prefs.autoUpdate = !prefs.autoUpdate
+        }
+        note("You have eTV ${Updater.installedName(this)}, build ${Updater.installedCode(this)}.")
+    }
+
+    private fun remotePane() {
         val shortcuts = listOf(
             "1 – 9" to "Open the app in that spot on the home row",
             "0  or  Red" to "All apps",
@@ -162,57 +323,58 @@ class SettingsActivity : EtvActivity() {
             "Blue" to "This page",
             "Options  or  Info" to "Options for the selected app",
             "Hold OK" to "Options for the selected app",
-            "Home (from another app)" to "Back to exactly where you were",
+            "Home (from an app)" to "Back to exactly where you were",
             "Home again,  or  Back" to "The app in the middle of the row",
         )
         for ((key, what) in shortcuts) shortcutLine(key, what)
+    }
 
-        section("System")
+    private fun aboutPane() {
         row("system", "Android TV settings", "", rerender = false) {
             AppRepo.tryStart(this, Intent(Settings.ACTION_SETTINGS))
         }
-
-        val footer = noteText(this, pal, "eTV ${Updater.installedName(this)}  ·  build ${Updater.installedCode(this)}")
-        list.addView(footer, LinearLayout.LayoutParams(-1, -2).apply {
-            topMargin = dpi(24f)
-            marginStart = dpi(18f)
-        })
-
-        // Keep the remote's focus on the row that was just changed.
-        val target = (0 until list.childCount).map { list.getChildAt(it) }
-            .firstOrNull { it.tag == focusKey && it.isFocusable }
-            ?: (0 until list.childCount).map { list.getChildAt(it) }.firstOrNull { it.isFocusable }
-        target?.post { target.requestFocus() }
+        note("eTV ${Updater.installedName(this)}  ·  build ${Updater.installedCode(this)}\ngithub.com/${Updater.REPO}")
     }
 
-    private fun section(text: String) {
-        list.addView(sectionLabel(this, pal, text), LinearLayout.LayoutParams(-1, -2).apply {
-            topMargin = dpi(22f)
-            bottomMargin = dpi(6f)
+    // ---------------- building blocks ----------------
+
+    private fun group(text: String) {
+        pane.addView(sectionLabel(this, pal, text), LinearLayout.LayoutParams(-1, -2).apply {
+            topMargin = dpi(18f)
+            bottomMargin = dpi(4f)
             marginStart = dpi(18f)
+        })
+    }
+
+    private fun note(text: String) {
+        pane.addView(noteText(this, pal, text), LinearLayout.LayoutParams(-1, -2).apply {
+            topMargin = dpi(6f)
+            bottomMargin = dpi(4f)
+            marginStart = dpi(18f)
+            marginEnd = dpi(18f)
         })
     }
 
     private fun shortcutLine(key: String, what: String) {
         val line = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            setPadding(dpi(18f), dpi(3f), dpi(18f), dpi(3f))
+            setPadding(dpi(18f), dpi(5f), dpi(18f), dpi(5f))
         }
         val k = TextView(this).apply {
             text = key
             typeface = Fonts.body(this@SettingsActivity, 500)
-            sp(13f)
+            sp(13.5f)
             setTextColor(accent)
         }
         val w = TextView(this).apply {
             text = what
             typeface = Fonts.body(this@SettingsActivity, 300)
-            sp(13f)
+            sp(13.5f)
             setTextColor(pal.label)
         }
-        line.addView(k, LinearLayout.LayoutParams(dpi(170f), -2))
+        line.addView(k, LinearLayout.LayoutParams(dpi(180f), -2))
         line.addView(w, LinearLayout.LayoutParams(0, -2, 1f))
-        list.addView(line, LinearLayout.LayoutParams(-1, -2))
+        pane.addView(line, LinearLayout.LayoutParams(-1, -2))
     }
 
     private fun row(
@@ -230,8 +392,64 @@ class SettingsActivity : EtvActivity() {
             onPress()
             if (rerender) render()
         }
-        list.addView(r, LinearLayout.LayoutParams(-1, dpi(52f)).apply { topMargin = dpi(4f) })
+        r.setOnFocusChangeListener { _, has -> if (has) focusKey = key }
+        pane.addView(r, LinearLayout.LayoutParams(-1, dpi(52f)).apply { topMargin = dpi(4f) })
     }
+
+    // ---------------- moving between the two sides ----------------
+
+    private fun firstOption(): View? =
+        (0 until pane.childCount).map { pane.getChildAt(it) }.firstOrNull { it.isFocusable }
+
+    private fun enterPane() {
+        firstOption()?.requestFocus()
+    }
+
+    private fun inMenu(v: View?) = v != null && v.parent === menu
+    private fun inPane(v: View?) = v != null && v.parent === pane
+
+    /**
+     * Right from a category goes into its options; Left from an option comes back to its category.
+     * Up / Down stop at the ends of each side.
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_DOWN) {
+            val f = currentFocus
+            when (event.keyCode) {
+                KeyEvent.KEYCODE_DPAD_RIGHT -> if (inMenu(f)) {
+                    enterPane()
+                    return true
+                }
+                KeyEvent.KEYCODE_DPAD_LEFT -> if (inPane(f)) {
+                    menu.getChildAt(current)?.requestFocus()
+                    return true
+                }
+                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> {
+                    val dir = if (event.keyCode == KeyEvent.KEYCODE_DPAD_UP) View.FOCUS_UP else View.FOCUS_DOWN
+                    val group: ViewGroup? = when {
+                        inMenu(f) -> menu
+                        inPane(f) -> pane
+                        else -> null
+                    }
+                    if (group != null && f != null && FocusFinder.getInstance().findNextFocus(group, f, dir) == null) return true
+                }
+            }
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        // Back from the options returns to the categories; from the categories it closes.
+        if (inPane(currentFocus)) {
+            menu.getChildAt(current)?.requestFocus()
+            return
+        }
+        @Suppress("DEPRECATION")
+        super.onBackPressed()
+    }
+
+    // ---------------- dialogs ----------------
 
     private fun editHidden() {
         val all = AppRepo.all(this)
@@ -272,7 +490,7 @@ class SettingsActivity : EtvActivity() {
         val b = AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
             .setTitle("One permission for Now playing")
             .setMessage(msg)
-            .setNegativeButton("Turn the card off") { _, _ ->
+            .setNegativeButton("Turn it off") { _, _ ->
                 prefs.nowPlaying = false
                 render()
             }
