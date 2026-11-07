@@ -106,6 +106,29 @@ class SettingsShots {
         }
     }
 
+    /** Lantern's top line with some buttons switched off, in each way of showing the prayer times. */
+    @Test
+    fun fewerButtons() {
+        val lantern = Look.themes.indexOfFirst { it.layout == Layout.LANTERN }
+        val doorway = Look.themes.indexOfFirst { it.layout == Layout.DOORWAY }
+        for ((theme, style) in listOf(lantern to 0, lantern to 2, doorway to 0)) {
+            try {
+                setUp(theme)
+                val p = Prefs(RuntimeEnvironment.getApplication())
+                p.athanOn = false
+                p.lanternPrayers = style
+                p.hiddenButtons = setOf("inputs")
+                val c = Robolectric.buildActivity(MainActivity::class.java).setup()
+                idle()
+                save(c.get().window.decorView, "buttons-theme$theme-style$style")
+                c.pause().stop().destroy()
+                p.hiddenButtons = emptySet()
+            } catch (e: Throwable) {
+                File(out, "error-buttons-$theme-$style.txt").writeText(e.stackTraceToString())
+            }
+        }
+    }
+
     @Test
     fun panels() {
         for (theme in listOf(0, 2)) {

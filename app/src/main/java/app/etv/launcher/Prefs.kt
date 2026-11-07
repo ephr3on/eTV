@@ -138,8 +138,15 @@ class Prefs(context: Context) {
     private val LOOK_KEYS = setOf(
         "accent", "palette", "greeting", "clock24", "showDate", "tileSize", "nameMode", "iconStyle",
         "arches", "favs", "hidden", "updateCode", "nowPlaying", "theme",
-        "showPrayers", "showSunrise", "showHijri", "hijriAdjust", "locName", "lanternPrayers",
+        "showPrayers", "showSunrise", "showHijri", "hijriAdjust", "locName", "lanternPrayers", "hiddenButtons",
     )
+
+    /** The home screen buttons you switched off: "search", "inputs", "apps" (Settings is always there). */
+    var hiddenButtons: Set<String>
+        get() = HashSet(sp.getStringSet("hiddenButtons", emptySet()) ?: emptySet())
+        set(v) = sp.edit().putStringSet("hiddenButtons", HashSet(v)).apply()
+
+    fun showsButton(key: String) = key !in hiddenButtons
 
     /** Show the "now playing" card when another app plays in the background. */
     var nowPlaying: Boolean

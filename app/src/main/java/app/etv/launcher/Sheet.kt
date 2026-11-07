@@ -83,10 +83,11 @@ class Sheet(
             overScrollMode = View.OVER_SCROLL_NEVER
             isVerticalFadingEdgeEnabled = true
             setFadingEdgeLength(c.dpi(28f))
-            clipToPadding = false
+        }
+        list = LinearLayout(c).apply {
+            orientation = LinearLayout.VERTICAL
             setPadding(0, c.dpi(4f), 0, c.dpi(12f))
         }
-        list = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL }
         scroll.addView(list, FrameLayout.LayoutParams(-1, -2))
         panel.addView(scroll, LinearLayout.LayoutParams(-1, 0, 1f).apply { topMargin = c.dpi(14f) })
 

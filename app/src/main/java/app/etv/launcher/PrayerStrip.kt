@@ -83,6 +83,10 @@ class PrayerStripView(context: Context, private val vertical: Boolean) : View(co
         const val CAROUSEL_WIDTH_DP = 540f
         const val CAROUSEL_HEIGHT_DP = 92f
         const val CAROUSEL_AXIS_DP = 44f
+
+        /** How far down the top of the names is, across and one at a time (to line them up with other things). */
+        const val LINE_NAME_TOP_DP = 5f
+        const val CAROUSEL_NAME_TOP_DP = 12f
     }
 
     /** How to draw across (Doorway's top-to-bottom list ignores it). */

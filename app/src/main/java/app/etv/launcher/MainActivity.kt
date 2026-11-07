@@ -53,6 +53,8 @@ class MainActivity : EtvActivity() {
 
         // Lantern's top line (dp): where the prayer line, the clock and the buttons line up.
         private const val LANTERN_AXIS = 54f
+        /** Lantern: the top of the clock's figures and of the button icons; the prayer names start here too. */
+        private const val LANTERN_TOP = LANTERN_AXIS - 9f
         private const val DOORWAY_MARGIN = 40f
         private const val LANTERN_MARGIN = 44f
         private const val LANTERN_CLOCK_SP = 32f
@@ -403,6 +405,8 @@ class MainActivity : EtvActivity() {
         v.isFocusable = true
         v.isClickable = true
         v.setOnClickListener { onClick() }
+        // Found by this, not by position: some buttons can be switched off.
+        v.tag = "dock:$index"
         v.setOnFocusChangeListener { view, has ->
             view.softScale(if (has) grow else 1f)
             if (has) remember(view, "dock:$index")
@@ -583,9 +587,9 @@ class MainActivity : EtvActivity() {
 
         makeDock(false, Gravity.CENTER)
         val h = dpi(44f)
-        addToDock(pillButton(0, "Search", R.drawable.ic_search) { openSearch() }, -2, h, 14f)
-        addToDock(pillButton(1, "Inputs", R.drawable.ic_inputs) { showInputs() }, -2, h, 14f)
-        addToDock(pillButton(2, "All apps", R.drawable.ic_apps) { openAllApps() }, -2, h, 14f)
+        if (prefs.showsButton("search")) addToDock(pillButton(0, "Search", R.drawable.ic_search) { openSearch() }, -2, h, 14f)
+        if (prefs.showsButton("inputs")) addToDock(pillButton(1, "Inputs", R.drawable.ic_inputs) { showInputs() }, -2, h, 14f)
+        if (prefs.showsButton("apps")) addToDock(pillButton(2, "All apps", R.drawable.ic_apps) { openAllApps() }, -2, h, 14f)
         addToDock(pillButton(3, if (updateReady) "Settings  ·  Update" else "Settings", R.drawable.ic_settings) { openCustomise() }, -2, h, 14f)
         dockAppsIndex = 2
         root.addView(dock, at(-1, dpi(56f), Gravity.BOTTOM, bottom = 18f))
@@ -608,10 +612,11 @@ class MainActivity : EtvActivity() {
         makeDock(column, if (column) Gravity.CENTER_HORIZONTAL else Gravity.CENTER_VERTICAL)
         val s = dpi(38f)
         // Spaced so the two columns are the same height.
-        val gap = if (column) ((PrayerStripView.verticalHeightDp(if (prefs.showSunrise) 6 else 5) - 4 * 38f) / 3f).coerceAtLeast(8f) else 8f
-        addToDock(roundButton(0, "Search", R.drawable.ic_search, true, false) { openSearch() }, s, s, gap)
-        addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, true, false) { showInputs() }, s, s, gap)
-        addToDock(roundButton(2, "All apps", R.drawable.ic_apps, true, false) { openAllApps() }, s, s, gap)
+        val buttons = 1 + listOf("search", "inputs", "apps").count { prefs.showsButton(it) }
+        val gap = if (column && buttons > 1) ((PrayerStripView.verticalHeightDp(if (prefs.showSunrise) 6 else 5) - buttons * 38f) / (buttons - 1)).coerceAtLeast(8f) else 8f
+        if (prefs.showsButton("search")) addToDock(roundButton(0, "Search", R.drawable.ic_search, true, false) { openSearch() }, s, s, gap)
+        if (prefs.showsButton("inputs")) addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, true, false) { showInputs() }, s, s, gap)
+        if (prefs.showsButton("apps")) addToDock(roundButton(2, "All apps", R.drawable.ic_apps, true, false) { openAllApps() }, s, s, gap)
         addToDock(roundButton(3, "Settings", R.drawable.ic_settings, true, updateReady) { openCustomise() }, s, s, gap)
         dockAppsIndex = 2
         if (strip != null) {
@@ -677,9 +682,9 @@ class MainActivity : EtvActivity() {
         makeDock(false, Gravity.CENTER_VERTICAL)
         val h = dpi(32f)
         addToDock(tabButton(0, "Home", true) { goToMiddleApp() }, -2, h, 4f)
-        addToDock(tabButton(1, "Apps", false) { openAllApps() }, -2, h, 4f)
-        addToDock(tabButton(2, "Inputs", false) { showInputs() }, -2, h, 4f)
-        addToDock(tabButton(3, "Search", false) { openSearch() }, -2, h, 4f)
+        if (prefs.showsButton("apps")) addToDock(tabButton(1, "Apps", false) { openAllApps() }, -2, h, 4f)
+        if (prefs.showsButton("inputs")) addToDock(tabButton(2, "Inputs", false) { showInputs() }, -2, h, 4f)
+        if (prefs.showsButton("search")) addToDock(tabButton(3, "Search", false) { openSearch() }, -2, h, 4f)
         addToDock(tabButton(4, if (updateReady) "Settings  •" else "Settings", false) { openCustomise() }, -2, h, 4f)
         dockAppsIndex = 1
         root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 26f))
@@ -719,9 +724,9 @@ class MainActivity : EtvActivity() {
         val bw = dpi(36f)
         val bh = dpi(48f)
         addToDock(railButton(0, "Home", R.drawable.ic_home, true, false) { goToMiddleApp() }, bw, bh, 10f)
-        addToDock(railButton(1, "All apps", R.drawable.ic_apps, false, false) { openAllApps() }, bw, bh, 10f)
-        addToDock(railButton(2, "Inputs", R.drawable.ic_inputs, false, false) { showInputs() }, bw, bh, 10f)
-        addToDock(railButton(3, "Search", R.drawable.ic_search, false, false) { openSearch() }, bw, bh, 10f)
+        if (prefs.showsButton("apps")) addToDock(railButton(1, "All apps", R.drawable.ic_apps, false, false) { openAllApps() }, bw, bh, 10f)
+        if (prefs.showsButton("inputs")) addToDock(railButton(2, "Inputs", R.drawable.ic_inputs, false, false) { showInputs() }, bw, bh, 10f)
+        if (prefs.showsButton("search")) addToDock(railButton(3, "Search", R.drawable.ic_search, false, false) { openSearch() }, bw, bh, 10f)
         addToDock(railButton(4, "Settings", R.drawable.ic_settings, false, updateReady) { openCustomise() }, bw, bh, 10f)
         dockAppsIndex = 1
         rail.addView(dock, at(-1, -2, Gravity.TOP, top = 104f))
@@ -803,8 +808,9 @@ class MainActivity : EtvActivity() {
         root.addView(glow, at(dpi(560f), dpi(480f), Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = 24f - lift))
 
         // The top: the clock on the left, the buttons on the right, mirror images of each other
-        // (same margin, about the same width), with the prayer times between them. All three sit
-        // on one line: the prayer line, LANTERN_AXIS from the top.
+        // (same margin, about the same width), with the prayer times between them. The clock and
+        // the buttons are centred on LANTERN_AXIS; the prayer times hang from the same top line as
+        // the clock's figures and the icons (LANTERN_TOP), so the three start level.
         val prayersShown = prefs.showPrayers
         val axis = if (prayersShown) LANTERN_AXIS else 44f
         val time = LinearLayout(this).apply {
@@ -824,9 +830,9 @@ class MainActivity : EtvActivity() {
 
         makeDock(false, Gravity.CENTER_VERTICAL)
         val s = dpi(LANTERN_BUTTON)
-        addToDock(roundButton(0, "Search", R.drawable.ic_search, false, false) { openSearch() }, s, s, LANTERN_BUTTON_GAP)
-        addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, false, false) { showInputs() }, s, s, LANTERN_BUTTON_GAP)
-        addToDock(roundButton(2, "All apps", R.drawable.ic_apps, false, false) { openAllApps() }, s, s, LANTERN_BUTTON_GAP)
+        if (prefs.showsButton("search")) addToDock(roundButton(0, "Search", R.drawable.ic_search, false, false) { openSearch() }, s, s, LANTERN_BUTTON_GAP)
+        if (prefs.showsButton("inputs")) addToDock(roundButton(1, "Inputs", R.drawable.ic_inputs, false, false) { showInputs() }, s, s, LANTERN_BUTTON_GAP)
+        if (prefs.showsButton("apps")) addToDock(roundButton(2, "All apps", R.drawable.ic_apps, false, false) { openAllApps() }, s, s, LANTERN_BUTTON_GAP)
         addToDock(roundButton(3, "Settings", R.drawable.ic_settings, false, updateReady) { openCustomise() }, s, s, LANTERN_BUTTON_GAP)
         dockAppsIndex = 2
         root.addView(dock, at(-2, -2, Gravity.TOP or Gravity.END, top = axis - LANTERN_BUTTON / 2f, end = LANTERN_MARGIN))
@@ -840,12 +846,12 @@ class MainActivity : EtvActivity() {
                 // One at a time: the next prayer's time on the axis, its neighbours fading either side.
                 2 -> {
                     it.form = PrayerShape.CAROUSEL
-                    root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.CAROUSEL_AXIS_DP))
+                    root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_TOP - PrayerStripView.CAROUSEL_NAME_TOP_DP))
                 }
                 // At the foot, under the app's name.
                 3 -> root.addView(it, at(-2, -2, Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, bottom = 6f))
                 // A line through the day, on the axis.
-                else -> root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_AXIS - PrayerStripView.LINE_DP))
+                else -> root.addView(it, at(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL, top = LANTERN_TOP - PrayerStripView.LINE_NAME_TOP_DP))
             }
         }
 
@@ -1103,7 +1109,7 @@ class MainActivity : EtvActivity() {
     private fun viewFor(key: String?): View? = when {
         key == null -> null
         key.startsWith("app:") -> tiles().firstOrNull { it.app.pkg == key.substring(4) }
-        key.startsWith("dock:") -> dock.getChildAt(key.substring(5).toIntOrNull() ?: -1)
+        key.startsWith("dock:") -> dockButton(key)
         key.startsWith("media:") -> nowCard.viewFor(key)
         key.startsWith("input:") -> inputsRow?.getChildAt(key.substring(6).toIntOrNull() ?: -1)
         else -> null
@@ -1155,7 +1161,10 @@ class MainActivity : EtvActivity() {
 
     /** The app in the middle of the row (left of the two middle ones when the count is even). */
     private fun middleView(): View? =
-        row.getChildAt((row.childCount - 1) / 2) ?: dock.getChildAt(dockAppsIndex)
+        row.getChildAt((row.childCount - 1) / 2) ?: dockButton("dock:$dockAppsIndex") ?: dock.getChildAt(0)
+
+    private fun dockButton(key: String): View? =
+        (0 until dock.childCount).map { dock.getChildAt(it) }.firstOrNull { it.tag == key }
 
     /** Selects the remembered item, or the app in the middle of the row. */
     private fun applyFocus() {

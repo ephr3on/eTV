@@ -112,10 +112,12 @@ class SettingsActivity : EtvActivity() {
             // A soft fade where the list goes on past the screen.
             isVerticalFadingEdgeEnabled = true
             setFadingEdgeLength(dpi(36f))
-            clipToPadding = false
+        }
+        // The space under the last option is inside the list, so the fade sits at the screen's edge.
+        pane = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
             setPadding(0, 0, 0, dpi(48f))
         }
-        pane = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         paneScroll.addView(pane, FrameLayout.LayoutParams(-1, -2))
         columns.addView(paneScroll, LinearLayout.LayoutParams(0, -1, 1f))
 
@@ -323,6 +325,21 @@ class SettingsActivity : EtvActivity() {
             val names = listOf("Always", "Only on the selected app", "Never")
             row("names", "App names", names[prefs.nameMode.coerceIn(0, 2)]) { prefs.nameMode = next(names, prefs.nameMode) }
         }
+
+        group("Buttons on the home screen")
+        val buttons = listOf(
+            Triple("search", "Search", "Yellow on the remote searches too"),
+            Triple("inputs", "Inputs", "Green or Sources on the remote opens them too"),
+            Triple("apps", "All apps", "0 or Red on the remote opens them too"),
+        )
+        for ((key, label, detail) in buttons) {
+            row("button_$key", label, detail = detail, toggle = prefs.showsButton(key)) {
+                val hidden = HashSet(prefs.hiddenButtons)
+                if (!hidden.remove(key)) hidden.add(key)
+                prefs.hiddenButtons = hidden
+            }
+        }
+        row("button_settings", "Settings", "Always shown", detail = "So Customise can always be reached") {}
 
         group("Now playing")
         val npAccess = NowPlayingWatcher.hasAccess(this)
