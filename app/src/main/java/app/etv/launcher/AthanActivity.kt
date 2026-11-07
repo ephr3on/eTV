@@ -23,14 +23,30 @@ import android.widget.TextView
  * the athan goes on, then the dua. It sits in its own task, so when it closes you're back exactly
  * where you were (your film, your video, or the home screen).
  *
- * OK, Back, or the remote's Stop / Pause end the athan. Volume works as always.
+ * It stays until the athan and the dua are over: the remote's keys do nothing here (only the
+ * volume works), and if Home or an app's button hides it, the athan brings it straight back.
+ * The one way out early is your code typed on the number keys (set in Settings → Athan).
  */
 class AthanActivity : Activity() {
 
     companion object {
         /** Start the athan for this prayer (when Android wouldn't let the service start by itself). */
         const val EXTRA_START = "app.etv.launcher.ATHAN_START"
+
+        /** The athan screen is on the TV now. */
+        @Volatile var visible = false
+            private set
+
+        private var shown: AthanActivity? = null
+
+        /** The athan is over: close at once. */
+        fun closeNow() {
+            shown?.let { if (!it.isFinishing) it.finish() }
+        }
     }
+
+    /** The number keys typed so far (the last few). */
+    private val typed = StringBuilder()
 
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var title: TextView
@@ -94,9 +110,6 @@ class AthanActivity : Activity() {
         col.addView(phase, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dpi(16f) })
         root.addView(col, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER).apply { topMargin = dpi(40f) })
 
-        val hint = tv(12f, 300, false, pal.muted).apply { text = "OK or Back to stop the athan" }
-        root.addView(hint, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply { bottomMargin = dpi(22f) })
-
         setContentView(root)
         openedAt = System.currentTimeMillis()
 
@@ -110,13 +123,22 @@ class AthanActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        visible = true
+        shown = this
         handler.removeCallbacks(tick)
         handler.post(tick)
     }
 
     override fun onPause() {
+        visible = false
         handler.removeCallbacks(tick)
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        if (shown === this) shown = null
+        visible = false
+        super.onDestroy()
     }
 
     private fun update() {
@@ -148,23 +170,38 @@ class AthanActivity : Activity() {
         if (v.text?.toString() != text) v.text = text
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        when (keyCode) {
-            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
-            KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_MEDIA_STOP, KeyEvent.KEYCODE_MEDIA_PAUSE,
-            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-                AthanService.stop()
-                finish()
-                return true
+    /**
+     * Every key stops here, except the volume: Back, OK, the arrows and the media keys do nothing.
+     * The number keys are remembered; the code ends the athan.
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        when (event.keyCode) {
+            KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_VOLUME_MUTE ->
+                return super.dispatchKeyEvent(event)
+        }
+        if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
+            val digit = when (event.keyCode) {
+                in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> event.keyCode - KeyEvent.KEYCODE_0
+                in KeyEvent.KEYCODE_NUMPAD_0..KeyEvent.KEYCODE_NUMPAD_9 -> event.keyCode - KeyEvent.KEYCODE_NUMPAD_0
+                else -> -1
+            }
+            if (digit >= 0) {
+                typed.append(digit)
+                val len = AthanService.codeLength(this)
+                if (len > 0 && typed.length > len) typed.delete(0, typed.length - len)
+                if (len > 0 && AthanService.isCode(this, typed.toString())) {
+                    typed.setLength(0)
+                    AthanService.stopWithCode()
+                    finish()
+                }
             }
         }
-        return super.onKeyDown(keyCode, event)
+        return true
     }
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        AthanService.stop()
-        finish()
+        // Back does nothing while the athan plays.
     }
 }
 

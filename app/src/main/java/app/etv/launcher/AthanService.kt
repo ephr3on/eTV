@@ -123,16 +123,19 @@ class AthanReceiver : BroadcastReceiver() {
 /**
  * Plays the athan, then the dua after it.
  *
- * While it plays, whatever was playing on the TV is paused (through Android's audio focus, and
- * directly through the apps' media controls when eTV may see them), and the athan screen comes up.
- * Afterwards everything is put back as it was and what was playing carries on. OK, Back, or the
- * remote's Pause / Stop end it early.
+ * First whatever is playing on the TV is paused (through the apps' own media controls, and
+ * Android's audio focus), and only once it has stopped does the athan begin, with the athan
+ * screen over everything. Afterwards the TV's volume is put back exactly as it was, the athan
+ * screen closes, and what was playing carries on.
+ *
+ * Nothing on the remote ends it early: not OK, Back, Stop or Pause. Home or an app's own button
+ * brings the athan screen straight back, and anything that starts playing is paused again.
+ * Only your code typed on the remote's number keys ([isCode]) ends it.
  */
 class AthanService : Service() {
 
     companion object {
         private const val ACTION_PLAY = "app.etv.launcher.ATHAN_PLAY"
-        private const val ACTION_STOP = "app.etv.launcher.ATHAN_STOP"
         private const val EXTRA_PRAYER = "prayer"
         private const val EXTRA_TEST = "test"
         private const val CHANNEL = "athan"
@@ -173,8 +176,47 @@ class AthanService : Service() {
             }
         }
 
-        /** Ends the athan (and the dua) now. */
-        fun stop() {
+        /**
+         * The only way to end the athan early: your own code, typed on the remote's number keys.
+         * You set it on the TV (Settings → Athan); it never leaves the TV and isn't in eTV's code.
+         * Only a slow, salted hash of it is kept, so it can't simply be read back.
+         */
+        fun hasCode(ctx: Context) = Prefs(ctx).athanCodeHash.isNotEmpty()
+
+        /** How many digits the code has (0 when there's none). */
+        fun codeLength(ctx: Context) = Prefs(ctx).athanCodeLength
+
+        /** True when [digits] is the code. */
+        fun isCode(ctx: Context, digits: String): Boolean {
+            val p = Prefs(ctx)
+            if (p.athanCodeHash.isEmpty() || digits.length != p.athanCodeLength) return false
+            return hash(digits, p.athanCodeSalt) == p.athanCodeHash
+        }
+
+        /** Sets the code, or removes it with an empty [digits]. */
+        fun setCode(ctx: Context, digits: String) {
+            val p = Prefs(ctx)
+            if (digits.isEmpty()) {
+                p.athanCodeHash = ""
+                p.athanCodeSalt = ""
+                p.athanCodeLength = 0
+                return
+            }
+            val salt = ByteArray(16).also { java.security.SecureRandom().nextBytes(it) }
+                .joinToString("") { "%02x".format(it) }
+            p.athanCodeSalt = salt
+            p.athanCodeHash = hash(digits, salt)
+            p.athanCodeLength = digits.length
+        }
+
+        private fun hash(digits: String, salt: String): String {
+            val spec = javax.crypto.spec.PBEKeySpec(digits.toCharArray(), salt.toByteArray(), 20_000, 256)
+            val key = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1").generateSecret(spec).encoded
+            return key.joinToString("") { "%02x".format(it) }
+        }
+
+        /** Ends the athan (and the dua) now: only for the code. */
+        fun stopWithCode() {
             current?.finishAthan()
         }
     }
@@ -195,10 +237,15 @@ class AthanService : Service() {
     private var session: MediaSession? = null
     private var focus: AudioFocusRequest? = null
     private var wake: PowerManager.WakeLock? = null
-    private var paused: List<MediaController> = emptyList()
+    private var paused: MutableList<MediaController> = ArrayList()
     private var savedVolume = -1
     private var savedMuted = false
     private var finished = true
+
+    /** The sound is the athan's: everything else has been paused and the athan is playing. */
+    private var started = false
+    private var focusLost = false
+    private var lastScreenAt = 0L
 
     private val attrs: AudioAttributes = AudioAttributes.Builder()
         .setUsage(AudioAttributes.USAGE_MEDIA)
@@ -206,8 +253,33 @@ class AthanService : Service() {
         .build()
 
     private val focusListener = AudioManager.OnAudioFocusChangeListener { change ->
-        // Someone started something on purpose: let them.
-        if (change == AudioManager.AUDIOFOCUS_LOSS) handler.post { finishAthan() }
+        // Something else wants to play: the guard takes the sound back for the athan.
+        if (change == AudioManager.AUDIOFOCUS_LOSS || change == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
+            change == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK
+        ) {
+            focusLost = true
+        }
+    }
+
+    /**
+     * Keeps the athan in charge while it plays: pauses anything that starts playing, takes the
+     * sound back, and brings the athan screen back if Home or another app hid it.
+     */
+    private val guard = object : Runnable {
+        override fun run() {
+            if (finished) return
+            val p = Prefs(this@AthanService)
+            if (p.athanPause) {
+                pauseOthers()
+                if (focusLost) {
+                    focusLost = false
+                    abandonFocus()
+                    requestFocus(transient = p.athanResume)
+                }
+            }
+            if (!AthanActivity.visible && System.currentTimeMillis() - lastScreenAt > 1_500L) showScreen()
+            handler.postDelayed(this, 1_000L)
+        }
     }
 
     private val timeout = Runnable { finishAthan() }
@@ -222,7 +294,6 @@ class AthanService : Service() {
                 val pr = Prayer.values().getOrNull(intent.getIntExtra(EXTRA_PRAYER, -1)) ?: Prayer.DHUHR
                 begin(pr, intent.getBooleanExtra(EXTRA_TEST, false))
             }
-            ACTION_STOP -> finishAthan()
             else -> if (finished) stopSelfNow()
         }
         return START_NOT_STICKY
@@ -236,12 +307,16 @@ class AthanService : Service() {
     // ---------------- start ----------------
 
     private fun begin(pr: Prayer, isTest: Boolean) {
-        if (!finished) cleanUp(resume = false) // a new athan replaces one still playing
+        // An athan already playing just carries on (the alarm and the minute check can both fire).
+        if (!finished) return
         finished = false
+        started = false
+        focusLost = false
         current = this
         prayer = pr
         test = isTest
         usedFallback = false
+        paused = ArrayList()
         val p = Prefs(this)
 
         try {
@@ -249,22 +324,47 @@ class AthanService : Service() {
             wake = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "eTV:athan").apply { acquire(MAX_MS + 60_000L) }
         } catch (_: Exception) {
         }
-
-        setVolume(p.athanVolume)
-        paused = if (p.athanPause) pauseOthers() else emptyList()
-        requestFocus(transient = p.athanResume)
-        openSession()
+        saveVolume()
         goForeground()
-        showScreen()
         handler.postDelayed(timeout, MAX_MS)
-        playAthan()
+
+        // 1. Stop whatever is playing, and cover the screen.
+        if (p.athanPause) pauseOthers()
+        showScreen()
+        if (p.athanPause) requestFocus(transient = p.athanResume)
+
+        // 2. Once it has really stopped (or after two seconds at most), the athan.
+        val since = System.currentTimeMillis()
+        val waitForQuiet = object : Runnable {
+            override fun run() {
+                if (finished) return
+                val waited = System.currentTimeMillis() - since
+                val quiet = paused.none { isPlaying(it) }
+                // Without the apps' media controls, give them a moment to pause for the audio focus.
+                val enough = if (NowPlayingWatcher.hasAccess(this@AthanService)) quiet else waited >= 700L
+                if (!enough && waited < 2_000L) {
+                    handler.postDelayed(this, 120L)
+                    return
+                }
+                started = true
+                setVolume(p.athanVolume)
+                openSession()
+                playAthan()
+                handler.postDelayed(guard, 1_000L)
+            }
+        }
+        handler.postDelayed(waitForQuiet, if (p.athanPause) 150L else 0L)
     }
 
     private fun showScreen() {
+        lastScreenAt = System.currentTimeMillis()
         try {
-            startActivity(Intent(this, AthanActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            startActivity(
+                Intent(this, AthanActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT),
+            )
         } catch (_: Exception) {
-            // Without the screen the athan still plays; the remote's Stop or Back on eTV ends it.
+            // Without the screen the athan still plays; the guard tries again.
         }
     }
 
@@ -351,34 +451,46 @@ class AthanService : Service() {
 
     // ---------------- the rest of the TV ----------------
 
-    /** Pauses every other app that's playing, when eTV may see them (the Now playing permission). */
-    private fun pauseOthers(): List<MediaController> {
-        if (!NowPlayingWatcher.hasAccess(this)) return emptyList()
-        return try {
+    private fun isPlaying(c: MediaController): Boolean {
+        val st = try { c.playbackState?.state } catch (_: Exception) { null }
+        return st == PlaybackState.STATE_PLAYING || st == PlaybackState.STATE_BUFFERING ||
+            st == PlaybackState.STATE_FAST_FORWARDING || st == PlaybackState.STATE_REWINDING
+    }
+
+    /**
+     * Pauses every other app that's playing (when eTV may see them: the Now playing permission),
+     * and remembers them, so they carry on afterwards.
+     */
+    private fun pauseOthers() {
+        if (!NowPlayingWatcher.hasAccess(this)) return
+        try {
             val msm = getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
-            msm.getActiveSessions(NowPlayingWatcher.component(this))
-                .filter { c ->
-                    val st = c.playbackState?.state
-                    c.packageName != packageName &&
-                        (st == PlaybackState.STATE_PLAYING || st == PlaybackState.STATE_BUFFERING)
-                }
-                .onEach { c -> try { c.transportControls.pause() } catch (_: Exception) {} }
+            for (c in msm.getActiveSessions(NowPlayingWatcher.component(this))) {
+                if (c.packageName == packageName || !isPlaying(c)) continue
+                try { c.transportControls.pause() } catch (_: Exception) {}
+                if (paused.none { it.sessionToken == c.sessionToken }) paused.add(c)
+            }
         } catch (_: Exception) {
-            emptyList()
         }
     }
 
+    /**
+     * Carries on with what was playing: once the athan screen has gone and the app is in front
+     * again, and once more a little later if it didn't take the first time.
+     */
     private fun resumeOthers(list: List<MediaController>) {
         if (list.isEmpty()) return
-        // Give the apps a moment to take back the sound first.
-        handler.postDelayed({
+        val main = Handler(Looper.getMainLooper())
+        fun playPaused() {
             for (c in list) {
                 try {
-                    if (c.playbackState?.state == PlaybackState.STATE_PAUSED) c.transportControls.play()
+                    if (!isPlaying(c)) c.transportControls.play()
                 } catch (_: Exception) {
                 }
             }
-        }, 900L)
+        }
+        main.postDelayed({ playPaused() }, 1_500L)
+        main.postDelayed({ playPaused() }, 4_000L)
     }
 
     private fun audio() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -415,17 +527,25 @@ class AthanService : Service() {
         focus = null
     }
 
-    /** Sets the TV's volume for the athan (and un-mutes it), remembering how it was. */
+    /** Remembers the TV's volume and mute exactly as they are, to put them back afterwards. */
+    private fun saveVolume() {
+        try {
+            val am = audio()
+            savedVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC)
+            savedMuted = Build.VERSION.SDK_INT >= 23 && am.isStreamMute(AudioManager.STREAM_MUSIC)
+        } catch (_: Exception) {
+            savedVolume = -1
+            savedMuted = false
+        }
+    }
+
+    /** Sets the TV's volume for the athan (and un-mutes it), when a level is chosen in Settings. */
     private fun setVolume(percent: Int) {
-        savedVolume = -1
-        savedMuted = false
         if (percent <= 0) return
         try {
             val am = audio()
             val max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-            savedVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC)
             if (Build.VERSION.SDK_INT >= 23 && am.isStreamMute(AudioManager.STREAM_MUSIC)) {
-                savedMuted = true
                 am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0)
             }
             val v = Math.round(max * percent / 100f).coerceIn(1, max)
@@ -434,25 +554,45 @@ class AthanService : Service() {
         }
     }
 
+    /**
+     * Puts the TV's volume and mute back exactly as they were before the athan, whatever changed
+     * them in between, so what was playing is heard again at the same level.
+     */
     private fun restoreVolume() {
         if (savedVolume < 0) return
         try {
             val am = audio()
-            am.setStreamVolume(AudioManager.STREAM_MUSIC, savedVolume, 0)
-            if (savedMuted && Build.VERSION.SDK_INT >= 23) am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0)
+            if (Build.VERSION.SDK_INT >= 23) {
+                val mutedNow = am.isStreamMute(AudioManager.STREAM_MUSIC)
+                if (mutedNow && !savedMuted) am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0)
+            }
+            if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != savedVolume) {
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, savedVolume, 0)
+            }
+            if (Build.VERSION.SDK_INT >= 23 && savedMuted && !am.isStreamMute(AudioManager.STREAM_MUSIC)) {
+                am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0)
+            }
         } catch (_: Exception) {
         }
         savedVolume = -1
     }
 
-    /** A media session, so the remote's Pause and Stop end the athan. */
+    /**
+     * A media session, so the remote's media keys come to the athan, which ignores them: Pause,
+     * Stop and the rest neither end it nor start anything else playing.
+     */
     private fun openSession() {
         try {
             val s = MediaSession(this, "eTV athan")
             s.setCallback(object : MediaSession.Callback() {
-                override fun onPause() = finishAthan()
-                override fun onStop() = finishAthan()
+                override fun onPause() {}
+                override fun onStop() {}
                 override fun onPlay() {}
+                override fun onSkipToNext() {}
+                override fun onSkipToPrevious() {}
+                override fun onFastForward() {}
+                override fun onRewind() {}
+                override fun onSeekTo(pos: Long) {}
             }, handler)
             @Suppress("DEPRECATION")
             s.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS)
@@ -468,7 +608,7 @@ class AthanService : Service() {
         try {
             s.setPlaybackState(
                 PlaybackState.Builder()
-                    .setActions(PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_STOP or PlaybackState.ACTION_PLAY_PAUSE)
+                    .setActions(0L)
                     .setState(PlaybackState.STATE_PLAYING, 0L, 1f)
                     .build(),
             )
@@ -484,14 +624,14 @@ class AthanService : Service() {
 
     // ---------------- ending ----------------
 
-    /** Ends the athan now and puts the TV back as it was. */
+    /** Ends the athan (when it and the dua are over, or for the code) and puts the TV back as it was. */
     fun finishAthan() {
         if (finished) return
-        cleanUp(resume = true)
+        cleanUp()
         stopSelfNow()
     }
 
-    private fun cleanUp(resume: Boolean) {
+    private fun cleanUp() {
         finished = true
         handler.removeCallbacksAndMessages(null)
         releasePlayer()
@@ -501,14 +641,18 @@ class AthanService : Service() {
         } catch (_: Exception) {
         }
         session = null
+        // In this order: the sound goes back to the other apps, the volume as it was, the athan
+        // screen closes, and then (once the app is in front again) what was playing carries on.
         abandonFocus()
         restoreVolume()
-        val was = paused
-        paused = emptyList()
-        if (resume && Prefs(this).athanResume) resumeOthers(was)
+        if (current === this) current = null
+        AthanActivity.closeNow()
+        val was = paused.toList()
+        paused = ArrayList()
+        if (Prefs(this).athanResume) resumeOthers(was)
+        started = false
         try { wake?.release() } catch (_: Exception) {}
         wake = null
-        if (current === this) current = null
     }
 
     private fun stopSelfNow() {
