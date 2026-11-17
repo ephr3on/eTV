@@ -6,8 +6,7 @@
  *
  * Licensed under the GNU General Public License v3.0 (GPLv3).
  *
- * Changed for eTV (2026): draws on a plain Surface (eTV has its own controls), no PlayerView; and
- * retries a playlist from the device's own server a few times before ending the session.
+ * Changed for eTV (2026): draws on a plain Surface (eTV has its own controls), no PlayerView.
  */
 
 package com.flymop.airplaytv.renderer
@@ -50,9 +49,6 @@ class AirPlayVideoPlayer(private val context: Context) {
     private val mainHandler = Handler(Looper.getMainLooper())
     private var player: ExoPlayer? = null
     private var pendingSurface: Surface? = null
-    private var location: String? = null
-    private var retries = 0
-    private var startMs = 0L
 
     var onPlaybackInfo: ((PlaybackSnapshot) -> Unit)? = null
     var onVideoSize: ((width: Int, height: Int, aspect: Float) -> Unit)? = null
@@ -69,21 +65,6 @@ class AirPlayVideoPlayer(private val context: Context) {
     private val _listener = object : Player.Listener {
         override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
             Log.w(TAG, "playback error", error)
-            // eTV: a playlist from the device's own server (YouTube's songs) can still be on its way
-            // when the player first asks for it. Try again a few times before giving up the session.
-            val loc = location
-            if (loc != null && loc.startsWith("http://localhost") && retries < MAX_RETRIES) {
-                retries++
-                Log.i(TAG, "retrying $loc ($retries/$MAX_RETRIES)")
-                val pos = (player?.currentPosition ?: 0L).coerceAtLeast(startMs)
-                mainHandler.postDelayed({
-                    val p = player ?: return@postDelayed
-                    if (location != loc) return@postDelayed
-                    p.setMediaItem(MediaItem.fromUri(loc), pos)
-                    p.prepare()
-                }, RETRY_DELAY_MS * retries)
-                return
-            }
             onEnded?.invoke()
         }
         override fun onPlaybackStateChanged(state: Int) {
@@ -150,9 +131,6 @@ class AirPlayVideoPlayer(private val context: Context) {
     fun play(location: String, startPositionSeconds: Float) = mainHandler.post {
         // recycling must not report the stopped sentinel: senders poll right after /play
         _stopInternal(reportStopped = false)
-        this.location = location
-        retries = 0
-        startMs = (startPositionSeconds * 1000).toLong()
         val p = createFastStartExoPlayer().also {
             it.addListener(_listener)
             pendingSurface?.let { s -> it.setVideoSurface(s) }
@@ -267,7 +245,5 @@ class AirPlayVideoPlayer(private val context: Context) {
     companion object {
         private const val TAG = "AirPlayVideoPlayer"
         private const val REPORT_INTERVAL_MS = 100L
-        private const val MAX_RETRIES = 3
-        private const val RETRY_DELAY_MS = 600L
     }
 }
