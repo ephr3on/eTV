@@ -1,0 +1,12 @@
+Performing Streamed Install
+Success
+Starting: Intent { cmp=app.etv.launcher/.MainActivity }
+Status: ok
+LaunchState: WARM
+Activity: app.etv.launcher/.MainActivity
+TotalTime: 1235
+WaitTime: 1239
+Complete
+17000
+kill: unknown pid '4718'
+/system/bin/sh: kill: 4718: Operation not permitted

@@ -1,0 +1,126 @@
+== Setting up
+  eTV uid 10116, Android 10
+  settings written
+
+== 1. A film is playing and the athan comes; ended with the code
+      film: playing=true volume=1.0 head=309408 (head 176352 -> 309408)
+  PASS  the film plays with sound before the athan
+      volume before:    Muted: false    Current: 2 (speaker): 9, 40000000 (default): 5    Devices: speaker 
+      film: playing=false volume=1.0 head=315744 (head 315744 -> 315744)
+  PASS  the film stopped
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+  PASS  the athan screen is on top
+      eTV players started: 1
+  PASS  the athan is sounding
+  -- trying to get out
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_BACK: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_DPAD_CENTER: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_ENTER: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_ESCAPE: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_MEDIA_STOP: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_MEDIA_PLAY_PAUSE: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_MEDIA_PLAY: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_MEDIA_NEXT: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_DPAD_LEFT: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_GUIDE: the athan stays
+      top:     mResumedActivity: ActivityRecord{485b2c9 u0 app.etv.launcher/.AthanActivity t8}
+      eTV players started: 1
+  PASS  KEYCODE_SETTINGS: the athan stays
+      film: playing=false volume=1.0 head=315744 (head 315744 -> 315744)
+  PASS  after all those keys the film is still quiet
+      top:     mResumedActivity: ActivityRecord{4d72fdc u0 app.etv.launcher/.AthanActivity t10}
+  PASS  Home: the athan screen is back on top
+      eTV players started: 1
+  PASS  Home: the athan still sounds
+      top:     mResumedActivity: ActivityRecord{4d72fdc u0 app.etv.launcher/.AthanActivity t10}
+  PASS  starting the film again: the athan screen is back on top
+      film: playing=false volume=1.0 head=326304 (head 326304 -> 326304)
+  PASS  starting the film again: the film is paused again
+      eTV players started: 1
+  PASS  starting the film again: the athan still sounds
+      top:     mResumedActivity: ActivityRecord{4d72fdc u0 app.etv.launcher/.AthanActivity t10}
+  PASS  a wrong code: the athan carries on
+      eTV players started: 1
+  PASS  a wrong code: still sounding
+      top:     mResumedActivity: ActivityRecord{4d72fdc u0 app.etv.launcher/.AthanActivity t10}
+  PASS  four digits of the code: still on
+      top:     mResumedActivity: ActivityRecord{23cc1d6 u0 app.etv.fakeplayer/.PlayerActivity t7}
+  PASS  the code ends the athan screen
+      eTV players started: 0
+  PASS  the code silences the athan
+      film: playing=true volume=1.0 head=533280 (head 401280 -> 533280)
+  PASS  the film carries on by itself, at full sound
+  PASS  the film is in front again
+      volume after:     Muted: false    Current: 2 (speaker): 9, 40000000 (default): 5    Devices: speaker 
+  PASS  the TV's volume (and mute) are exactly as before
+      film: playing=true volume=1.0 head=974688 (head 887040 -> 974688)
+  PASS  still playing a while later
+
+== 2. The whole athan and dua, untouched
+      film: playing=true volume=1.0 head=265056 (head 132000 -> 265056)
+  PASS  the film plays before the athan
+      film: playing=false volume=1.0 head=284064 (head 284064 -> 284064)
+  PASS  the film stopped
+      top:     mResumedActivity: ActivityRecord{cac74dd u0 app.etv.launcher/.AthanActivity t12}
+  PASS  the athan screen is on top
+      eTV players started: 1
+      0s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      eTV players started: 1
+      31s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      eTV players started: 1
+      61s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      eTV players started: 1
+      91s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      eTV players started: 1
+      122s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      eTV players started: 1
+      152s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      eTV players started: 1
+      182s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      eTV players started: 1
+      213s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      eTV players started: 1
+      243s: film playing=false volume=1.0 head=284064; eTV sounding: yes
+      the athan screen closed after 268s
+  PASS  the athan and dua ran their whole length (over 3 minutes)
+      top:     mResumedActivity: ActivityRecord{4532145 u0 app.etv.fakeplayer/.PlayerActivity t11}
+  PASS  the athan screen closed by itself
+      eTV players started: 0
+  PASS  eTV is silent
+      film: playing=true volume=1.0 head=416064 (head 328416 -> 416064)
+  PASS  the film carries on by itself, at full sound
+  PASS  the film is in front again
+      volume before:    Muted: false    Current: 2 (speaker): 9, 40000000 (default): 5    Devices: speaker 
+      volume after:     Muted: false    Current: 2 (speaker): 9, 40000000 (default): 5    Devices: speaker 
+  PASS  the TV's volume (and mute) are exactly as before
+      film: playing=true volume=1.0 head=901824 (head 769824 -> 901824)
+  PASS  still playing a while later
+
+== 3. Nothing playing, athan ended with the code: nothing starts afterwards
+      top:     mResumedActivity: ActivityRecord{1690d3e u0 app.etv.launcher/.AthanActivity t13}
+  PASS  the athan screen is on top
+      top:     mResumedActivity: ActivityRecord{bc0a403 u0 app.etv.launcher/.MainActivity t9}
+  PASS  the code ends it
+  PASS  the film app didn't start by itself
+
+== 43 passed, 0 failed

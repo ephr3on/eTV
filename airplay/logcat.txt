@@ -1,0 +1,804 @@
+--------- beginning of main
+11-17 16:26:07.727  3008  3008 I abb     : StartCommandInProcess(73657474696e67730067657400676c6f settings.get.glo [truncated])
+11-17 16:26:07.740  3008  3008 I abb     : StartCommandInProcess(7061636b61676500696e7374616c6c00 package.install. [truncated])
+11-17 16:26:07.712  1898  1898 W Binder:1898_5: type=1400 audit(0.0:96): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+11-17 16:26:07.712  1898  1898 I chatty  : uid=1000 system_server identical 1 line
+11-17 16:26:07.712  1898  1898 W Binder:1898_5: type=1400 audit(0.0:98): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+11-17 16:26:07.712  1754  1754 W adbd    : type=1400 audit(0.0:99): avc: denied { shutdown } for scontext=u:r:adbd:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+11-17 16:26:07.772  1898  1898 W Binder:1898_5: type=1400 audit(0.0:100): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+--------- beginning of system
+11-17 16:26:07.879  1898  1948 W PackageParser: Unknown element under <manifest>: queries at /data/app/vmdl1153136392.tmp/base.apk Binary XML file line #42
+11-17 16:26:07.889  1898  1934 I ActivityManager: Force stopping app.etv.launcher appid=10116 user=-1: installPackageLI
+11-17 16:26:07.889  1898  1934 I ActivityManager: Killing 3546:app.etv.launcher:airplay/u0a116 (adj 200): stop app.etv.launcher
+11-17 16:26:07.892  1898  1934 W ActivityManager: Scheduling restart of crashed service app.etv.launcher/com.flymop.airplaytv.service.AirPlayService in 1000ms
+11-17 16:26:07.893  1898  1934 I ActivityManager: Killing 3503:app.etv.launcher/u0a116 (adj 0): stop app.etv.launcher
+11-17 16:26:07.893  1898  1934 W ActivityManager: Scheduling restart of crashed service app.etv.launcher/.MediaListener in 1000ms
+11-17 16:26:07.893  1898  1934 W ActivityTaskManager: Force removing ActivityRecord{bc0a403 u0 app.etv.launcher/.MainActivity t9 f}: app died, no saved state
+11-17 16:26:07.894  1898  1948 I PackageManager: Update package app.etv.launcher code path from /data/app/app.etv.launcher-wPLDj3BezwPEsoA5Yp8pwg== to /data/app/app.etv.launcher-at4xpvmTQj1xfPbD6yxIBw==; Retain data and using new
+11-17 16:26:07.894  1898  1948 I PackageManager: Update package app.etv.launcher resource path from /data/app/app.etv.launcher-wPLDj3BezwPEsoA5Yp8pwg== to /data/app/app.etv.launcher-at4xpvmTQj1xfPbD6yxIBw==; Retain data and using new
+11-17 16:26:07.910  1898  1948 I PackageManager: Un-granting permission android.permission.GLOBAL_SEARCH from package com.android.quicksearchbox (protectionLevel=18 flags=0x3088be45)
+11-17 16:26:07.910  1898  1948 I PackageManager: Un-granting permission android.permission.BIND_WALLPAPER from package com.android.camera2 (protectionLevel=18 flags=0x20d8bc45)
+11-17 16:26:07.912  1898  1948 I PackageManager: Un-granting permission android.permission.CONNECTIVITY_USE_RESTRICTED_NETWORKS from package com.android.captiveportallogin (protectionLevel=18 flags=0x38c8be45)
+11-17 16:26:07.912  1898  1948 I PackageManager: Un-granting permission android.permission.NETWORK_BYPASS_PRIVATE_DNS from package com.android.captiveportallogin (protectionLevel=2 flags=0x38c8be45)
+11-17 16:26:07.912  1898  1948 I PackageManager: Un-granting permission android.permission.REQUEST_INSTALL_PACKAGES from package app.etv.launcher (protectionLevel=66 flags=0x3048be46)
+11-17 16:26:07.921  1898  1948 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-17 16:26:07.921  1898  1948 D PackageManager: Clear ephemeral installer activity
+11-17 16:26:07.922  1668  1668 I Zygote  : Process 3546 exited due to signal 9 (Killed)
+11-17 16:26:07.922  1898  3109 D ConnectivityService: ConnectivityService NetworkRequestInfo binderDied(NetworkRequest [ TRACK_DEFAULT id=16, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10116] ], android.os.BinderProxy@9dbe622)
+11-17 16:26:07.922  1898  1981 E WifiMulticastLockManager: Multicaster binderDied
+11-17 16:26:07.923  1898  2015 D ConnectivityService: releasing NetworkRequest [ TRACK_DEFAULT id=16, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10116] ] (release request)
+11-17 16:26:07.923  1898  2017 D NsdService: Client disconnected
+11-17 16:26:07.923  1898  2017 D NsdService: Terminating client-ID 2 global-ID 2 type 393225
+11-17 16:26:07.923  1898  2017 D NsdService: mdnssd [stop-register, 2]
+11-17 16:26:07.928  1667  1911 D MDnsDS  : Stopping register with ref 0x7ebe9740a790
+11-17 16:26:07.928  1667  1911 D MDnsDS  : freeServiceRef 2
+11-17 16:26:07.928  1667  1911 D MDnsDS  : triggering rescan
+11-17 16:26:07.928  1667  1910 D MDnsDS  : Monitor poll got data pollCount = 3, 2
+11-17 16:26:07.928  1667  1910 D MDnsDS  : Monitor found [2].revents = 32 - calling ProcessResults
+11-17 16:26:07.928  1667  1910 W /system/bin/netd: dnssd_clientstub DNSServiceProcessResult called with NULL DNSServiceRef
+11-17 16:26:07.928  1667  1910 D MDnsDS  : controlSocket shows revent= 1
+11-17 16:26:07.928  1667  1910 D MDnsDS  : MDnsSdListener::Monitor got 1
+11-17 16:26:07.928  1667  1910 D MDnsDS  : MDnsSdListener::Monitor poll rescanning - size=10, live=1
+11-17 16:26:07.928  1667  1910 D MDnsDS  : Going to poll with pollCount 2
+11-17 16:26:07.929  1898  2017 D NsdService: Terminating client-ID 3 global-ID 3 type 393225
+11-17 16:26:07.929  1898  2017 D NsdService: mdnssd [stop-register, 3]
+11-17 16:26:07.929  1667  1911 D MDnsDS  : Stopping register with ref 0x7ebe9740a7f0
+11-17 16:26:07.929  1667  1911 D MDnsDS  : freeServiceRef 3
+11-17 16:26:07.929  1667  1911 D MDnsDS  : triggering rescan
+11-17 16:26:07.930  1898  2017 D NsdService: mdnssd [stop-service]
+11-17 16:26:07.930  1667  1910 D MDnsDS  : Monitor poll got data pollCount = 2, 2
+11-17 16:26:07.930  1667  1910 D MDnsDS  : Monitor found [1].revents = 32 - calling ProcessResults
+11-17 16:26:07.930  1667  1910 W /system/bin/netd: dnssd_clientstub DNSServiceProcessResult called with NULL DNSServiceRef
+11-17 16:26:07.930  1667  1910 D MDnsDS  : controlSocket shows revent= 1
+11-17 16:26:07.930  1667  1910 D MDnsDS  : MDnsSdListener::Monitor got 1
+11-17 16:26:07.930  1667  1910 D MDnsDS  : MDnsSdListener::Monitor poll rescanning - size=10, live=0
+11-17 16:26:07.930  1667  1910 D MDnsDS  : Going to poll with pollCount 1
+11-17 16:26:07.931  1898  1936 I libprocessgroup: Successfully killed process cgroup uid 10116 pid 3546 in 39ms
+11-17 16:26:07.932  1667  1911 D MDnsDS  : Stopping MDNSD
+11-17 16:26:07.932  1898  1948 W PackageManager: Cannot whitelist unknown permission: android.permission.USE_EXACT_ALARM
+11-17 16:26:07.932  1898  1948 W PackageManager: Cannot whitelist unknown permission: android.permission.SCHEDULE_EXACT_ALARM
+11-17 16:26:07.932  1898  1948 W PackageManager: Cannot whitelist unknown permission: android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
+11-17 16:26:07.932  1898  1948 W PackageManager: Cannot whitelist unknown permission: android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE
+11-17 16:26:07.940  1898  1898 W MediaSessionService: Dead ActiveSessionsListener in pushSessionsChanged, removing
+11-17 16:26:07.940  1898  1898 W MediaSessionService: android.os.DeadObjectException
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at android.os.BinderProxy.transactNative(Native Method)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at android.os.BinderProxy.transact(BinderProxy.java:510)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at android.media.session.IActiveSessionsListener$Stub$Proxy.onActiveSessionsChanged(IActiveSessionsListener.java:115)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at com.android.server.media.MediaSessionService.pushSessionsChanged(MediaSessionService.java:629)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at com.android.server.media.MediaSessionService.access$5600(MediaSessionService.java:100)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at com.android.server.media.MediaSessionService$MessageHandler.handleMessage(MediaSessionService.java:2245)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at android.os.Handler.dispatchMessage(Handler.java:107)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at android.os.Looper.loop(Looper.java:214)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at com.android.server.SystemServer.run(SystemServer.java:541)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at com.android.server.SystemServer.main(SystemServer.java:349)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at java.lang.reflect.Method.invoke(Native Method)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+11-17 16:26:07.940  1898  1898 W MediaSessionService: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:908)
+11-17 16:26:07.946  1898  1924 D NotificationListeners: Removing active service ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:07.946  1898  1898 V NotificationListeners: 0 notification listener connection lost: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:07.947  1668  1668 I Zygote  : Process 3503 exited due to signal 9 (Killed)
+11-17 16:26:07.949  1793  1793 E         : Couldn't opendir /data/app/vmdl1153136392.tmp: No such file or directory
+11-17 16:26:07.949  1793  1793 E installd: Failed to delete /data/app/vmdl1153136392.tmp: No such file or directory
+11-17 16:26:07.953  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:07.932  1898  1898 W Binder:1898_5: type=1400 audit(0.0:101): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+11-17 16:26:07.932  1898  1898 I chatty  : uid=1000 system_server identical 1 line
+11-17 16:26:07.932  1898  1898 W Binder:1898_5: type=1400 audit(0.0:103): avc: denied { getopt } for scontext=u:r:system_server:s0 tcontext=u:r:shell:s0 tclass=unix_stream_socket permissive=0
+11-17 16:26:07.965  1898  1934 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:07.966  1898  1934 I ActivityTaskManager: Config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2274) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.356}
+11-17 16:26:07.967  1898  1934 I ActivityTaskManager: Override config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2274) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.356} for displayId=0
+11-17 16:26:07.965  1898  1934 I chatty  : uid=1000(system) ActivityManager identical 8 lines
+11-17 16:26:07.965  1898  1934 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:07.972  1898  1936 I libprocessgroup: Successfully killed process cgroup uid 10116 pid 3503 in 40ms
+11-17 16:26:07.976  1898  1934 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:07.988  1898  1934 I ActivityManager:   Force stopping service ServiceRecord{5a4763e u0 app.etv.launcher/.MediaListener}
+11-17 16:26:07.989  1898  1948 I ActivityManager: Force stopping app.etv.launcher appid=10116 user=0: pkg removed
+11-17 16:26:07.991  1898  1898 W NotificationListeners: 0 notification listener binding died: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:07.996  1898  1898 V NotificationListeners: onNullBinding() called with: name = [ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}]
+11-17 16:26:07.997  1898  1934 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_REMOVED dat=package:app.etv.launcher flg=0x4000010 (has extras) } to com.android.gallery3d/.app.PackagesMonitor
+11-17 16:26:07.997  1898  1934 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_REMOVED dat=package:app.etv.launcher flg=0x4000010 (has extras) } to com.android.musicfx/.Compatibility$Receiver
+11-17 16:26:07.976  1898  1934 I chatty  : uid=1000(system) ActivityManager identical 8 lines
+11-17 16:26:07.976  1898  1934 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:07.998  1898  1928 I InputManager-JNI: Viewport [0] to add: local:0
+11-17 16:26:08.008  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000004
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_10' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_7' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_4' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_8' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_9' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Device reconfigured: id=8, name='virtio_input_multi_touch_1', size 1080x2400, orientation 0, mode 1, display id 0
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_11' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_5' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_2' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_6' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.008  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_3' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.009  1898  1934 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:app.etv.launcher flg=0x4000010 (has extras) } to com.android.packageinstaller/.PackageInstalledReceiver
+11-17 16:26:08.009  1898  1934 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:app.etv.launcher flg=0x4000010 (has extras) } to com.android.gallery3d/.app.PackagesMonitor
+11-17 16:26:08.009  1898  1934 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:app.etv.launcher flg=0x4000010 (has extras) } to com.android.musicfx/.Compatibility$Receiver
+11-17 16:26:08.011  1898  1928 W ActivityManager: setHasOverlayUi called on unknown pid: 3503
+11-17 16:26:08.013  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000010
+11-17 16:26:08.040  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.048  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:26:08.051  2633  2722 D LoaderTask: loadWorkspace: loading default favorites
+11-17 16:26:08.059  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.062  1898  1934 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_REPLACED dat=package:app.etv.launcher flg=0x4000010 (has extras) } to com.android.musicfx/.Compatibility$Receiver
+11-17 16:26:08.065  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.072  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000010
+11-17 16:26:08.074  2293  2293 D CarrierSvcBindHelper: No carrier app for: 0
+11-17 16:26:08.074  2633  2792 D EGL_emulation: eglMakeCurrent: 0x7be6c9338340: ver 3 0 (tinfo 0x7be6c932ec40)
+11-17 16:26:08.075  2293  2293 D CarrierSvcBindHelper: No carrier app for: 0
+11-17 16:26:08.078  2293  2293 D CarrierConfigLoader: mHandler: 9 phoneId: 0
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: Failed to query for shortcuts
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: java.lang.SecurityException: Caller can't access shortcut information
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.Parcel.createException(Parcel.java:2071)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.Parcel.readException(Parcel.java:2039)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.Parcel.readException(Parcel.java:1987)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.content.pm.ILauncherApps$Stub$Proxy.getShortcuts(ILauncherApps.java:1271)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.content.pm.LauncherApps.getShortcuts(LauncherApps.java:888)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at com.android.launcher3.shortcuts.DeepShortcutManager.query(DeepShortcutManager.java:203)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at com.android.launcher3.shortcuts.DeepShortcutManager.queryForPinnedShortcuts(DeepShortcutManager.java:171)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at com.android.launcher3.shortcuts.DeepShortcutManager.queryForPinnedShortcuts(DeepShortcutManager.java:166)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at com.android.launcher3.model.LoaderTask.loadWorkspace(LoaderTask.java:321)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at com.android.launcher3.model.LoaderTask.run(LoaderTask.java:171)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.Handler.handleCallback(Handler.java:883)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.Handler.dispatchMessage(Handler.java:100)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.Looper.loop(Looper.java:214)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: Caused by: android.os.RemoteException: Remote stack trace:
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at com.android.server.pm.LauncherAppsService$LauncherAppsImpl.ensureShortcutPermission(LauncherAppsService.java:657)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at com.android.server.pm.LauncherAppsService$LauncherAppsImpl.getShortcuts(LauncherAppsService.java:665)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.content.pm.ILauncherApps$Stub.onTransact(ILauncherApps.java:589)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.Binder.execTransactInternal(Binder.java:1021)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 	at android.os.Binder.execTransact(Binder.java:994)
+11-17 16:26:08.082  2633  2722 E DeepShortcutManager: 
+11-17 16:26:08.166  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:26:08.169  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:26:08.172  1668  1668 D Zygote  : Forked child process 4647
+11-17 16:26:08.173  1898  1935 I ActivityManager: Start proc 4647:app.etv.launcher/u0a116 for broadcast {app.etv.launcher/app.etv.launcher.BootReceiver}
+11-17 16:26:08.173  2052  2502 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c4308680, tid 2502
+11-17 16:26:08.178  2633  2792 D EGL_emulation: eglMakeCurrent: 0x7be6c9338340: ver 3 0 (tinfo 0x7be6c932ec40)
+11-17 16:26:08.179  2052  2502 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:26:08.179  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.193  1898  1898 W Looper  : Slow dispatch took 133ms main h=android.app.ActivityThread$H c=android.app.-$$Lambda$LoadedApk$ReceiverDispatcher$Args$_BumDX2UKsnxLVrE6UJsJZkotuA@6b676b8 m=0
+11-17 16:26:08.193  4647  4647 I pp.etv.launche: Late-enabling -Xcheck:jni
+11-17 16:26:08.193  2633  2792 D EGL_emulation: eglMakeCurrent: 0x7be6c9338340: ver 3 0 (tinfo 0x7be6c932ec40)
+11-17 16:26:08.198  1898  1898 I Telecom : DefaultDialerCache: Refreshing default dialer for user 0: now com.android.dialer: DDC.oR@AKQ
+11-17 16:26:08.199  1898  1898 V BackupManagerConstants: getFullBackupIntervalMilliseconds(...) returns 86400000
+11-17 16:26:08.199  1898  1898 V BackupManagerConstants: getFullBackupRequiredNetworkType(...) returns 2
+11-17 16:26:08.199  1898  1898 V BackupManagerConstants: getFullBackupRequireCharging(...) returns true
+11-17 16:26:08.199  1898  1898 V NotificationListeners: enabling notification listener for 0: ComponentInfo{com.android.launcher3/com.android.launcher3.notification.NotificationListener}
+11-17 16:26:08.199  1898  1898 V NotificationListeners: Not registering ComponentInfo{com.android.launcher3/com.android.launcher3.notification.NotificationListener} is already bound
+11-17 16:26:08.199  1898  1898 V NotificationListeners: enabling notification listener for 0: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:08.199  1898  1898 V NotificationListeners: binding: Intent { act=android.service.notification.NotificationListenerService cmp=app.etv.launcher/.MediaListener (has extras) }
+11-17 16:26:08.200  1898  1898 V NotificationListeners: enabling notification listener for 0: ComponentInfo{com.android.launcher3/com.android.launcher3.notification.NotificationListener}
+11-17 16:26:08.200  1898  1898 V NotificationListeners: Not registering ComponentInfo{com.android.launcher3/com.android.launcher3.notification.NotificationListener} is already bound
+11-17 16:26:08.200  1898  1898 V NotificationListeners: enabling notification listener for 0: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:08.200  1898  1898 V NotificationListeners: Not registering ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener} is already bound
+11-17 16:26:08.212  2633  2633 E libprocessgroup: set_timerslack_ns write failed: Operation not permitted
+11-17 16:26:08.221  4647  4647 E pp.etv.launche: Unknown bits set in runtime_flags: 0x8000
+11-17 16:26:08.221  4647  4647 W pp.etv.launche: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:08.224  1898  1919 I system_server: Background young concurrent copying GC freed 50516(3399KB) AllocSpace objects, 31(1412KB) LOS objects, 29% free, 8463KB/11MB, paused 2.614ms total 185.403ms
+11-17 16:26:08.233  2052  2502 D EGL_emulation: eglCreateContext: 0x7be6c4308fe0: maj 3 min 0 rcv 3
+11-17 16:26:08.239  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.256  2052  2502 D EGL_emulation: eglMakeCurrent: 0x7be6c4308fe0: ver 3 0 (tinfo 0x7be6c430c2e0)
+11-17 16:26:08.258  2633  2792 D EGL_emulation: eglMakeCurrent: 0x7be6c9338340: ver 3 0 (tinfo 0x7be6c932ec40)
+11-17 16:26:08.259  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.274  2633  2792 D EGL_emulation: eglMakeCurrent: 0x7be6c9338340: ver 3 0 (tinfo 0x7be6c932ec40)
+11-17 16:26:08.292  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:26:08.310  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.313  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:26:08.315  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:26:08.317  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:08.325  1898  1933 W system_server: Long monitor contention with owner main (1898) at void com.android.server.am.ActivityManagerService$LocalService.updateDeviceIdleTempWhitelist(int[], int, boolean)(ActivityManagerService.java:17848) waiters=1 in int com.android.server.am.ActivityManagerService.broadcastIntent(android.app.IApplicationThread, android.content.Intent, java.lang.String, android.content.IIntentReceiver, int, java.lang.String, android.os.Bundle, java.lang.String[], int, android.os.Bundle, boolean, boolean, int) for 305ms
+11-17 16:26:08.325  2633  2633 E libprocessgroup: set_timerslack_ns write failed: Operation not permitted
+11-17 16:26:08.327  1898  1933 W VoiceInteractionManagerService: no available voice recognition services found for user 0
+11-17 16:26:08.344  3638  4646 W KeyChain: Creating new DB.
+11-17 16:26:08.351  3638  4646 W KeyChain: Got Alias from KeyStore: WifiConfigStore.xml.encrypted-checksum.data-integrity-checker-key
+11-17 16:26:08.352  3638  4646 W KeyChain: Existing alias: WifiConfigStore.xml.encrypted-checksum.data-integrity-checker-key
+11-17 16:26:08.352  3638  4646 W KeyChain: Marking as selectable: WifiConfigStore.xml.encrypted-checksum.data-integrity-checker-key
+11-17 16:26:08.355  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.361  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:26:08.378  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:26:08.384  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:26:08.390  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:08.405  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:26:08.413  4641  4641 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:08.414  4641  4641 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:08.414  4641  4641 I AndroidRuntime: Using default boot image
+11-17 16:26:08.414  4641  4641 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:08.414  4641  4641 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:08.415  4641  4641 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:08.417  4641  4641 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:08.443  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:08.464  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:26:08.476  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:08.478  4641  4641 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:08.479  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:26:08.484  4641  4641 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:08.485  4641  4641 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:08.492  4641  4641 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:08.494  4641  4641 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:26:08.495  1898  1929 I WindowManager: Screen frozen for +573ms due to Window{6bac818 u0 com.android.systemui.ImageWallpaper}
+11-17 16:26:08.496  4641  4641 D AndroidRuntime: Shutting down VM
+11-17 16:26:08.510  1898  1927 I DropBoxManagerService: add tag=system_app_strictmode isTagEnabled=true flags=0x2
+11-17 16:26:08.515  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:08.574  1898  1927 I chatty  : uid=1000(system) android.io identical 3 lines
+11-17 16:26:08.614  1898  1927 I DropBoxManagerService: add tag=system_app_strictmode isTagEnabled=true flags=0x2
+11-17 16:26:08.669  1898  1898 V NotificationListeners: 0 notification listener service connected: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:08.671  1898  4645 I ActivityManager: Force stopping app.etv.launcher appid=10116 user=0: from pid 4681
+11-17 16:26:08.673  1898  4645 I ActivityManager: Killing 4647:app.etv.launcher/u0a116 (adj 0): stop app.etv.launcher
+11-17 16:26:08.674  1898  4645 W ActivityManager: Scheduling restart of crashed service app.etv.launcher/.MediaListener in 1000ms
+11-17 16:26:08.674  1898  4645 I ActivityManager:   Force stopping service ServiceRecord{c378fce u0 app.etv.launcher/.MediaListener}
+11-17 16:26:08.675  1898  1898 V NotificationListeners: 0 notification listener connection lost: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:08.675  1898  1898 W NotificationListeners: 0 notification listener binding died: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:08.675  1898  1898 V NotificationListeners: onNullBinding() called with: name = [ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}]
+11-17 16:26:08.678  1898  1898 V NotificationListeners: enabling notification listener for 0: ComponentInfo{com.android.launcher3/com.android.launcher3.notification.NotificationListener}
+11-17 16:26:08.678  1898  1898 V NotificationListeners: Not registering ComponentInfo{com.android.launcher3/com.android.launcher3.notification.NotificationListener} is already bound
+11-17 16:26:08.678  1898  1898 V NotificationListeners: enabling notification listener for 0: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:08.678  1898  1898 V NotificationListeners:     disconnecting old notification listener: android.service.notification.INotificationListener$Stub$Proxy@7584e2
+11-17 16:26:08.678  1898  1898 E NotificationListeners: notification listener ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener} could not be unbound
+11-17 16:26:08.678  1898  1898 E NotificationListeners: java.lang.IllegalArgumentException: Service not registered: com.android.server.notification.ManagedServices$1@a111d82
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at android.app.LoadedApk.forgetServiceDispatcher(LoadedApk.java:1751)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at android.app.ContextImpl.unbindService(ContextImpl.java:1776)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.ManagedServices.unbindService(ManagedServices.java:1275)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.ManagedServices.registerServiceLocked(ManagedServices.java:1086)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.ManagedServices.registerServiceLocked(ManagedServices.java:1062)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.ManagedServices.registerService(ManagedServices.java:1048)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.ManagedServices.bindToServices(ManagedServices.java:1035)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.ManagedServices.rebindServices(ManagedServices.java:998)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.ManagedServices.onPackagesChanged(ManagedServices.java:612)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.NotificationManagerService.handleOnPackageChanged(NotificationManagerService.java:6267)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.NotificationManagerService.access$8600(NotificationManagerService.java:277)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.notification.NotificationManagerService$WorkerHandler.handleMessage(NotificationManagerService.java:6305)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at android.os.Handler.dispatchMessage(Handler.java:107)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at android.os.Looper.loop(Looper.java:214)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.SystemServer.run(SystemServer.java:541)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.server.SystemServer.main(SystemServer.java:349)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at java.lang.reflect.Method.invoke(Native Method)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+11-17 16:26:08.678  1898  1898 E NotificationListeners: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:908)
+11-17 16:26:08.678  1898  1898 V NotificationListeners: binding: Intent { act=android.service.notification.NotificationListenerService cmp=app.etv.launcher/.MediaListener (has extras) }
+11-17 16:26:08.627  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:08.686  4685  4685 I pp.etv.launche: Late-enabling -Xcheck:jni
+11-17 16:26:08.689  1668  1668 D Zygote  : Forked child process 4685
+11-17 16:26:08.689  2293  2293 D CarrierSvcBindHelper: No carrier app for: 0
+11-17 16:26:08.689  1898  1935 I ActivityManager: Start proc 4685:app.etv.launcher/u0a116 for service {app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:08.699  4685  4685 E pp.etv.launche: Unknown bits set in runtime_flags: 0x8000
+11-17 16:26:08.699  4685  4685 W pp.etv.launche: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:08.712  1668  1668 I Zygote  : Process 4647 exited due to signal 9 (Killed)
+11-17 16:26:08.712  1898  1936 I libprocessgroup: Successfully killed process cgroup uid 10116 pid 4647 in 38ms
+11-17 16:26:08.718  1898  1924 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=app.etv.launcher/.MainActivity} from uid 2000
+11-17 16:26:08.723  1898  1929 E system_server: Invalid ID 0x00000000.
+11-17 16:26:08.738  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.791  1898  2203 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:08.791  1898  2203 I ActivityTaskManager: Config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w866dp h387dp 420dpi nrml long land finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 2400, 1080) mAppBounds=Rect(0, 0 - 2274, 1080) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90} s.383}
+11-17 16:26:08.793  1898  2203 I ActivityTaskManager: Override config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w866dp h387dp 420dpi nrml long land finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 2400, 1080) mAppBounds=Rect(0, 0 - 2274, 1080) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90} s.383} for displayId=0
+11-17 16:26:08.799  1898  2203 W ActivityTaskManager: Request to remove task ignored for non-existent task 13
+11-17 16:26:08.798  1898  2203 I chatty  : uid=1000(system) Binder:1898_6 identical 28 lines
+11-17 16:26:08.798  1898  2203 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:08.806  1898  1928 I InputManager-JNI: Viewport [0] to add: local:0
+11-17 16:26:08.821  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000004
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_10' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_7' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_4' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_8' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_9' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Device reconfigured: id=8, name='virtio_input_multi_touch_1', size 1080x2400, orientation 1, mode 1, display id 0
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_11' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_5' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_2' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_6' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.821  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_3' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:26:08.825  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:26:08.825  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.846  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:26:08.861  2633  2792 D EGL_emulation: eglMakeCurrent: 0x7be6c9338340: ver 3 0 (tinfo 0x7be6c932ec40)
+11-17 16:26:08.876  1898  1898 V NotificationListeners: 0 notification listener service connected: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:08.878  4685  4685 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@6dba9bd
+11-17 16:26:08.892  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:26:08.900  1713  1713 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+11-17 16:26:08.909  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:26:08.910  2633  2633 E libprocessgroup: set_timerslack_ns write failed: Operation not permitted
+11-17 16:26:08.910  2633  2633 E libprocessgroup: set_timerslack_ns write failed: Operation not permitted
+11-17 16:26:08.911  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:08.928  1736  1945 E SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
+11-17 16:26:08.928  1736  1945 E SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
+11-17 16:26:08.932  4685  4715 D libEGL  : Emulator has host GPU support, qemu.gles is set to 1.
+11-17 16:26:08.941  4685  4715 W libc    : Unable to set property "qemu.gles" to "1": connection failed; errno=13 (Permission denied)
+11-17 16:26:08.942  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:26:08.943  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:26:08.932  4685  4685 W RenderThread: type=1400 audit(0.0:108): avc: denied { write } for name="property_service" dev="tmpfs" ino=7741 scontext=u:r:untrusted_app:s0:c116,c256,c512,c768 tcontext=u:object_r:property_socket:s0 tclass=sock_file permissive=0 app=app.etv.launcher
+11-17 16:26:08.956  4685  4715 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+11-17 16:26:08.956  4685  4715 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-17 16:26:08.957  4685  4715 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-17 16:26:08.960  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:26:08.960  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:08.979  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:26:08.980  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:26:08.986  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:08.993  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:26:09.011  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:26:09.027  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:09.069  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:09.077  4685  4712 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c9c6fd60, tid 4712
+11-17 16:26:09.078  1668  1668 D Zygote  : Forked child process 4718
+11-17 16:26:09.079  4685  4712 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:26:09.080  1898  1935 I ActivityManager: Start proc 4718:app.etv.launcher:airplay/u0a116 for service {app.etv.launcher/com.flymop.airplaytv.service.AirPlayService}
+11-17 16:26:09.089  4718  4718 I auncher:airpla: Late-enabling -Xcheck:jni
+11-17 16:26:09.092  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:09.103  4685  4712 D EGL_emulation: eglCreateContext: 0x7be6c9ce2dc0: maj 3 min 0 rcv 3
+11-17 16:26:09.110  4685  4712 D EGL_emulation: eglMakeCurrent: 0x7be6c9ce2dc0: ver 3 0 (tinfo 0x7be714588b60)
+11-17 16:26:09.117  4718  4718 E auncher:airpla: Unknown bits set in runtime_flags: 0x8000
+11-17 16:26:09.117  4718  4718 W auncher:airpla: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:09.134  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:09.134  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:26:09.135  4685  4712 W Gralloc3: mapper 3.x is not supported
+11-17 16:26:09.135  4685  4712 D HostConnection: createUnique: call
+11-17 16:26:09.135  4685  4712 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c9ce2f00, tid 4712
+11-17 16:26:09.136  4685  4712 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:26:09.162  4685  4712 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:26:09.162  4685  4712 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff60d000 size 0x2000
+11-17 16:26:09.163  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:09.164  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:09.165  4685  4712 D EGL_emulation: eglMakeCurrent: 0x7be6c9ce2dc0: ver 3 0 (tinfo 0x7be714588b60)
+11-17 16:26:09.179  1898  2017 D NsdService: mdnssd [start-service]
+11-17 16:26:09.179  1667  1911 D MDnsDS  : Starting MDNSD
+11-17 16:26:09.389  1898  2017 D NsdService: New client listening to asynchronous messages
+11-17 16:26:09.390  1898  2017 D NsdService: New client, channel: com.android.internal.util.AsyncChannel@52f37f9 messenger: android.os.Messenger@bbee33e
+11-17 16:26:09.398  4718  4718 W MediaSessionCompat: Couldn't find a unique registered media button receiver in the given context.
+11-17 16:26:09.399  1898  3210 D MediaSessionService: Media button session is changed to app.etv.launcher/AirPlay (userId=0)
+11-17 16:26:09.452  1898  3210 I WifiService: acquireMulticastLock uid=10116
+11-17 16:26:09.474  4718  4718 I VideoCapabilities: Unsupported profile 4 for video/mp4v-es
+11-17 16:26:09.476  4718  4718 D libEGL  : Emulator has host GPU support, qemu.gles is set to 1.
+11-17 16:26:09.490  4718  4718 W libc    : Unable to set property "qemu.gles" to "1": connection failed; errno=13 (Permission denied)
+11-17 16:26:09.491  4718  4718 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+11-17 16:26:09.492  4718  4718 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-17 16:26:09.493  4718  4718 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-17 16:26:09.500  4718  4718 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c9b824e0, tid 4718
+11-17 16:26:09.554  4718  4718 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:26:09.462  4718  4718 W auncher:airplay: type=1400 audit(0.0:109): avc: denied { write } for name="property_service" dev="tmpfs" ino=7741 scontext=u:r:untrusted_app:s0:c116,c256,c512,c768 tcontext=u:object_r:property_socket:s0 tclass=sock_file permissive=0 app=app.etv.launcher
+11-17 16:26:09.656  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:26:09.659  4718  4718 D EGL_emulation: eglCreateContext: 0x7be6c9b826c0: maj 3 min 0 rcv 3
+11-17 16:26:09.771  4685  4712 I OpenGLRenderer: Davey! duration=890ms; Flags=1, IntendedVsync=442448001958, Vsync=442631335284, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=442637485320, AnimationStart=442637499363, PerformTraversalsStart=442637575899, DrawStart=442731088884, SyncQueued=442733895292, SyncStart=442734439453, IssueDrawCommandsStart=442734467704, SwapBuffers=443269447285, FrameCompleted=443339291173, DequeueBufferDuration=18000, QueueBufferDuration=181000, 
+11-17 16:26:09.771  4718  4718 D EGL_emulation: eglMakeCurrent: 0x7be6c9b826c0: ver 3 0 (tinfo 0x7be6c9b9a520)
+11-17 16:26:09.773  4685  4685 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+11-17 16:26:09.864  4718  4718 I DecoderSelector: gl renderer: android emulator opengl es translator (google swiftshader)
+11-17 16:26:09.864  4718  4718 I DecoderSelector: hevc decoder not whitelisted: OMX.google.hevc.decoder
+11-17 16:26:09.864  4718  4718 I VideoRenderer: decoders: avc=OMX.google.h264.decoder hevc=null
+11-17 16:26:09.870  4685  4712 I OpenGLRenderer: Davey! duration=790ms; Flags=0, IntendedVsync=442647887141, Vsync=443331220447, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=443341469314, AnimationStart=443341486186, PerformTraversalsStart=443341580069, DrawStart=443345486953, SyncQueued=443346290970, SyncStart=443346505759, IssueDrawCommandsStart=443347048105, SwapBuffers=443388586084, FrameCompleted=443438270546, DequeueBufferDuration=29000, QueueBufferDuration=87000, 
+11-17 16:26:09.873  4718  4718 I AirPlayNative: AirPlay server started on port 7000
+11-17 16:26:09.876  1898  3210 D ConnectivityService: requestNetwork for uid/pid:10116/4718 NetworkRequest [ TRACK_DEFAULT id=17, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10116] ]
+11-17 16:26:09.876  1898  2017 D NsdService: Register service
+11-17 16:26:09.876  1898  2017 D NsdService: registerService: 4 name: 0215B2000000@eTV, type: _raop._tcp, host: null, port: 7000, txtRecord: 	txtvers=1am=AppleTV3,2ch=2
+11-17 16:26:09.876  1898  2017 D NsdService: cn=0,1,2,3da=trueet=0,3,5ft=0x5A7FFEF7,0x0md=0,1,2Cpk=b672f06b064be1f587bef35940cbc363c4ce7fb55cca75dba0cc8f313fb37352pw=falsesf=0x4sr=44100ss=16sv=falsetp=UDPvn=65537	vs=220.68vv=2rhd=5.6.0.0
+11-17 16:26:09.876  1898  2017 D NsdService: mdnssd [register, 4, 0215B2000000@eTV, _raop._tcp, 7000, CXR4dHZlcnM9MQ1hbT1BcHBsZVRWMywyBGNoPTIKY249MCwxLDIsMwdkYT10cnVlCGV0PTAsMyw1EWZ0PTB4NUE3RkZFRjcsMHgwCG1kPTAsMSwyQ3BrPWI2NzJmMDZiMDY0YmUxZjU4N2JlZjM1OTQwY2JjMzYzYzRjZTdmYjU1Y2NhNzVkYmEwY2M4ZjMxM2ZiMzczNTIIcHc9ZmFsc2UGc2Y9MHg0CHNyPTQ0MTAwBXNzPTE2CHN2PWZhbHNlBnRwPVVEUAh2bj02NTUzNwl2cz0yMjAuNjgEdnY9MgtyaGQ9NS42LjAuMA==]
+11-17 16:26:09.877  1667  1911 D MDnsDS  : serviceRegister(4, (null), 0215B2000000@eTV, _raop._tcp, (null), (null), 7000, 235, <binary>)
+11-17 16:26:09.877  1898  2012 D UntrustedWifiNetworkFactory: got request NetworkRequest [ TRACK_DEFAULT id=17, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10116] ] with score 60 and serial -1
+11-17 16:26:09.877  1898  2012 D WifiNetworkFactory: got request NetworkRequest [ TRACK_DEFAULT id=17, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10116] ] with score 60 and serial -1
+11-17 16:26:09.877  2293  2293 D PhoneSwitcherNetworkRequstListener: got request NetworkRequest [ TRACK_DEFAULT id=17, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10116] ] with score 60 and serial -1
+11-17 16:26:09.878  1667  1911 D MDnsDS  : startMonitoring 4
+11-17 16:26:09.878  1667  1911 D MDnsDS  : triggering rescan
+11-17 16:26:09.878  1667  1911 D MDnsDS  : serviceRegister successful
+11-17 16:26:09.878  1667  1910 D MDnsDS  : Monitor poll got data pollCount = 1, 1
+11-17 16:26:09.878  1667  1910 D MDnsDS  : controlSocket shows revent= 1
+11-17 16:26:09.878  1667  1910 D MDnsDS  : MDnsSdListener::Monitor got 1
+11-17 16:26:09.878  1667  1910 D MDnsDS  : MDnsSdListener::Monitor poll rescanning - size=10, live=1
+11-17 16:26:09.878  1667  1910 D MDnsDS  : Going to poll with pollCount 2
+11-17 16:26:09.878  1898  2017 D NsdService: Register 2 4
+11-17 16:26:09.878  1898  2017 D NsdService: Register service
+11-17 16:26:09.878  1898  2017 D NsdService: registerService: 5 name: eTV, type: _airplay._tcp, host: null, port: 7000, txtRecord: srcvers=220.68features=0x5A7FFEF7,0x0'pi=2e388006-13ba-4041-9a67-25dd4a43d536Cpk=b672f06b064be1f587bef35940cbc363c4ce7fb55cca75dba0cc8f313fb37352pw=falsevv=2
+11-17 16:26:09.878  1898  2017 D NsdService: flags=0x84model=AppleTV3,2deviceid=02:15:b2:00:00:00
+11-17 16:26:09.878  1898  2017 D NsdService: mdnssd [register, 5, eTV, _airplay._tcp, 7000, DnNyY3ZlcnM9MjIwLjY4F2ZlYXR1cmVzPTB4NUE3RkZFRjcsMHgwJ3BpPTJlMzg4MDA2LTEzYmEtNDA0MS05YTY3LTI1ZGQ0YTQzZDUzNkNwaz1iNjcyZjA2YjA2NGJlMWY1ODdiZWYzNTk0MGNiYzM2M2M0Y2U3ZmI1NWNjYTc1ZGJhMGNjOGYzMTNmYjM3MzUyCHB3PWZhbHNlBHZ2PTIKZmxhZ3M9MHg4NBBtb2RlbD1BcHBsZVRWMywyGmRldmljZWlkPTAyOjE1OmIyOjAwOjAwOjAw]
+11-17 16:26:09.878  1667  1911 D MDnsDS  : serviceRegister(5, (null), eTV, _airplay._tcp, (null), (null), 7000, 216, <binary>)
+11-17 16:26:09.879  1667  1911 D MDnsDS  : startMonitoring 5
+11-17 16:26:09.879  1667  1911 D MDnsDS  : triggering rescan
+11-17 16:26:09.879  1667  1911 D MDnsDS  : serviceRegister successful
+11-17 16:26:09.879  1667  1910 D MDnsDS  : Monitor poll got data pollCount = 2, 1
+11-17 16:26:09.879  1667  1910 D MDnsDS  : controlSocket shows revent= 1
+11-17 16:26:09.879  1667  1910 D MDnsDS  : MDnsSdListener::Monitor got 1
+11-17 16:26:09.879  1667  1910 D MDnsDS  : MDnsSdListener::Monitor poll rescanning - size=10, live=2
+11-17 16:26:09.879  1667  1910 D MDnsDS  : Going to poll with pollCount 3
+11-17 16:26:09.880  1898  2017 D NsdService: Register 3 5
+11-17 16:26:09.883  4718  4718 I AirPlayService: Server started on port 7000
+11-17 16:26:09.954  1898  1933 I ActivityTaskManager: Displayed app.etv.launcher/.MainActivity: +1s235ms
+11-17 16:26:09.979  1898  1929 I WindowManager: Screen frozen for +1s254ms due to Window{dfd19f2 u0 app.etv.launcher/app.etv.launcher.MainActivity}
+11-17 16:26:10.449  1667  1910 D MDnsDS  : Monitor poll got data pollCount = 3, 2
+11-17 16:26:10.449  1667  1910 D MDnsDS  : Monitor found [1].revents = 1 - calling ProcessResults
+11-17 16:26:10.449  1667  1910 D MDnsDS  : register succeeded for 5 as eTV
+11-17 16:26:10.449  1667  1910 D MDnsDS  : Monitor found [2].revents = 1 - calling ProcessResults
+11-17 16:26:10.449  1667  1910 D MDnsDS  : register succeeded for 4 as 0215B2000000@eTV
+11-17 16:26:10.449  1667  1910 D MDnsDS  : controlSocket shows revent= 0
+11-17 16:26:10.449  1667  1910 D MDnsDS  : Going to poll with pollCount 3
+11-17 16:26:10.450  1898  2017 D NsdService: Native daemon message SERVICE_REGISTERED: 606 5 "eTV"
+11-17 16:26:10.450  1898  2017 D NsdService: Native daemon message SERVICE_REGISTERED: 606 4 "0215B2000000@eTV"
+11-17 16:26:10.450  4718  4739 I NsdServiceManager: AirPlay registered: eTV
+11-17 16:26:10.450  4718  4739 I NsdServiceManager: RAOP registered: 0215B2000000@eTV
+11-17 16:26:11.998  1898  1928 I system_server: Explicit concurrent copying GC freed 36182(2682KB) AllocSpace objects, 7(592KB) LOS objects, 42% free, 6893KB/11MB, paused 14us total 16.527ms
+11-17 16:26:14.701  4685  4767 D ProfileInstaller: Installing profile for app.etv.launcher
+11-17 16:26:17.996  1898  1898 V NotificationListeners:     disconnecting old notification listener: android.service.notification.INotificationListener$Stub$Proxy@3e8d997
+11-17 16:26:17.997  1898  1898 V NotificationListeners: binding: Intent { act=android.service.notification.NotificationListenerService cmp=app.etv.launcher/.MediaListener (has extras) }
+11-17 16:26:17.998  1898  1898 V NotificationListeners: 0 notification listener service connected: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:18.022  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:18.029  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:26:18.030  4770  4770 W Gralloc3: mapper 3.x is not supported
+11-17 16:26:18.034  4770  4770 D HostConnection: createUnique: call
+11-17 16:26:18.036  4770  4770 D HostConnection: HostConnection::get() New Host Connection established 0x7c557772c5a0, tid 4770
+11-17 16:26:18.038  4770  4770 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:26:18.039  4770  4770 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:26:18.039  4770  4770 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff60b000 size 0x2000
+11-17 16:26:18.053  4770  4770 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:26:18.053  4770  4770 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec28000 size 0x9e5000
+11-17 16:26:18.279  4718  4763 I AirPlayService: Client connected (1)
+11-17 16:26:18.280  1898  1923 I WifiService: acquireWifiLock uid=10116 lockMode=4
+11-17 16:26:18.282  4718  4763 D AirPlayService: client volume query: 9/15 -> -12.0dB
+11-17 16:26:18.288  4718  4763 I AirPlayService: Client disconnected (0)
+11-17 16:26:18.288  4718  4763 I AirPlayNative: video_flush
+11-17 16:26:18.288  1898  1923 I WifiService: releaseWifiLock uid=10116
+11-17 16:26:18.288  1898  2012 E SupplicantStaIfaceHal: ISupplicantStaIface.setPowerSave failed: {.code = FAILURE_UNKNOWN, .debugMessage = }
+11-17 16:26:18.675  1898  1898 V NotificationListeners:     disconnecting old notification listener: android.service.notification.INotificationListener$Stub$Proxy@f08d0e8
+11-17 16:26:18.675  1898  1898 V NotificationListeners: binding: Intent { act=android.service.notification.NotificationListenerService cmp=app.etv.launcher/.MediaListener (has extras) }
+11-17 16:26:18.677  1898  1898 V NotificationListeners: 0 notification listener service connected: ComponentInfo{app.etv.launcher/app.etv.launcher.MediaListener}
+11-17 16:26:19.108  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:26:19.108  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:26:21.352  4788  4788 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:21.362  4788  4788 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:21.362  4788  4788 I AndroidRuntime: Using default boot image
+11-17 16:26:21.362  4788  4788 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:21.362  4788  4788 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:21.362  4788  4788 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:21.363  4788  4788 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:21.342  4788  4788 W app_process: type=1400 audit(0.0:110): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:21.362  4788  4788 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:26:21.362  4788  4788 W app_process: type=1400 audit(0.0:112): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:21.390  4788  4788 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:21.392  4788  4788 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:21.393  4788  4788 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:21.398  4788  4788 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:21.399  4788  4788 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:26:21.401  1898  3210 I ActivityTaskManager: START u0 {cmp=app.etv.launcher/.SettingsActivity} from uid 10116
+11-17 16:26:21.405  1898  1923 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:21.405  1898  1923 I chatty  : uid=1000(system) Binder:1898_1 identical 8 lines
+11-17 16:26:21.405  1898  1923 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:21.406  4685  4685 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@4719cc2
+11-17 16:26:21.407  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:26:21.407  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:26:21.407  4788  4788 D AndroidRuntime: Shutting down VM
+11-17 16:26:21.502  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:21.538  1713  1713 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+11-17 16:26:21.538  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:21.540  4685  4712 D EGL_emulation: eglMakeCurrent: 0x7be6c9ce2dc0: ver 3 0 (tinfo 0x7be714588b60)
+11-17 16:26:24.462  4802  4802 W app_process: type=1400 audit(0.0:113): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:24.462  4802  4802 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:26:24.462  4802  4802 W app_process: type=1400 audit(0.0:115): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:24.480  4802  4802 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:24.481  4802  4802 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:24.481  4802  4802 I AndroidRuntime: Using default boot image
+11-17 16:26:24.481  4802  4802 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:24.481  4802  4802 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:24.481  4802  4802 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:24.482  4802  4802 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:24.509  4802  4802 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:24.511  4802  4802 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:24.512  4802  4802 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:24.514  4802  4802 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:24.519  4802  4802 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:24.521  4802  4802 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-17 16:26:24.525  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:25.540  4802  4802 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1593d; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1081 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:25.540  4802  4802 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16480; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1213 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:25.540  4802  4802 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16fc3; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1345 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:25.546  4802  4802 W AccessibilityNodeInfoDumper: Fetch time: 7ms
+11-17 16:26:25.551  1898  3210 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@9319fcf
+11-17 16:26:25.552  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:25.553  1898  1898 V SettingsProvider: Notifying for 0: content://settings/system/user_rotation
+11-17 16:26:25.554  1898  1928 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:25.554  1898  1928 I chatty  : uid=1000(system) android.display identical 8 lines
+11-17 16:26:25.554  1898  1928 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:25.556  4802  4802 D AndroidRuntime: Shutting down VM
+11-17 16:26:25.647  4820  4820 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:25.632  4820  4820 W app_process: type=1400 audit(0.0:116): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:25.648  4820  4820 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:25.648  4820  4820 I AndroidRuntime: Using default boot image
+11-17 16:26:25.632  4820  4820 W app_process: type=1400 audit(0.0:117): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:25.649  4820  4820 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:25.649  4820  4820 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:25.632  4820  4820 W app_process: type=1400 audit(0.0:118): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:25.649  4820  4820 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:25.649  4820  4820 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:25.676  4820  4820 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:25.678  4820  4820 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:25.679  4820  4820 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:25.684  4820  4820 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:25.686  4820  4820 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:26:25.709  1733  4164 D AF::TrackHandle: OpPlayAudio: track:61 usage:13 not muted
+11-17 16:26:25.709  1898  2024 W AudioTrack: createTrack_l(10485760): AUDIO_OUTPUT_FLAG_FAST denied by server; frameCount 0 -> 4512
+11-17 16:26:25.711  1699  3712 W audio_hw_generic: Not supplying enough data to HAL, expected position 17096153 , only wrote 17096104
+11-17 16:26:25.726  4820  4820 D AndroidRuntime: Shutting down VM
+11-17 16:26:27.297  4833  4833 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:27.282  4833  4833 W app_process: type=1400 audit(0.0:119): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:27.299  4833  4833 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:27.299  4833  4833 I AndroidRuntime: Using default boot image
+11-17 16:26:27.282  4833  4833 W app_process: type=1400 audit(0.0:120): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:27.299  4833  4833 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:27.299  4833  4833 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:27.282  4833  4833 W app_process: type=1400 audit(0.0:121): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:27.299  4833  4833 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:27.300  4833  4833 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:27.326  4833  4833 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:27.329  4833  4833 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:27.330  4833  4833 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:27.331  4833  4833 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:27.335  4833  4833 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:27.337  4833  4833 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-17 16:26:27.339  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:28.352  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@15949; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1081 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.352  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1648c; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1213 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.352  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16fcf; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1345 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.358  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@24989; boundsInParent: Rect(0, 0 - 1204, 137); boundsInScreen: Rect(923, 1134 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.358  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@25c4e; boundsInParent: Rect(0, 0 - 1204, 137); boundsInScreen: Rect(923, 1282 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.358  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@26f13; boundsInParent: Rect(0, 0 - 1157, 48); boundsInScreen: Rect(970, 1466 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: BUTTONS ON THE HOME SCREEN; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.359  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@272d4; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 1536 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.361  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@2895a; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 1721 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.362  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@29fe0; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 1906 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.362  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@2b666; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 2091 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.363  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@2c92b; boundsInParent: Rect(0, 0 - 1157, 48); boundsInScreen: Rect(970, 2312 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: NOW PLAYING; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.363  4833  4833 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@2ccec; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 2382 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:28.364  4833  4833 W AccessibilityNodeInfoDumper: Fetch time: 13ms
+11-17 16:26:28.364  1898  1924 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@23688de
+11-17 16:26:28.365  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:28.367  4833  4833 D AndroidRuntime: Shutting down VM
+11-17 16:26:28.465  4850  4850 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:28.452  4850  4850 W app_process: type=1400 audit(0.0:122): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:28.466  4850  4850 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:28.466  4850  4850 I AndroidRuntime: Using default boot image
+11-17 16:26:28.452  4850  4850 W app_process: type=1400 audit(0.0:123): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:28.466  4850  4850 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:28.466  4850  4850 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:28.452  4850  4850 W app_process: type=1400 audit(0.0:124): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:28.466  4850  4850 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:28.467  4850  4850 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:28.494  4850  4850 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:28.496  4850  4850 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:28.497  4850  4850 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:28.502  4850  4850 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:28.503  4850  4850 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:26:28.576  4850  4850 D AndroidRuntime: Shutting down VM
+11-17 16:26:30.137  4862  4862 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:30.122  4862  4862 W app_process: type=1400 audit(0.0:125): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:30.122  4862  4862 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:26:30.122  4862  4862 W app_process: type=1400 audit(0.0:127): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:30.139  4862  4862 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:30.139  4862  4862 I AndroidRuntime: Using default boot image
+11-17 16:26:30.139  4862  4862 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:30.139  4862  4862 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:30.139  4862  4862 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:30.139  4862  4862 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:30.166  4862  4862 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:30.168  4862  4862 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:30.170  4862  4862 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:30.170  4862  4862 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:30.175  4862  4862 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:30.176  4862  4862 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-17 16:26:31.202  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1594b; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1081 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.203  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1648e; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1213 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.203  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16fd1; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1345 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.210  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@34c90; boundsInParent: Rect(0, 0 - 708, 126); boundsInScreen: Rect(970, 1089 - 1678, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.210  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@357d3; boundsInParent: Rect(0, 0 - 370, 61); boundsInScreen: Rect(1710, 1121 - 2080, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: Shafi'i, Maliki, Hanbali; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.210  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@35b94; boundsInParent: Rect(0, 0 - 1204, 222); boundsInScreen: Rect(923, 1250 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.210  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@36e59; boundsInParent: Rect(0, 0 - 1110, 110); boundsInScreen: Rect(970, 1488 - 2080, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: Choose your city first: the prayer times are then worked out for it, and the athan plays at each one.; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.210  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@3721a; boundsInParent: Rect(0, 0 - 1157, 48); boundsInScreen: Rect(970, 1656 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: THE ATHAN; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.212  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@375db; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 1726 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.213  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@38c61; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 1911 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.215  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@3a2e7; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 2096 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.216  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@3b96d; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 2281 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.216  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@3cff3; boundsInParent: Rect(0, 0 - 1157, 48); boundsInScreen: Rect(970, 2502 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: EACH PRAYER; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.217  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@3d3b4; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 2572 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.218  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@3ea3a; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 2757 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.219  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@400c0; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 2942 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.219  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@41746; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 3127 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.220  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@42dcc; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 3312 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.221  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@44452; boundsInParent: Rect(0, 0 - 1157, 48); boundsInScreen: Rect(970, 3533 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: WHILE THE ATHAN PLAYS; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.222  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@44813; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 3603 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.223  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@45ad8; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 3788 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.224  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@4715e; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 3973 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.225  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@487e4; boundsInParent: Rect(0, 0 - 1157, 48); boundsInScreen: Rect(970, 4194 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: ON THE HOME SCREEN; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.225  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@48ba5; boundsInParent: Rect(0, 0 - 1204, 137); boundsInScreen: Rect(923, 4264 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.226  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@4a22b; boundsInParent: Rect(0, 0 - 1204, 137); boundsInScreen: Rect(923, 4412 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.227  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@4b8b1; boundsInParent: Rect(0, 0 - 1204, 137); boundsInScreen: Rect(923, 4560 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.229  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@4cf37; boundsInParent: Rect(0, 0 - 1204, 137); boundsInScreen: Rect(923, 4708 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.230  4862  4862 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@4e5bd; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 4856 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:31.231  4862  4862 W AccessibilityNodeInfoDumper: Fetch time: 30ms
+11-17 16:26:30.179  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:31.231  1898  1923 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@104d5b6
+11-17 16:26:31.231  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:31.234  4862  4862 D AndroidRuntime: Shutting down VM
+11-17 16:26:31.312  4880  4880 W app_process: type=1400 audit(0.0:128): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:31.312  4880  4880 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:26:31.312  4880  4880 W app_process: type=1400 audit(0.0:130): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:31.326  4880  4880 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:31.327  4880  4880 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:31.327  4880  4880 I AndroidRuntime: Using default boot image
+11-17 16:26:31.327  4880  4880 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:31.327  4880  4880 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:31.327  4880  4880 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:31.328  4880  4880 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:31.355  4880  4880 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:31.357  4880  4880 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:31.358  4880  4880 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:31.363  4880  4880 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:31.365  4880  4880 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:26:31.395  4880  4880 D AndroidRuntime: Shutting down VM
+11-17 16:26:32.955  4897  4897 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:32.942  4897  4897 W app_process: type=1400 audit(0.0:131): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:32.956  4897  4897 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:32.956  4897  4897 I AndroidRuntime: Using default boot image
+11-17 16:26:32.942  4897  4897 W app_process: type=1400 audit(0.0:132): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:32.942  4897  4897 W app_process: type=1400 audit(0.0:133): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:32.956  4897  4897 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:32.956  4897  4897 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:32.956  4897  4897 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:32.957  4897  4897 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:32.984  4897  4897 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:32.986  4897  4897 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:32.988  4897  4897 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:32.988  4897  4897 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:32.993  4897  4897 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:32.995  4897  4897 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-17 16:26:34.005  4897  4897 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@15953; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1081 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:34.005  4897  4897 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16496; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1213 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:34.005  4897  4897 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16fd9; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1345 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:34.010  4897  4897 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@55de5; boundsInParent: Rect(0, 0 - 1204, 222); boundsInScreen: Rect(923, 1139 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:34.010  4897  4897 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@5746b; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 1372 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:34.010  4897  4897 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@58af1; boundsInParent: Rect(0, 0 - 1157, 48); boundsInScreen: Rect(970, 1593 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: HOW TO; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:34.011  4897  4897 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@58eb2; boundsInParent: Rect(0, 0 - 1110, 223); boundsInScreen: Rect(970, 1668 - 2080, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: On an iPhone or iPad on the same Wi-Fi: Control Centre → Screen Mirroring → eTV. In an app (Photos, Music, YouTube, Safari): the AirPlay icon → eTV. On a Mac: Control Centre → Screen Mirroring.  The TV is at 10.0.2.16.; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:34.011  4897  4897 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@59273; boundsInParent: Rect(0, 0 - 1110, 110); boundsInScreen: Rect(970, 1918 - 2080, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: During the athan AirPlay goes quiet like everything else, and carries on afterwards.; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:34.011  4897  4897 W AccessibilityNodeInfoDumper: Fetch time: 8ms
+11-17 16:26:32.998  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:34.012  1898  1923 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@d04e58e
+11-17 16:26:34.012  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:34.015  4897  4897 D AndroidRuntime: Shutting down VM
+11-17 16:26:34.091  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:34.101  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:26:34.102  4916  4916 W Gralloc3: mapper 3.x is not supported
+11-17 16:26:34.106  4916  4916 D HostConnection: createUnique: call
+11-17 16:26:34.107  4916  4916 D HostConnection: HostConnection::get() New Host Connection established 0x7abd44f365a0, tid 4916
+11-17 16:26:34.108  4916  4916 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:26:34.109  4916  4916 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:26:34.109  4916  4916 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff60b000 size 0x2000
+11-17 16:26:34.123  4916  4916 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:26:34.123  4916  4916 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec28000 size 0x9e5000
+11-17 16:26:34.270  4918  4918 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:34.262  4918  4918 W app_process: type=1400 audit(0.0:134): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:34.271  4918  4918 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:34.272  4918  4918 I AndroidRuntime: Using default boot image
+11-17 16:26:34.262  4918  4918 W app_process: type=1400 audit(0.0:135): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:34.272  4918  4918 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:34.272  4918  4918 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:34.262  4918  4918 W app_process: type=1400 audit(0.0:136): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:34.272  4918  4918 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:34.273  4918  4918 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:34.301  4918  4918 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:34.303  4918  4918 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:34.304  4918  4918 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:34.304  4918  4918 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:34.309  4918  4918 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:34.311  4918  4918 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-17 16:26:34.540  1699  1699 W audio_hw_generic: Not supplying enough data to HAL, expected position 17872852 , only wrote 17485433
+11-17 16:26:35.325  4918  4918 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1595b; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1081 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:35.325  4918  4918 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1649e; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1213 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:35.326  4918  4918 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16fe1; boundsInParent: Rect(0, 0 - 604, 121); boundsInScreen: Rect(147, 1345 - 751, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:35.331  4918  4918 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@55ded; boundsInParent: Rect(0, 0 - 1204, 222); boundsInScreen: Rect(923, 1139 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:35.331  4918  4918 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@57473; boundsInParent: Rect(0, 0 - 1204, 174); boundsInScreen: Rect(923, 1372 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.LinearLayout; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:35.331  4918  4918 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@58af9; boundsInParent: Rect(0, 0 - 1157, 48); boundsInScreen: Rect(970, 1593 - 2127, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: HOW TO; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:35.331  4918  4918 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@58eba; boundsInParent: Rect(0, 0 - 1110, 223); boundsInScreen: Rect(970, 1668 - 2080, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: On an iPhone or iPad on the same Wi-Fi: Control Centre → Screen Mirroring → eTV. In an app (Photos, Music, YouTube, Safari): the AirPlay icon → eTV. On a Mac: Control Centre → Screen Mirroring.  The TV is at 10.0.2.16.; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:35.331  4918  4918 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@5927b; boundsInParent: Rect(0, 0 - 1110, 110); boundsInScreen: Rect(970, 1918 - 2080, 1080); packageName: app.etv.launcher; className: android.widget.TextView; text: During the athan AirPlay goes quiet like everything else, and carries on afterwards.; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]
+11-17 16:26:35.332  4918  4918 W AccessibilityNodeInfoDumper: Fetch time: 8ms
+11-17 16:26:34.314  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:35.332  1898  3210 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@698e8c1
+11-17 16:26:35.332  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-17 16:26:35.335  4918  4918 D AndroidRuntime: Shutting down VM
+11-17 16:26:35.336  4918  4932 W MessageQueue: Handler (com.android.internal.os.HandlerCaller$MyHandler) {2fd28c7} sending message to a Handler on a dead thread
+11-17 16:26:35.336  4918  4932 W MessageQueue: java.lang.IllegalStateException: Handler (com.android.internal.os.HandlerCaller$MyHandler) {2fd28c7} sending message to a Handler on a dead thread
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.os.MessageQueue.enqueueMessage(MessageQueue.java:558)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.os.Handler.enqueueMessage(Handler.java:754)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.os.Handler.sendMessageAtTime(Handler.java:703)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.os.Handler.sendMessageDelayed(Handler.java:673)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.os.Handler.sendMessage(Handler.java:611)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at com.android.internal.os.HandlerCaller.sendMessage(HandlerCaller.java:94)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.accessibilityservice.AccessibilityService$IAccessibilityServiceClientWrapper.init(AccessibilityService.java:1736)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.accessibilityservice.IAccessibilityServiceClient$Stub.onTransact(IAccessibilityServiceClient.java:174)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.os.Binder.execTransactInternal(Binder.java:1021)
+11-17 16:26:35.336  4918  4932 W MessageQueue: 	at android.os.Binder.execTransact(Binder.java:994)
+11-17 16:26:35.423  4935  4935 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:35.412  4935  4935 W app_process: type=1400 audit(0.0:137): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:35.425  4935  4935 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:35.425  4935  4935 I AndroidRuntime: Using default boot image
+11-17 16:26:35.412  4935  4935 W app_process: type=1400 audit(0.0:138): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:35.425  4935  4935 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:35.425  4935  4935 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:35.412  4935  4935 W app_process: type=1400 audit(0.0:139): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:35.425  4935  4935 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:35.426  4935  4935 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:35.453  4935  4935 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:35.455  4935  4935 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:35.456  4935  4935 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:35.461  4935  4935 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:35.463  4935  4935 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:26:35.465  4935  4935 D AndroidRuntime: Shutting down VM
+11-17 16:26:36.505  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:36.516  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:26:36.516  4949  4949 W Gralloc3: mapper 3.x is not supported
+11-17 16:26:36.520  4949  4949 D HostConnection: createUnique: call
+11-17 16:26:36.521  4949  4949 D HostConnection: HostConnection::get() New Host Connection established 0x75feb071a5a0, tid 4949
+11-17 16:26:36.522  4949  4949 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:26:36.523  4949  4949 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:26:36.523  4949  4949 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff60b000 size 0x2000
+11-17 16:26:36.536  4949  4949 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:26:36.536  4949  4949 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec28000 size 0x9e5000
+11-17 16:26:36.662  4951  4951 W app_process: type=1400 audit(0.0:140): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:36.662  4951  4951 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:26:36.662  4951  4951 W app_process: type=1400 audit(0.0:142): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:36.679  4951  4951 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:36.680  4951  4951 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:36.680  4951  4951 I AndroidRuntime: Using default boot image
+11-17 16:26:36.680  4951  4951 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:36.680  4951  4951 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:36.680  4951  4951 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:36.681  4951  4951 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:36.709  4951  4951 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:36.711  4951  4951 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:36.713  4951  4951 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:36.717  4951  4951 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:36.719  4951  4951 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:26:36.721  1898  1926 D AutofillManagerService: onBackKeyPressed()
+11-17 16:26:36.725  4951  4951 D AndroidRuntime: Shutting down VM
+11-17 16:26:36.741  1898  1923 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:36.741  1898  1923 I chatty  : uid=1000(system) Binder:1898_1 identical 8 lines
+11-17 16:26:36.741  1898  1923 W InputReader: Device has associated, but no associated display id.
+11-17 16:26:36.759  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:26:36.759  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:26:36.773  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:26:36.773  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:26:36.784  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:36.787  1713  1713 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+11-17 16:26:36.787  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:36.788  4685  4712 D EGL_emulation: eglMakeCurrent: 0x7be6c9ce2dc0: ver 3 0 (tinfo 0x7be714588b60)
+11-17 16:26:38.772  4969  4969 W kill    : type=1400 audit(0.0:143): avc: denied { sigkill } for scontext=u:r:runas_app:s0:c116,c256,c512,c768 tcontext=u:r:untrusted_app:s0:c116,c256,c512,c768 tclass=process permissive=0 app=app.etv.launcher
+11-17 16:26:41.867  4977  4977 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:26:41.868  4977  4977 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:26:41.868  4977  4977 I AndroidRuntime: Using default boot image
+11-17 16:26:41.868  4977  4977 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:26:41.868  4977  4977 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:26:41.868  4977  4977 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:26:41.869  4977  4977 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:26:41.852  4977  4977 W app_process: type=1400 audit(0.0:144): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:41.852  4977  4977 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:26:41.852  4977  4977 W app_process: type=1400 audit(0.0:146): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:26:41.900  4977  4977 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:26:41.902  4977  4977 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:26:41.903  4977  4977 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:26:41.908  4977  4977 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:26:41.910  4977  4977 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:26:41.911  4977  4977 D AndroidRuntime: Shutting down VM
+11-17 16:26:36.722  1898  1926 D AutofillManagerService: onBackKeyPressed()
+11-17 16:26:41.911  1898  1925 D AutofillManagerService: Close system dialogs
+11-17 16:26:41.911  2052  2052 V StatusBar: mStatusBarWindow: com.android.systemui.statusbar.phone.StatusBarWindowView{cc81dcd V.E...... ........ 0,0-2400,63} canPanelBeCollapsed(): false
+11-17 16:26:41.912  1898  1926 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=app.etv.launcher/.MainActivity (has extras)} from uid 0
+11-17 16:26:41.914  4977  4988 W app_process: Thread attaching while runtime is shutting down: Binder:4977_2
+11-17 16:26:41.914  4977  4988 I AndroidRuntime: NOTE: attach of thread 'Binder:4977_2' failed
+11-17 16:26:47.958  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:26:47.968  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:26:47.968  4993  4993 W Gralloc3: mapper 3.x is not supported
+11-17 16:26:47.973  4993  4993 D HostConnection: createUnique: call
+11-17 16:26:47.974  4993  4993 D HostConnection: HostConnection::get() New Host Connection established 0x75b86a7335a0, tid 4993
+11-17 16:26:47.976  4993  4993 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:26:47.977  4993  4993 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:26:47.977  4993  4993 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff60b000 size 0x2000
+11-17 16:26:47.990  4993  4993 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:26:47.990  4993  4993 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec28000 size 0x9e5000
+11-17 16:26:50.131  4718  4763 I AirPlayService: Client connected (1)
+11-17 16:26:50.132  1898  3210 I WifiService: acquireWifiLock uid=10116 lockMode=4
+11-17 16:26:50.133  4718  4763 D AirPlayService: client volume query: 9/15 -> -12.0dB
+11-17 16:26:50.136  4718  4763 I AirPlayService: Client disconnected (0)
+11-17 16:26:50.136  4718  4763 I AirPlayNative: video_flush
+11-17 16:26:50.137  1898  1923 I WifiService: releaseWifiLock uid=10116
+11-17 16:26:50.137  1898  2012 E SupplicantStaIfaceHal: ISupplicantStaIface.setPowerSave failed: {.code = FAILURE_UNKNOWN, .debugMessage = }

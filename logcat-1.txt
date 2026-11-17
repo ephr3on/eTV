@@ -1,0 +1,1004 @@
+--------- beginning of main
+11-17 16:19:32.774  3658  3658 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:19:32.779  3658  3658 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:19:32.779  3658  3658 I AndroidRuntime: Using default boot image
+11-17 16:19:32.779  3658  3658 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:19:32.779  3658  3658 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:19:32.779  3658  3658 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:19:32.780  3658  3658 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:19:32.762  3658  3658 W app_process: type=1400 audit(0.0:39): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:32.762  3658  3658 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:19:32.762  3658  3658 W app_process: type=1400 audit(0.0:41): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:32.808  3658  3658 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:19:32.810  3658  3658 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:32.812  3658  3658 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:19:32.818  3658  3658 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:19:32.819  3658  3658 D AndroidRuntime: Calling main entry com.android.commands.media.Media
+11-17 16:19:32.826  3658  3658 W asset   : unable to execute idmap2: Permission denied
+11-17 16:19:32.826  3658  3658 W AssetManager: 'idmap2 --scan' failed: no static="true" overlays targeting "android" will be loaded
+11-17 16:19:32.843  3658  3658 D AndroidRuntime: Shutting down VM
+11-17 16:19:32.845  2052  2147 I vol.Events: writeEvent level_changed STREAM_MUSIC 9
+11-17 16:19:32.812  3658  3658 W main    : type=1400 audit(0.0:42): avc: denied { execute } for name="idmap2" dev="dm-2" ino=724 scontext=u:r:shell:s0 tcontext=u:object_r:idmap_exec:s0 tclass=file permissive=0
+--------- beginning of system
+11-17 16:19:32.882  1898  2203 I ActivityManager: Force stopping app.etv.fakeplayer appid=10117 user=0: from pid 3674
+11-17 16:19:32.883  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:32.883  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:32.885  2293  2293 D CarrierSvcBindHelper: No carrier app for: 0
+11-17 16:19:32.886  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:32.886  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:32.887  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:32.887  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:32.888  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:32.888  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:32.889  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:32.889  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:32.891  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:32.891  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:32.899  1898  2203 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=app.etv.fakeplayer/.PlayerActivity} from uid 2000
+11-17 16:19:32.903  1898  1929 E system_server: Invalid ID 0x00000000.
+11-17 16:19:32.914  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:32.943  1898  2794 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:32.944  1898  2794 I ActivityTaskManager: Config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2274) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.50}
+11-17 16:19:32.945  1898  2794 I ActivityTaskManager: Override config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2274) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.50} for displayId=0
+11-17 16:19:32.943  1898  2794 I chatty  : uid=1000(system) Binder:1898_B identical 8 lines
+11-17 16:19:32.943  1898  2794 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:32.964  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:32.966  3546  3546 I AirPlayService: Advertising 1080x2400 from next session
+11-17 16:19:33.015  1898  2794 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:33.015  1898  2794 I chatty  : uid=1000(system) Binder:1898_B identical 8 lines
+11-17 16:19:33.015  1898  2794 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:33.017  1898  1928 W system_server: Long monitor contention with owner Binder:1898_B (2794) at void com.android.server.wm.ActivityTaskManagerService.activityPaused(android.os.IBinder)(ActivityTaskManagerService.java:1696) waiters=1 in void com.android.server.wm.WindowProcessController.addPackage(java.lang.String) for 111ms
+11-17 16:19:33.019  1736  1783 E SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
+11-17 16:19:33.019  1736  1783 E SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
+11-17 16:19:33.020  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:33.028  1898  1928 W ActivityManager: Slow operation: 123ms so far, now at startProcess: done creating new process record
+11-17 16:19:33.029  1898  1928 W ActivityManager: Slow operation: 123ms so far, now at startProcess: stepping in to startProcess
+11-17 16:19:33.029  1898  1928 W ActivityManager: Slow operation: 123ms so far, now at startProcess: done starting proc!
+11-17 16:19:33.040  1898  1928 I InputManager-JNI: Viewport [0] to add: local:0
+11-17 16:19:33.043  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000004
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_10' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_7' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_4' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_8' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_9' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Device reconfigured: id=8, name='virtio_input_multi_touch_1', size 1080x2400, orientation 0, mode 1, display id 0
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_11' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_5' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_2' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_6' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.043  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_3' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:33.046  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:19:33.048  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:19:33.053  1898  3686 D libEGL  : Emulator has host GPU support, qemu.gles is set to 1.
+11-17 16:19:33.054  1668  1668 D Zygote  : Forked child process 3687
+11-17 16:19:33.062  1898  1935 I ActivityManager: Start proc 3687:app.etv.fakeplayer/u0a117 for activity {app.etv.fakeplayer/app.etv.fakeplayer.PlayerActivity}
+11-17 16:19:33.065  3687  3687 I .etv.fakeplaye: Late-enabling -Xcheck:jni
+11-17 16:19:33.076  3687  3687 E .etv.fakeplaye: Unknown bits set in runtime_flags: 0x8000
+11-17 16:19:33.076  3687  3687 W .etv.fakeplaye: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:33.088  1898  1981 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:33.089  1898  1981 I chatty  : uid=1000(system) Binder:1898_3 identical 18 lines
+11-17 16:19:33.089  1898  1981 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:33.124  1667  1667 I netd    : trafficSwapActiveStatsMap() <60.13ms>
+11-17 16:19:33.125  1667  1667 I netd    : tetherGetStats() <0.32ms>
+11-17 16:19:33.142  1898  3686 W libc    : Unable to set property "qemu.gles" to "1": error code: 0x18
+11-17 16:19:33.145  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:19:33.145  1898  3686 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+11-17 16:19:33.146  1898  3686 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-17 16:19:33.151  1898  3686 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-17 16:19:33.155  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:33.184  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:19:33.191  2052  2502 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c4308680, tid 2502
+11-17 16:19:33.193  2052  2502 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:19:33.200  2052  2502 D EGL_emulation: eglCreateContext: 0x7be6c4308fe0: maj 3 min 0 rcv 3
+11-17 16:19:33.201  2052  2502 D EGL_emulation: eglMakeCurrent: 0x7be6c4308fe0: ver 3 0 (tinfo 0x7be6c430c2e0)
+11-17 16:19:33.204  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:19:33.205  1713  1713 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+11-17 16:19:33.211  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:19:33.212  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:33.215  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:19:33.221  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:19:33.222  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:33.237  1898  3686 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c2317240, tid 3686
+11-17 16:19:33.240  1898  3686 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:19:33.252  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:33.276  1898  3686 D EGL_emulation: eglCreateContext: 0x7be6c2317380: maj 3 min 0 rcv 3
+11-17 16:19:33.277  1898  3686 D EGL_emulation: eglMakeCurrent: 0x7be6c2317380: ver 3 0 (tinfo 0x7be6c4f502a0)
+11-17 16:19:33.316  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:33.333  1733  1733 W AudioFlinger: createTrack_l(): mismatch between requested flags (00000008) and output flags (00000006)
+11-17 16:19:33.334  1733  1733 D AudioFlinger: Client defaulted notificationFrames to 4410 for frameCount 8820
+11-17 16:19:33.334  1733  1733 D AF::TrackHandle: OpPlayAudio: track:55 usage:1 not muted
+11-17 16:19:33.338  1898  1981 I MediaFocusControl: requestAudioFocus() from uid/pid 10117/3687 clientId=android.media.AudioManager@3735375app.etv.fakeplayer.PlayerActivity$$ExternalSyntheticLambda0@d065f0a callingPack=app.etv.fakeplayer req=1 flags=0x0 sdk=35
+11-17 16:19:33.343  1898  1898 D MediaSessionService: Media button session is changed to app.etv.fakeplayer/film (userId=0)
+11-17 16:19:33.343  1898  1898 V SettingsProvider: Notifying for 0: content://settings/secure/media_button_receiver
+11-17 16:19:33.360  1736  1783 E SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
+11-17 16:19:33.361  1736  1783 E SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
+11-17 16:19:33.376  3687  3711 D libEGL  : Emulator has host GPU support, qemu.gles is set to 1.
+11-17 16:19:33.392  3687  3711 W libc    : Unable to set property "qemu.gles" to "1": connection failed; errno=13 (Permission denied)
+11-17 16:19:33.394  3687  3711 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+11-17 16:19:33.395  3687  3711 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-17 16:19:33.402  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:19:33.425  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:19:33.441  3687  3711 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-17 16:19:33.463  1898  2024 W system_server: Long monitor contention with owner Binder:1898_8 (2539) at int android.media.AudioSystem.getDevicesForStream(int)(AudioSystem.java:-2) waiters=0 in int com.android.server.audio.AudioService$VolumeStreamState.getIndex(int) for 119ms
+11-17 16:19:33.464  1898  1898 V SettingsProvider: Notifying for 0: content://settings/system/volume_music_speaker
+11-17 16:19:33.467  3687  3687 I FakePlayer: state PLAYING
+11-17 16:19:33.481  2052  2066 I ndroid.systemu: NativeAlloc concurrent copying GC freed 75379(3700KB) AllocSpace objects, 2(104KB) LOS objects, 49% free, 5971KB/11MB, paused 12us total 274.960ms
+11-17 16:19:33.482  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=0
+11-17 16:19:33.552  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:33.570  3687  3707 D HostConnection: HostConnection::get() New Host Connection established 0x7be714a49780, tid 3707
+11-17 16:19:33.574  3687  3707 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:19:33.583  1898  1919 I system_server: NativeAlloc concurrent copying GC freed 60931(3746KB) AllocSpace objects, 20(944KB) LOS objects, 42% free, 6836KB/11MB, paused 23us total 563.648ms
+11-17 16:19:33.594  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:19:33.595  3687  3707 D EGL_emulation: eglCreateContext: 0x7be714a49960: maj 3 min 0 rcv 3
+11-17 16:19:33.597  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:19:33.605  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:33.606  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:19:33.372  3687  3687 W RenderThread: type=1400 audit(0.0:43): avc: denied { write } for name="property_service" dev="tmpfs" ino=7741 scontext=u:r:untrusted_app:s0:c117,c256,c512,c768 tcontext=u:object_r:property_socket:s0 tclass=sock_file permissive=0 app=app.etv.fakeplayer
+11-17 16:19:33.618  3687  3707 W Gralloc3: mapper 3.x is not supported
+11-17 16:19:33.624  3687  3707 D HostConnection: createUnique: call
+11-17 16:19:33.625  3687  3707 D HostConnection: HostConnection::get() New Host Connection established 0x7be714a49aa0, tid 3707
+11-17 16:19:33.628  3687  3707 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:19:33.629  3687  3707 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:19:33.630  3687  3707 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff60b000 size 0x2000
+11-17 16:19:33.633  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:33.637  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:33.644  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:19:33.655  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:19:33.660  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:33.878  1898  1933 I ActivityTaskManager: Displayed app.etv.fakeplayer/.PlayerActivity: +974ms
+11-17 16:19:33.884  1898  1929 I WindowManager: Screen frozen for +979ms due to Window{ca85ca u0 app.etv.fakeplayer/app.etv.fakeplayer.PlayerActivity}
+11-17 16:19:34.482  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=44352
+11-17 16:19:35.484  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=87648
+11-17 16:19:35.902  1898  1928 I system_server: Explicit concurrent copying GC freed 6788(615KB) AllocSpace objects, 3(60KB) LOS objects, 42% free, 6474KB/11MB, paused 15us total 14.116ms
+11-17 16:19:36.485  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=132000
+11-17 16:19:37.019  1898  2543 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-17 16:19:37.114  1898  1898 W Telecom : Logging: Stale Sessions Cleaned:
+11-17 16:19:37.114  1898  1898 W Telecom : CM.CCCR@ADg
+11-17 16:19:37.114  1898  1898 W Telecom : 	CM.CCCR->CM.UECNT@ADg
+11-17 16:19:37.114  1898  1898 W Telecom : 		CM.CCCR->CM.UECNT@ADg
+11-17 16:19:37.114  1898  1898 W Telecom : 			CM.CCCR->CM.UECNT->CM.CCCR->CM.UECNT@ADg
+11-17 16:19:37.486  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=176352
+11-17 16:19:37.910  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:37.923  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:19:37.923  3715  3715 W Gralloc3: mapper 3.x is not supported
+11-17 16:19:37.926  3715  3715 D HostConnection: createUnique: call
+11-17 16:19:37.927  3715  3715 D HostConnection: HostConnection::get() New Host Connection established 0x7e96275185a0, tid 3715
+11-17 16:19:37.929  3715  3715 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:19:37.930  3715  3715 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:19:37.930  3715  3715 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff609000 size 0x2000
+11-17 16:19:37.944  3715  3715 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:19:37.944  3715  3715 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec26000 size 0x9e5000
+11-17 16:19:38.344  1898  2012 W AlarmManager: Unrecognized alarm listener com.android.server.wifi.WifiConfigStore$2@dbb81ab
+11-17 16:19:38.351  1898  2012 D WifiConfigStore: Writing to stores completed in 7 ms.
+11-17 16:19:38.488  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=220704
+11-17 16:19:39.489  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=265056
+11-17 16:19:40.491  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=309408
+11-17 16:19:40.607  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:40.608  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:40.610  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:40.610  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:40.619  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:40.619  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:40.620  3687  3687 I FakePlayer: command pause
+11-17 16:19:40.621  1898  1981 I MediaFocusControl: requestAudioFocus() from uid/pid 10116/3503 clientId=android.media.AudioManager@24312e7app.etv.launcher.AthanService$$ExternalSyntheticLambda12@bfb9e94 callingPack=app.etv.launcher req=2 flags=0x0 sdk=35
+11-17 16:19:40.621  1898  1981 I ActivityTaskManager: START u0 {flg=0x10020000 cmp=app.etv.launcher/.AthanActivity} from uid 10116
+11-17 16:19:40.621  3687  3687 I FakePlayer: state PAUSED
+11-17 16:19:40.621  1898  2203 I MediaFocusControl: abandonAudioFocus() from uid/pid 10117/3687 clientId=android.media.AudioManager@3735375app.etv.fakeplayer.PlayerActivity$$ExternalSyntheticLambda0@d065f0a
+11-17 16:19:40.621  1898  2203 I MediaFocusControl: AudioFocus  removeFocusStackEntry(): removing entry for android.media.AudioManager@3735375app.etv.fakeplayer.PlayerActivity$$ExternalSyntheticLambda0@d065f0a
+11-17 16:19:40.622  1898  1981 W ActivityTaskManager: Background activity start for app.etv.launcher allowed because SYSTEM_ALERT_WINDOW permission is granted.
+11-17 16:19:40.626  1898  1929 E system_server: Invalid ID 0x00000000.
+11-17 16:19:40.695  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:40.696  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:40.741  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:40.782  1804  1804 D NuPlayerDriver: NuPlayerDriver(0xf56fb680) created, clientPid(3503)
+11-17 16:19:40.791  1804  1804 I Codec2Client: Creating a Codec2 client to service "software"
+11-17 16:19:40.791  1804  1804 I Codec2Client: Client to Codec2 service "software" created
+11-17 16:19:40.794  1804  3748 D GenericSource: FileSource remote
+11-17 16:19:40.802  1804  3746 I GenericSource: start
+11-17 16:19:40.805  1898  1898 D MediaSessionService: Media button session is changed to app.etv.launcher/eTV athan (userId=0)
+11-17 16:19:40.812  1804  3752 I OMXClient: IOmx service obtained
+11-17 16:19:40.812  1808  2249 I OMXMaster: makeComponentInstance(OMX.google.mp3.decoder) in android.hardwar process
+11-17 16:19:40.813  1808  2249 E OMXNodeInstance: setConfig(0xeb4be360:google.mp3.decoder, ConfigPriority(0x6f800002)) ERROR: Undefined(0x80001001)
+11-17 16:19:40.813  1804  3752 I ACodec  : codec does not support config priority (err -2147483648)
+11-17 16:19:40.813  1808  2249 E OMXNodeInstance: getConfig(0xeb4be360:google.mp3.decoder, ConfigAndroidVendorExtension(0x6f100004)) ERROR: Undefined(0x80001001)
+11-17 16:19:40.813  1804  3752 I MediaCodec: MediaCodec will operate in async mode
+11-17 16:19:40.821  1898  1981 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:40.822  1898  1981 I ActivityTaskManager: Config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w866dp h387dp 420dpi nrml long land finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 2400, 1080) mAppBounds=Rect(0, 0 - 2274, 1080) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90} s.80}
+11-17 16:19:40.823  1898  1981 I ActivityTaskManager: Override config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w866dp h387dp 420dpi nrml long land finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 2400, 1080) mAppBounds=Rect(0, 0 - 2274, 1080) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90} s.80} for displayId=0
+11-17 16:19:40.821  1898  1981 I chatty  : uid=1000(system) Binder:1898_3 identical 8 lines
+11-17 16:19:40.821  1898  1981 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:40.829  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:40.838  3546  3546 I AirPlayService: Advertising 2400x1080 from next session
+11-17 16:19:40.850  1898  1981 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:40.850  1898  1981 I chatty  : uid=1000(system) Binder:1898_3 identical 18 lines
+11-17 16:19:40.850  1898  1981 W InputReader: Device has associated, but no associated display id.
+11-17 16:19:40.851  1733  1733 W AudioFlinger: createTrack_l(): mismatch between requested flags (00000008) and output flags (00000006)
+11-17 16:19:40.852  1733  1733 D AudioFlinger: Client defaulted notificationFrames to 11088 for frameCount 22176
+11-17 16:19:40.852  1733  1733 D AF::TrackHandle: OpPlayAudio: track:56 usage:1 not muted
+11-17 16:19:40.858  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:19:40.858  1898  1928 I InputManager-JNI: Viewport [0] to add: local:0
+11-17 16:19:40.859  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000004
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_10' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_7' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_4' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_8' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_9' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Device reconfigured: id=8, name='virtio_input_multi_touch_1', size 1080x2400, orientation 1, mode 1, display id 0
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_11' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_5' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_2' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_6' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.859  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_3' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:19:40.861  3503  3503 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@d1d2932
+11-17 16:19:40.867  1898  3686 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c2317240, tid 3686
+11-17 16:19:40.870  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:19:40.871  1898  3686 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:19:40.873  1898  3686 D EGL_emulation: eglCreateContext: 0x7be6c2317380: maj 3 min 0 rcv 3
+11-17 16:19:40.874  1898  3686 D EGL_emulation: eglMakeCurrent: 0x7be6c2317380: ver 3 0 (tinfo 0x7be6c4f502a0)
+11-17 16:19:40.874  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:40.903  1804  3107 D AudioTrack: getTimestamp_l(9): device stall time corrected using current time 54471666989
+11-17 16:19:40.930  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:40.941  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:40.943  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:19:40.946  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:40.951  1667  1667 I netd    : trafficSwapActiveStatsMap() <90.41ms>
+11-17 16:19:40.954  1733  1821 D AudioFlinger: mixer(0x777436cd7500) throttle end: throttle time(2)
+11-17 16:19:40.957  1667  1667 I netd    : tetherGetStats() <0.61ms>
+11-17 16:19:41.002  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:41.185  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:19:41.194  1898  1933 I ActivityTaskManager: Displayed app.etv.launcher/.AthanActivity: +559ms
+11-17 16:19:41.198  1898  1919 I system_server: NativeAlloc concurrent copying GC freed 15542(1235KB) AllocSpace objects, 11(476KB) LOS objects, 42% free, 6757KB/11MB, paused 31us total 272.758ms
+11-17 16:19:41.274  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:19:41.318  2052  2502 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c4308680, tid 2502
+11-17 16:19:41.324  2052  2502 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:19:41.331  2052  2502 D EGL_emulation: eglCreateContext: 0x7be6c4308fe0: maj 3 min 0 rcv 3
+11-17 16:19:41.336  2052  2502 D EGL_emulation: eglMakeCurrent: 0x7be6c4308fe0: ver 3 0 (tinfo 0x7be6c430c2e0)
+11-17 16:19:41.376  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:19:41.379  1713  1713 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+11-17 16:19:41.388  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:19:41.394  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:41.398  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:19:41.403  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:19:41.408  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:19:41.409  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:41.411  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:19:41.438  1898  1929 I WindowManager: Screen frozen for +725ms due to Window{1b01a99 u0 NavigationBar0}
+11-17 16:19:41.457  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:41.462  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:19:41.473  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:41.495  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:19:41.520  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:41.529  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:41.535  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:19:42.362  2267  2267 I wpa_supplicant: nl80211: send_and_recv->nl_recvmsgs failed: -33
+11-17 16:19:42.362  1898  1981 D WificondControl: Scan result ready event
+11-17 16:19:42.562  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:43.460  1898  1928 I system_server: Explicit concurrent copying GC freed 6315(518KB) AllocSpace objects, 2(104KB) LOS objects, 42% free, 6512KB/11MB, paused 15us total 13.776ms
+11-17 16:19:43.596  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:43.857  1898  2543 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-17 16:19:44.631  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:44.648  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:19:44.660  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:19:44.660  3765  3765 W Gralloc3: mapper 3.x is not supported
+11-17 16:19:44.663  3765  3765 D HostConnection: createUnique: call
+11-17 16:19:44.664  3765  3765 D HostConnection: HostConnection::get() New Host Connection established 0x7a8199f4b5a0, tid 3765
+11-17 16:19:44.666  3765  3765 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:19:44.666  3765  3765 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:19:44.667  3765  3765 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff609000 size 0x2000
+11-17 16:19:44.681  3765  3765 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:19:44.681  3765  3765 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec26000 size 0x9e5000
+11-17 16:19:45.664  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:46.696  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:47.417  3782  3782 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:19:47.418  3782  3782 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:19:47.418  3782  3782 I AndroidRuntime: Using default boot image
+11-17 16:19:47.418  3782  3782 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:19:47.418  3782  3782 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:19:47.418  3782  3782 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:19:47.419  3782  3782 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:19:47.402  3782  3782 W app_process: type=1400 audit(0.0:44): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:47.402  3782  3782 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:19:47.402  3782  3782 W app_process: type=1400 audit(0.0:46): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:47.449  3782  3782 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:19:47.452  3782  3782 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:47.453  3782  3782 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:19:47.458  3782  3782 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:19:47.459  3782  3782 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:19:47.463  1898  1926 D AutofillManagerService: onBackKeyPressed()
+11-17 16:19:47.463  1898  1926 D AutofillManagerServiceImpl: Reset component for user 0:
+11-17 16:19:47.463  1898  1926 D AutofillUI: destroySaveUiUiThread(): already destroyed
+11-17 16:19:47.463  3782  3782 D AndroidRuntime: Shutting down VM
+11-17 16:19:47.729  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:48.767  3687  3687 I chatty  : uid=10117(app.etv.fakeplayer) identical 1 line
+11-17 16:19:49.802  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:50.050  3800  3800 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:19:50.042  3800  3800 W app_process: type=1400 audit(0.0:47): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:50.042  3800  3800 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:19:50.042  3800  3800 W app_process: type=1400 audit(0.0:49): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:50.052  3800  3800 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:19:50.052  3800  3800 I AndroidRuntime: Using default boot image
+11-17 16:19:50.052  3800  3800 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:19:50.052  3800  3800 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:19:50.052  3800  3800 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:19:50.052  3800  3800 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:19:50.080  3800  3800 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:19:50.082  3800  3800 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:50.084  3800  3800 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:19:50.089  3800  3800 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:19:50.091  3800  3800 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:19:50.093  3800  3800 D AndroidRuntime: Shutting down VM
+11-17 16:19:50.836  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:52.653  1898  2015 D ConnectivityService: handleLingerComplete for NetworkAgentInfo [MOBILE (LTE) - 100]
+11-17 16:19:51.870  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:52.653  1667  1667 I Netd    : Destroyed 1 sockets for netId 100 permission=1 in 0.2 ms
+11-17 16:19:52.654  1667  1667 I netd    : networkSetPermissionForNetwork(100, 1) <1.52ms>
+11-17 16:19:52.681  1667  1667 I netd    : trafficSwapActiveStatsMap() <25.02ms>
+11-17 16:19:52.682  1667  1667 I netd    : tetherGetStats() <0.23ms>
+11-17 16:19:52.672  3818  3818 W app_process: type=1400 audit(0.0:50): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:52.672  3818  3818 W app_process: type=1400 audit(0.0:51): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:52.690  3818  3818 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:19:52.691  3818  3818 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:19:52.691  3818  3818 I AndroidRuntime: Using default boot image
+11-17 16:19:52.691  3818  3818 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:19:52.691  3818  3818 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:19:52.691  3818  3818 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:19:52.682  3818  3818 W app_process: type=1400 audit(0.0:52): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:52.692  3818  3818 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:19:52.721  3818  3818 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:19:52.723  3818  3818 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:52.724  3818  3818 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:19:52.729  3818  3818 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:19:52.730  3818  3818 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:19:52.733  3818  3818 D AndroidRuntime: Shutting down VM
+11-17 16:19:52.905  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:53.943  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:54.312  1756  1756 E netmgr  : Failed to open QEMU pipe 'qemud:network': Invalid argument
+11-17 16:19:54.377  1763  1763 E wifi_forwarder: RemoteConnection failed to initialize: RemoteConnection failed to open pipe
+11-17 16:19:54.980  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:55.302  3836  3836 W app_process: type=1400 audit(0.0:53): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:55.302  3836  3836 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:19:55.302  3836  3836 W app_process: type=1400 audit(0.0:55): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:55.313  3836  3836 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:19:55.314  3836  3836 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:19:55.314  3836  3836 I AndroidRuntime: Using default boot image
+11-17 16:19:55.314  3836  3836 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:19:55.314  3836  3836 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:19:55.314  3836  3836 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:19:55.315  3836  3836 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:19:55.342  3836  3836 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:19:55.344  3836  3836 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:55.346  3836  3836 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:19:55.350  3836  3836 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:19:55.352  3836  3836 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:19:55.354  3836  3836 D AndroidRuntime: Shutting down VM
+11-17 16:19:56.012  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:57.051  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:57.922  3854  3854 W app_process: type=1400 audit(0.0:56): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:57.922  3854  3854 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:19:57.922  3854  3854 W app_process: type=1400 audit(0.0:58): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:19:57.933  3854  3854 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:19:57.934  3854  3854 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:19:57.934  3854  3854 I AndroidRuntime: Using default boot image
+11-17 16:19:57.934  3854  3854 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:19:57.934  3854  3854 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:19:57.935  3854  3854 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:19:57.935  3854  3854 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:19:57.963  3854  3854 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:19:57.965  3854  3854 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:57.966  3854  3854 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:19:57.971  3854  3854 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:19:57.973  3854  3854 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:19:57.975  3854  3854 D AndroidRuntime: Shutting down VM
+11-17 16:19:58.091  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:19:58.352  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.352  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.355  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.356  1898  3866 I chatty  : uid=1000 system_server identical 2 lines
+11-17 16:19:58.356  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.357  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.357  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.357  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.358  1898  3866 I chatty  : uid=1000 system_server identical 1 line
+11-17 16:19:58.359  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.360  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.360  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.361  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.361  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.362  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.366  1898  3866 I chatty  : uid=1000 system_server identical 4 lines
+11-17 16:19:58.367  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.367  1898  3866 I PackageManager.DexOptimizer: Running dexopt (dexoptNeeded=1) on: /data/app/app.etv.fakeplayer-47iM9c4iPURfqDgeCvOFxA==/base.apk pkg=app.etv.fakeplayer isa=x86_64 dexoptFlags=boot_complete,debuggable,public,enable_hidden_api_checks targetFilter=verify oatDir=/data/app/app.etv.fakeplayer-47iM9c4iPURfqDgeCvOFxA==/oat classLoaderContext=PCL[]
+11-17 16:19:58.368  1793  1793 V installd: DexInv: --- BEGIN '/data/app/app.etv.fakeplayer-47iM9c4iPURfqDgeCvOFxA==/base.apk' ---
+11-17 16:19:58.369  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.369  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.371  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.371  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.372  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.372  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.373  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.373  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.374  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.374  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.375  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.375  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.377  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.377  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.378  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.378  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.378  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.378  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.379  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.379  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.380  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.380  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.381  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.381  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.382  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.382  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.383  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.383  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.384  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:19:58.384  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:19:58.384  3867  3867 W dex2oat : Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:58.384  3867  3867 I dex2oat : /apex/com.android.runtime/bin/dex2oat --input-vdex-fd=-1 --output-vdex-fd=10 --resolve-startup-const-strings=true --max-image-block-size=524288 --compiler-filter=verify --debuggable --classpath-dir=/data/app/app.etv.fakeplayer-47iM9c4iPURfqDgeCvOFxA== --class-loader-context=PCL[] --generate-mini-debug-info --compact-dex-level=none --compilation-reason=boot
+11-17 16:19:58.387  3867  3867 I dex2oat : setting boot class path to /apex/com.android.runtime/javalib/core-oj.jar:/apex/com.android.runtime/javalib/core-libart.jar:/apex/com.android.runtime/javalib/okhttp.jar:/apex/com.android.runtime/javalib/bouncycastle.jar:/apex/com.android.runtime/javalib/apache-xml.jar:/system/framework/framework.jar:/system/framework/ext.jar:/system/framework/telephony-common.jar:/system/framework/voip-common.jar:/system/framework/ims-common.jar:/system/framework/android.test.base.jar
+11-17 16:19:58.390  1699  3712 W audio_hw_generic: Hardware backing HAL too slow, could only write 0 of 661 frames
+11-17 16:19:58.478  3867  3867 I dex2oat : Explicit concurrent copying GC freed 4554(619KB) AllocSpace objects, 0(0B) LOS objects, 99% free, 5464B/1541KB, paused 7us total 1.373ms
+11-17 16:19:58.480  3867  3867 I dex2oat : Explicit concurrent copying GC freed 12(15KB) AllocSpace objects, 0(0B) LOS objects, 99% free, 5896B/1541KB, paused 4us total 919us
+11-17 16:19:58.483  3867  3867 I dex2oat : Explicit concurrent copying GC freed 53(32KB) AllocSpace objects, 0(0B) LOS objects, 99% free, 6912B/1542KB, paused 4us total 842us
+11-17 16:19:58.487  3867  3867 I dex2oat : dex2oat took 103.376ms (113.185ms cpu) (threads: 2) arena alloc=0B (0B) java alloc=6912B (6912B) native alloc=2504KB (2564784B) free=575KB (589136B)
+11-17 16:19:58.488  1793  1793 V installd: DexInv: --- END '/data/app/app.etv.fakeplayer-47iM9c4iPURfqDgeCvOFxA==/base.apk' (success) ---
+11-17 16:19:58.489  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.505  1898  3866 I chatty  : uid=1000 system_server identical 17 lines
+11-17 16:19:58.506  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.507  1898  3866 I PackageManager.DexOptimizer: Running dexopt (dexoptNeeded=1) on: /data/app/app.etv.launcher-wPLDj3BezwPEsoA5Yp8pwg==/base.apk pkg=app.etv.launcher isa=x86_64 dexoptFlags=boot_complete,debuggable,public,enable_hidden_api_checks targetFilter=verify oatDir=/data/app/app.etv.launcher-wPLDj3BezwPEsoA5Yp8pwg==/oat classLoaderContext=PCL[]
+11-17 16:19:58.507  1793  1793 V installd: DexInv: --- BEGIN '/data/app/app.etv.launcher-wPLDj3BezwPEsoA5Yp8pwg==/base.apk' ---
+11-17 16:19:58.513  3873  3873 W dex2oat : Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:19:58.513  3873  3873 I dex2oat : /apex/com.android.runtime/bin/dex2oat --input-vdex-fd=-1 --output-vdex-fd=10 --resolve-startup-const-strings=true --max-image-block-size=524288 --compiler-filter=verify --debuggable --classpath-dir=/data/app/app.etv.launcher-wPLDj3BezwPEsoA5Yp8pwg== --class-loader-context=PCL[] --generate-mini-debug-info --compact-dex-level=none --compilation-reason=boot
+11-17 16:19:58.514  3873  3873 I dex2oat : setting boot class path to /apex/com.android.runtime/javalib/core-oj.jar:/apex/com.android.runtime/javalib/core-libart.jar:/apex/com.android.runtime/javalib/okhttp.jar:/apex/com.android.runtime/javalib/bouncycastle.jar:/apex/com.android.runtime/javalib/apache-xml.jar:/system/framework/framework.jar:/system/framework/ext.jar:/system/framework/telephony-common.jar:/system/framework/voip-common.jar:/system/framework/ims-common.jar:/system/framework/android.test.base.jar
+11-17 16:19:58.658  3873  3875 W dex2oat : Accessing hidden method Landroid/media/session/MediaController;->getTag()Ljava/lang/String; (greylist-max-o, linking, denied)
+11-17 16:19:58.688  3873  3873 I dex2oat : dex2oat took 175.014ms (250.716ms cpu) (threads: 2) arena alloc=0B (0B) java alloc=2173KB (2226072B) native alloc=3643KB (3730592B) free=644KB (660320B)
+11-17 16:19:58.690  1793  1793 V installd: DexInv: --- END '/data/app/app.etv.launcher-wPLDj3BezwPEsoA5Yp8pwg==/base.apk' (success) ---
+11-17 16:19:58.691  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.746  1898  3866 I chatty  : uid=1000 system_server identical 59 lines
+11-17 16:19:58.746  1898  3866 I system_server: The ClassLoaderContext is a special shared library.
+11-17 16:19:58.746  1898  3866 I BackgroundDexOptService: Pinning optimized code {app.etv.fakeplayer, app.etv.launcher}
+11-17 16:19:59.129  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:00.002  2052  2052 D KeyguardClockSwitch: Updating clock: 420
+11-17 16:20:00.169  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:00.558  3884  3884 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:00.542  3884  3884 W app_process: type=1400 audit(0.0:59): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:00.542  3884  3884 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:20:00.542  3884  3884 W app_process: type=1400 audit(0.0:61): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:00.559  3884  3884 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:00.559  3884  3884 I AndroidRuntime: Using default boot image
+11-17 16:20:00.559  3884  3884 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:00.559  3884  3884 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:00.559  3884  3884 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:00.560  3884  3884 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:00.606  3884  3884 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:00.608  3884  3884 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:00.609  3884  3884 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:00.614  3884  3884 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:00.616  3884  3884 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:00.619  3884  3884 D AndroidRuntime: Shutting down VM
+11-17 16:20:01.208  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:02.246  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:02.332  1898  1981 D WificondControl: Scan result ready event
+11-17 16:20:03.201  3902  3902 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:03.192  3902  3902 W app_process: type=1400 audit(0.0:62): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:03.192  3902  3902 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:20:03.192  3902  3902 W app_process: type=1400 audit(0.0:64): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:03.202  3902  3902 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:03.202  3902  3902 I AndroidRuntime: Using default boot image
+11-17 16:20:03.202  3902  3902 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:03.202  3902  3902 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:03.202  3902  3902 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:03.203  3902  3902 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:03.229  3902  3902 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:03.231  3902  3902 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:03.232  3902  3902 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:03.237  3902  3902 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:03.239  3902  3902 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:03.241  3902  3902 D AndroidRuntime: Shutting down VM
+11-17 16:20:03.281  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:03.563  2943  3142 I Dialer  : OmtpVvmCarrierCfgHlpr - OmtpEvent:CONFIG_STATUS_SMS_TIME_OUT
+11-17 16:20:03.563  2943  2943 I Dialer  : RetryPolicy - discarding deferred status: configuration_state=4
+11-17 16:20:03.564  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:20:03.564  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:20:03.564  2943  2943 I Dialer  : VvmTaskExecutor - no more tasks, stopping service if no task are added in 5000 millis
+11-17 16:20:03.564  2943  2943 I Dialer  : VvmTaskReceiver - task received
+11-17 16:20:03.564  2943  2943 I Dialer  : VvmTaskReceiver - TaskExecutor already running
+11-17 16:20:03.564  2943  2943 I Dialer  : Task.createTask - create task:com.android.voicemail.impl.ActivationTask
+11-17 16:20:03.565  2943  2943 I Dialer  : RetryPolicy - retry #1 for com.android.voicemail.impl.ActivationTask@61f8a3f queued, executing in 5000
+11-17 16:20:03.565  2943  2943 I Dialer  : VvmTaskExecutor - com.android.voicemail.impl.ActivationTask@61f8a3f added
+11-17 16:20:03.565  2943  2943 I Dialer  : VvmTaskExecutor - minimal wait time:5000
+11-17 16:20:03.565  2943  2943 I Dialer  : VvmTaskExecutor - sleep for 5000 millis
+11-17 16:20:03.566  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:20:03.566  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:20:03.567  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:20:03.567  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:20:04.312  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:05.345  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:05.832  3920  3920 W app_process: type=1400 audit(0.0:65): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:05.832  3920  3920 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:20:05.832  3920  3920 W app_process: type=1400 audit(0.0:67): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:05.842  3920  3920 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:05.843  3920  3920 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:05.843  3920  3920 I AndroidRuntime: Using default boot image
+11-17 16:20:05.843  3920  3920 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:05.843  3920  3920 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:05.843  3920  3920 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:05.844  3920  3920 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:05.871  3920  3920 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:05.873  3920  3920 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:05.874  3920  3920 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:05.879  3920  3920 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:05.881  3920  3920 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:05.883  3920  3920 D AndroidRuntime: Shutting down VM
+11-17 16:20:06.379  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:07.418  3687  3687 I chatty  : uid=10117(app.etv.fakeplayer) identical 1 line
+11-17 16:20:08.451  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:08.478  3938  3938 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:08.462  3938  3938 W app_process: type=1400 audit(0.0:68): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:08.462  3938  3938 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:20:08.462  3938  3938 W app_process: type=1400 audit(0.0:70): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:08.480  3938  3938 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:08.480  3938  3938 I AndroidRuntime: Using default boot image
+11-17 16:20:08.480  3938  3938 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:08.480  3938  3938 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:08.480  3938  3938 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:08.481  3938  3938 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:08.508  3938  3938 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:08.510  3938  3938 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:08.511  3938  3938 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:08.516  3938  3938 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:08.517  3938  3938 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:08.519  3938  3938 D AndroidRuntime: Shutting down VM
+11-17 16:20:08.603  2943  3142 I Dialer  : VvmTaskExecutor - executing task com.android.voicemail.impl.ActivationTask@61f8a3f
+11-17 16:20:08.604  2943  3142 I Dialer  : PreOMigrationHandler - ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, ***, UserHandle{0} already migrated
+11-17 16:20:08.618  2974  3116 I VoicemailNotifier: receivers for android.intent.action.PROVIDER_CHANGED :[]
+11-17 16:20:08.619  2943  3142 I Dialer  : VvmActivationTask - VVM content provider configured - vvm_type_cvvm
+11-17 16:20:08.619  2943  3142 I Dialer  : OmtpVvmCarrierCfgHlpr - OmtpEvent:CONFIG_ACTIVATING
+11-17 16:20:08.623  2974  3116 I VoicemailNotifier: receivers for android.intent.action.PROVIDER_CHANGED :[]
+11-17 16:20:08.624  2293  2987 I LocationAccessPolicy: Allowing com.android.dialer fine because it doesn't target API 29 yet. Please fix this app. Called from getServiceStateForSubscriber
+11-17 16:20:08.624  2293  2987 I LocationAccessPolicy: Allowing com.android.dialer coarse because it doesn't target API 29 yet. Please fix this app. Called from getServiceStateForSubscriber
+11-17 16:20:09.479  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:10.516  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:11.100  3956  3956 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:11.082  3956  3956 W app_process: type=1400 audit(0.0:71): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:11.101  3956  3956 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:11.082  3956  3956 W app_process: type=1400 audit(0.0:72): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:11.101  3956  3956 I AndroidRuntime: Using default boot image
+11-17 16:20:11.101  3956  3956 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:11.101  3956  3956 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:11.092  3956  3956 W app_process: type=1400 audit(0.0:73): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:11.101  3956  3956 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:11.102  3956  3956 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:11.129  3956  3956 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:11.131  3956  3956 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:11.132  3956  3956 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:11.137  3956  3956 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:11.139  3956  3956 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:11.140  3956  3956 D AndroidRuntime: Shutting down VM
+11-17 16:20:11.550  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:12.479  1699  3712 W audio_hw_generic: Hardware backing HAL too slow, could only write 0 of 661 frames
+11-17 16:20:12.588  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:13.623  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:13.702  3974  3974 W app_process: type=1400 audit(0.0:74): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:13.702  3974  3974 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:20:13.702  3974  3974 W app_process: type=1400 audit(0.0:76): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:13.720  3974  3974 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:13.721  3974  3974 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:13.721  3974  3974 I AndroidRuntime: Using default boot image
+11-17 16:20:13.721  3974  3974 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:13.721  3974  3974 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:13.721  3974  3974 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:13.722  3974  3974 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:13.751  3974  3974 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:13.753  3974  3974 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:13.755  3974  3974 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:13.760  3974  3974 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:13.761  3974  3974 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:13.763  3974  3974 D AndroidRuntime: Shutting down VM
+11-17 16:20:14.662  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:17.770  3687  3687 I chatty  : uid=10117(app.etv.fakeplayer) identical 3 lines
+11-17 16:20:18.804  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:18.895  4001  4001 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:18.882  4001  4001 W app_process: type=1400 audit(0.0:77): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:18.882  4001  4001 W app_process: type=1400 audit(0.0:78): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:18.896  4001  4001 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:18.896  4001  4001 I AndroidRuntime: Using default boot image
+11-17 16:20:18.896  4001  4001 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:18.896  4001  4001 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:18.882  4001  4001 W app_process: type=1400 audit(0.0:79): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:18.896  4001  4001 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:18.897  4001  4001 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:18.924  4001  4001 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:18.926  4001  4001 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:18.928  4001  4001 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:18.933  4001  4001 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:18.934  4001  4001 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:18.936  1898  1925 D AutofillManagerService: Close system dialogs
+11-17 16:20:18.936  2052  2052 V StatusBar: mStatusBarWindow: com.android.systemui.statusbar.phone.StatusBarWindowView{cc81dcd V.E...... ........ 0,0-2400,63} canPanelBeCollapsed(): false
+11-17 16:20:18.936  4001  4001 D AndroidRuntime: Shutting down VM
+11-17 16:20:18.937  1898  1926 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=app.etv.launcher/.MainActivity (has extras)} from uid 0
+11-17 16:20:18.938  4001  4012 W app_process: Thread attaching while runtime is shutting down: Binder:4001_2
+11-17 16:20:18.938  4001  4012 I AndroidRuntime: NOTE: attach of thread 'Binder:4001_2' failed
+11-17 16:20:18.941  1898  1981 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:18.941  1898  1981 I chatty  : uid=1000(system) Binder:1898_3 identical 8 lines
+11-17 16:20:18.941  1898  1981 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:18.943  3503  3503 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@6717d71
+11-17 16:20:18.943  1898  1929 E system_server: Invalid ID 0x00000000.
+11-17 16:20:18.946  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:20:18.946  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:20:18.962  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:18.983  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:20:18.983  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:20:18.991  1898  3118 I ActivityTaskManager: START u0 {flg=0x10020000 cmp=app.etv.launcher/.AthanActivity} from uid 10116
+11-17 16:20:18.992  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:20:18.992  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:20:19.033  1898  3755 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:19.033  1898  3755 I chatty  : uid=1000(system) Binder:1898_15 identical 8 lines
+11-17 16:20:19.033  1898  3755 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:19.045  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:19.084  1713  1713 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+11-17 16:20:19.084  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:19.085  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:19.114  3503  3503 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@22e4adb
+11-17 16:20:19.118  1898  1929 E system_server: Invalid ID 0x00000000.
+11-17 16:20:19.122  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:19.218  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:19.222  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:19.286  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:19.293  1733  1821 D AudioFlinger: mixer(0x777436cd7500) throttle end: throttle time(7)
+11-17 16:20:19.294  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:19.295  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:19.303  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:19.372  1898  3686 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c2317240, tid 3686
+11-17 16:20:19.378  1898  3686 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:20:19.398  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:19.446  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:19.478  1898  3686 D EGL_emulation: eglCreateContext: 0x7be6c2317380: maj 3 min 0 rcv 3
+11-17 16:20:19.506  1898  3686 D EGL_emulation: eglMakeCurrent: 0x7be6c2317380: ver 3 0 (tinfo 0x7be6c4f502a0)
+11-17 16:20:19.612  1733  1821 D AudioFlinger: mixer(0x777436cd7500) throttle end: throttle time(4)
+11-17 16:20:19.841  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:20.001  1898  3755 I ActivityTaskManager: START u0 {flg=0x10020000 cmp=app.etv.launcher/.AthanActivity} from uid 10116
+11-17 16:20:20.881  3687  3687 I chatty  : uid=10117(app.etv.fakeplayer) identical 1 line
+11-17 16:20:21.893  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=315744
+11-17 16:20:22.539  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:22.548  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:20:22.549  4023  4023 W Gralloc3: mapper 3.x is not supported
+11-17 16:20:22.553  4023  4023 D HostConnection: createUnique: call
+11-17 16:20:22.554  4023  4023 D HostConnection: HostConnection::get() New Host Connection established 0x7981ad0d95a0, tid 4023
+11-17 16:20:22.556  4023  4023 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:20:22.557  4023  4023 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:20:22.557  4023  4023 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff609000 size 0x2000
+11-17 16:20:22.570  4023  4023 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:20:22.571  4023  4023 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec26000 size 0x9e5000
+11-17 16:20:22.654  1898  2543 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-17 16:20:22.711  1898  3114 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=app.etv.fakeplayer/.PlayerActivity (has extras)} from uid 2000
+11-17 16:20:22.735  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:22.752  1898  2794 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:22.759  1898  2794 I ActivityTaskManager: Config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2274) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.111}
+11-17 16:20:22.765  1898  2794 I ActivityTaskManager: Override config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2274) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.111} for displayId=0
+11-17 16:20:22.752  1898  2794 I chatty  : uid=1000(system) Binder:1898_B identical 8 lines
+11-17 16:20:22.752  1898  2794 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:22.779  3546  3546 I AirPlayService: Advertising 1080x2400 from next session
+11-17 16:20:22.780  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:22.789  1898  2794 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:22.790  1898  2794 I chatty  : uid=1000(system) Binder:1898_B identical 28 lines
+11-17 16:20:22.790  1898  2794 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:22.794  1898  1928 I InputManager-JNI: Viewport [0] to add: local:0
+11-17 16:20:22.795  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000004
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_10' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_7' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_4' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_8' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_9' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Device reconfigured: id=8, name='virtio_input_multi_touch_1', size 1080x2400, orientation 0, mode 1, display id 0
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_11' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_5' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_2' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_6' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.795  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_3' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:22.803  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:22.812  3687  3687 I FakePlayer: asked to play
+11-17 16:20:22.814  1898  2794 I MediaFocusControl: requestAudioFocus() from uid/pid 10117/3687 clientId=android.media.AudioManager@3735375app.etv.fakeplayer.PlayerActivity$$ExternalSyntheticLambda0@d065f0a callingPack=app.etv.fakeplayer req=1 flags=0x0 sdk=35
+11-17 16:20:22.822  1898  1898 D MediaSessionService: Media button session is changed to app.etv.fakeplayer/film (userId=0)
+11-17 16:20:22.823  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:20:22.824  3687  3687 I FakePlayer: state PLAYING
+11-17 16:20:22.846  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:22.858  3503  3503 D AudioManager: dispatching onAudioFocusChange(-1) to android.media.AudioManager@24312e7app.etv.launcher.AthanService$$ExternalSyntheticLambda12@bfb9e94
+11-17 16:20:22.864  1898  3686 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c2317240, tid 3686
+11-17 16:20:22.879  1898  3686 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:20:22.881  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:22.881  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:22.882  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:22.891  1898  3686 D EGL_emulation: eglCreateContext: 0x7be6c2317380: maj 3 min 0 rcv 3
+11-17 16:20:22.891  1898  3686 D EGL_emulation: eglMakeCurrent: 0x7be6c2317380: ver 3 0 (tinfo 0x7be6c4f502a0)
+11-17 16:20:22.912  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:20:22.913  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:22.917  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:22.933  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:22.955  2052  2502 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c4308680, tid 2502
+11-17 16:20:22.955  2052  2502 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:20:22.961  2052  2502 D EGL_emulation: eglCreateContext: 0x7be6c4308fe0: maj 3 min 0 rcv 3
+11-17 16:20:22.961  2052  2502 D EGL_emulation: eglMakeCurrent: 0x7be6c4308fe0: ver 3 0 (tinfo 0x7be6c430c2e0)
+11-17 16:20:23.001  1699  3712 W audio_hw_generic: Hardware backing HAL too slow, could only write 0 of 661 frames
+11-17 16:20:23.010  1898  1923 I MediaFocusControl: abandonAudioFocus() from uid/pid 10116/3503 clientId=android.media.AudioManager@24312e7app.etv.launcher.AthanService$$ExternalSyntheticLambda12@bfb9e94
+11-17 16:20:23.011  1898  1923 I MediaFocusControl: requestAudioFocus() from uid/pid 10116/3503 clientId=android.media.AudioManager@24312e7app.etv.launcher.AthanService$$ExternalSyntheticLambda12@bfb9e94 callingPack=app.etv.launcher req=2 flags=0x0 sdk=35
+11-17 16:20:23.011  1898  1923 I ActivityTaskManager: START u0 {flg=0x10020000 cmp=app.etv.launcher/.AthanActivity} from uid 10116
+11-17 16:20:23.039  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:23.046  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=325248
+11-17 16:20:23.046  3687  3687 I FakePlayer: command pause
+11-17 16:20:23.049  1898  1898 D MediaSessionService: Media button session is changed to app.etv.launcher/eTV athan (userId=0)
+11-17 16:20:23.049  3687  3687 I FakePlayer: state PAUSED
+11-17 16:20:23.049  1898  2005 I MediaFocusControl: abandonAudioFocus() from uid/pid 10117/3687 clientId=android.media.AudioManager@3735375app.etv.fakeplayer.PlayerActivity$$ExternalSyntheticLambda0@d065f0a
+11-17 16:20:23.049  1898  2005 I MediaFocusControl: AudioFocus  removeFocusStackEntry(): removing entry for android.media.AudioManager@3735375app.etv.fakeplayer.PlayerActivity$$ExternalSyntheticLambda0@d065f0a
+11-17 16:20:23.050  1898  2185 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:23.050  1898  2185 I chatty  : uid=1000(system) Binder:1898_5 identical 8 lines
+11-17 16:20:23.050  1898  2185 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:23.052  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.058  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.075  1898  2185 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:23.076  1898  2185 I ActivityTaskManager: Config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w866dp h387dp 420dpi nrml long land finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 2400, 1080) mAppBounds=Rect(0, 0 - 2274, 1080) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90} s.142}
+11-17 16:20:23.077  1898  2185 I ActivityTaskManager: Override config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w866dp h387dp 420dpi nrml long land finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 2400, 1080) mAppBounds=Rect(0, 0 - 2274, 1080) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90} s.142} for displayId=0
+11-17 16:20:23.076  1898  2185 I chatty  : uid=1000(system) Binder:1898_5 identical 18 lines
+11-17 16:20:23.076  1898  2185 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:23.090  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:23.093  1713  1713 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+11-17 16:20:23.094  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:23.103  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:23.110  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:23.123  1898  1928 I InputManager-JNI: Viewport [0] to add: local:0
+11-17 16:20:23.123  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000004
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_10' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_7' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_4' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_8' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_9' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Device reconfigured: id=8, name='virtio_input_multi_touch_1', size 1080x2400, orientation 1, mode 1, display id 0
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_11' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_5' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_2' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_6' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.123  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_3' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:23.127  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:20:23.140  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:20:23.146  3546  3546 I AirPlayService: Advertising 2400x1080 from next session
+11-17 16:20:23.149  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.164  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:23.172  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:23.186  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.195  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.195  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:23.218  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.214  1733  1821 D AudioFlinger: mixer(0x777436cd7500) throttle end: throttle time(2)
+11-17 16:20:23.279  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.293  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:23.293  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:23.312  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.315  1898  1919 I system_server: NativeAlloc concurrent copying GC freed 16114(1330KB) AllocSpace objects, 9(244KB) LOS objects, 42% free, 6837KB/11MB, paused 2.497ms total 156.533ms
+11-17 16:20:23.318  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:23.354  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:20:23.364  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.374  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:23.375  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:23.376  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:23.378  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:23.382  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.384  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:23.386  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:23.440  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:23.445  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.450  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:20:23.472  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:20:23.483  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:20:23.487  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:23.493  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:20:23.497  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:20:23.525  1898  1929 I WindowManager: Screen frozen for +807ms due to Window{1b01a99 u0 NavigationBar0}
+11-17 16:20:23.593  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:23.603  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:20:23.645  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:20:23.684  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:23.727  1713  1713 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:20:23.761  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:23.778  1898  1919 I system_server: NativeAlloc concurrent copying GC freed 2357(294KB) AllocSpace objects, 0(0B) LOS objects, 42% free, 6848KB/11MB, paused 24us total 118.489ms
+11-17 16:20:23.779  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:23.791  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:23.801  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 606208
+11-17 16:20:23.832  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:24.062  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:25.079  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:25.546  1898  1928 I system_server: Explicit concurrent copying GC freed 4171(300KB) AllocSpace objects, 0(0B) LOS objects, 42% free, 6644KB/11MB, paused 13us total 17.111ms
+11-17 16:20:25.797  1898  2543 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-17 16:20:26.095  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:26.750  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:26.760  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:20:26.760  4047  4047 W Gralloc3: mapper 3.x is not supported
+11-17 16:20:26.765  4047  4047 D HostConnection: createUnique: call
+11-17 16:20:26.765  4047  4047 D HostConnection: HostConnection::get() New Host Connection established 0x787c05b135a0, tid 4047
+11-17 16:20:26.767  4047  4047 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:20:26.767  4047  4047 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:20:26.767  4047  4047 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff609000 size 0x2000
+11-17 16:20:26.780  4047  4047 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:20:26.781  4047  4047 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec26000 size 0x9e5000
+11-17 16:20:27.129  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:28.164  3687  3687 I chatty  : uid=10117(app.etv.fakeplayer) identical 1 line
+11-17 16:20:29.179  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:29.515  4065  4065 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:29.502  4065  4065 W app_process: type=1400 audit(0.0:80): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:29.517  4065  4065 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:29.517  4065  4065 I AndroidRuntime: Using default boot image
+11-17 16:20:29.502  4065  4065 W app_process: type=1400 audit(0.0:81): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:29.517  4065  4065 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:29.517  4065  4065 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:29.502  4065  4065 W app_process: type=1400 audit(0.0:82): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:29.517  4065  4065 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:29.518  4065  4065 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:29.546  4065  4065 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:29.548  4065  4065 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:29.549  4065  4065 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:29.554  4065  4065 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:29.555  4065  4065 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:29.561  4065  4065 D AndroidRuntime: Shutting down VM
+11-17 16:20:30.212  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:32.279  3687  3687 I chatty  : uid=10117(app.etv.fakeplayer) identical 2 lines
+11-17 16:20:33.313  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:33.652  4084  4084 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:33.653  4084  4084 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:33.653  4084  4084 I AndroidRuntime: Using default boot image
+11-17 16:20:33.642  4084  4084 W app_process: type=1400 audit(0.0:83): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:33.642  4084  4084 W app_process: type=1400 audit(0.0:84): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:33.653  4084  4084 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:33.653  4084  4084 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:33.642  4084  4084 W app_process: type=1400 audit(0.0:85): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:33.654  4084  4084 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:33.654  4084  4084 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:33.682  4084  4084 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:33.684  4084  4084 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:33.685  4084  4084 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:33.690  4084  4084 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:33.692  4084  4084 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:33.704  4084  4084 D AndroidRuntime: Shutting down VM
+11-17 16:20:34.351  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:35.385  3687  3687 I chatty  : uid=10117(app.etv.fakeplayer) identical 1 line
+11-17 16:20:36.412  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:36.461  1699  3712 W audio_hw_generic: Hardware backing HAL too slow, could only write 0 of 661 frames
+11-17 16:20:36.772  4099  4099 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-17 16:20:36.773  4099  4099 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_apex_image"
+11-17 16:20:36.773  4099  4099 I AndroidRuntime: Using default boot image
+11-17 16:20:36.773  4099  4099 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.disable_lock_profiling"
+11-17 16:20:36.773  4099  4099 I AndroidRuntime: Leaving lock profiling enabled
+11-17 16:20:36.762  4099  4099 W app_process: type=1400 audit(0.0:86): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:36.762  4099  4099 I chatty  : uid=2000(shell) app_process identical 1 line
+11-17 16:20:36.762  4099  4099 W app_process: type=1400 audit(0.0:88): avc: denied { read } for name="u:object_r:device_config_runtime_native_boot_prop:s0" dev="tmpfs" ino=7647 scontext=u:r:shell:s0 tcontext=u:object_r:device_config_runtime_native_boot_prop:s0 tclass=file permissive=0
+11-17 16:20:36.773  4099  4099 E libc    : Access denied finding property "persist.device_config.runtime_native_boot.enable_generational_cc"
+11-17 16:20:36.774  4099  4099 I app_process: Core platform API reporting enabled, enforcing=false
+11-17 16:20:36.801  4099  4099 D ICU     : Time zone APEX file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat
+11-17 16:20:36.803  4099  4099 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-17 16:20:36.804  4099  4099 I app_process: The ClassLoaderContext is a special shared library.
+11-17 16:20:36.809  4099  4099 W app_process: JNI RegisterNativeMethods: attempt to register 0 native methods for android.media.AudioAttributes
+11-17 16:20:36.810  4099  4099 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-17 16:20:36.821  4099  4099 D AndroidRuntime: Shutting down VM
+11-17 16:20:36.988  1733  1821 D AudioFlinger: mixer(0x777436cd7500) throttle end: throttle time(3)
+11-17 16:20:37.451  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:38.491  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:38.581  1804  3107 D NuPlayerDriver: stop(0xf56fb680)
+11-17 16:20:38.582  3503  3503 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-17 16:20:38.582  3503  3503 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-17 16:20:38.582  1804  3107 D NuPlayerDriver: reset(0xf56fb680) at state 8
+11-17 16:20:38.585  1804  3746 D NuPlayerDriver: notifyResetComplete(0xf56fb680)
+11-17 16:20:38.585  1804  3107 W AMessage: failed to post message as target looper for handler 0 is gone.
+11-17 16:20:38.586  1898  2185 D MediaSessionService: Media button session is changed to null
+11-17 16:20:38.586  1898  2185 I MediaFocusControl: abandonAudioFocus() from uid/pid 10116/3503 clientId=android.media.AudioManager@24312e7app.etv.launcher.AthanService$$ExternalSyntheticLambda12@bfb9e94
+11-17 16:20:38.589  1898  1933 E memtrack: Couldn't load memtrack module
+11-17 16:20:38.589  1898  1933 W android.os.Debug: failed to get memory consumption info: -1
+11-17 16:20:38.593  3503  3503 W MediaPlayer: mediaplayer went away with unhandled events
+11-17 16:20:38.593  3503  3503 W MediaPlayer: mediaplayer went away with unhandled events
+11-17 16:20:38.606  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:38.608  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:38.634  1898  2185 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:38.635  1898  2185 I ActivityTaskManager: Config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2274) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.173}
+11-17 16:20:38.636  1898  2185 I ActivityTaskManager: Override config changes=20000480 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h842dp 420dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2274) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.173} for displayId=0
+11-17 16:20:38.636  1898  2185 I chatty  : uid=1000(system) Binder:1898_5 identical 28 lines
+11-17 16:20:38.636  1898  2185 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:38.644  3546  3546 I AirPlayService: Advertising 1080x2400 from next session
+11-17 16:20:38.647  1898  1928 I InputManager-JNI: Viewport [0] to add: local:0
+11-17 16:20:38.653  1898  1997 I InputReader: Reconfiguring input devices.  changes=0x00000004
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_10' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_7' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_4' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_8' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_9' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Device reconfigured: id=8, name='virtio_input_multi_touch_1', size 1080x2400, orientation 0, mode 1, display id 0
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_11' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_5' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_2' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_6' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.653  1898  1997 I InputReader: Touch device 'virtio_input_multi_touch_3' could not query the properties of its associated display.  The device will be inoperable until the display size becomes available.
+11-17 16:20:38.662  3503  3537 D EGL_emulation: eglMakeCurrent: 0x7be714a49aa0: ver 3 0 (tinfo 0x7be714a18680)
+11-17 16:20:38.679  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:38.681  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:20:38.695  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:38.695  1898  1923 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:38.695  1898  1923 I chatty  : uid=1000(system) Binder:1898_1 identical 8 lines
+11-17 16:20:38.695  1898  1923 W InputReader: Device has associated, but no associated display id.
+11-17 16:20:38.697  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:38.698  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:38.760  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:20:38.762  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:38.763  2052  2502 D HostConnection: HostConnection::get() New Host Connection established 0x7be6c4308680, tid 2502
+11-17 16:20:38.765  2052  2502 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:20:38.766  2052  2502 D EGL_emulation: eglCreateContext: 0x7be6c4308fe0: maj 3 min 0 rcv 3
+11-17 16:20:38.766  2052  2502 D EGL_emulation: eglMakeCurrent: 0x7be6c4308fe0: ver 3 0 (tinfo 0x7be6c430c2e0)
+11-17 16:20:38.774  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:38.782  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:38.793  3687  3707 D EGL_emulation: eglMakeCurrent: 0x7be714a49960: ver 3 0 (tinfo 0x7be714a18660)
+11-17 16:20:38.812  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:38.832  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:38.838  1713  1846 I chatty  : uid=1000(system) HwBinder:1713_2 identical 1 line
+11-17 16:20:38.839  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 28672
+11-17 16:20:38.840  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:38.843  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:20:38.857  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:20:38.862  2052  2052 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+11-17 16:20:38.867  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:38.876  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:20:38.900  1898  1929 I WindowManager: Screen frozen for +307ms due to Window{1b01a99 u0 NavigationBar0}
+11-17 16:20:38.913  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:38.919  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 544768
+11-17 16:20:38.923  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:38.951  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 274432
+11-17 16:20:38.973  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:38.983  2052  2242 D EGL_emulation: eglMakeCurrent: 0x7be714586ec0: ver 3 0 (tinfo 0x7be7144ff580)
+11-17 16:20:39.493  3687  3687 I FakePlayer: STATUS playing=false volume=1.0 head=326304
+11-17 16:20:39.789  3687  3687 I FakePlayer: command play
+11-17 16:20:39.790  1898  2185 I MediaFocusControl: requestAudioFocus() from uid/pid 10117/3687 clientId=android.media.AudioManager@3735375app.etv.fakeplayer.PlayerActivity$$ExternalSyntheticLambda0@d065f0a callingPack=app.etv.fakeplayer req=1 flags=0x0 sdk=35
+11-17 16:20:39.790  1898  1898 D MediaSessionService: Media button session is changed to app.etv.fakeplayer/film (userId=0)
+11-17 16:20:39.791  3687  3687 I FakePlayer: state PLAYING
+11-17 16:20:39.801  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:40.494  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=356928
+11-17 16:20:40.917  1898  1928 I system_server: Explicit concurrent copying GC freed 18701(1546KB) AllocSpace objects, 8(224KB) LOS objects, 42% free, 6643KB/11MB, paused 15us total 14.021ms
+11-17 16:20:41.495  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=401280
+11-17 16:20:41.673  1898  2543 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-17 16:20:41.864  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:41.873  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:20:41.874  4117  4117 W Gralloc3: mapper 3.x is not supported
+11-17 16:20:41.877  4117  4117 D HostConnection: createUnique: call
+11-17 16:20:41.877  4117  4117 D HostConnection: HostConnection::get() New Host Connection established 0x7ca89440a5a0, tid 4117
+11-17 16:20:41.879  4117  4117 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:20:41.880  4117  4117 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:20:41.880  4117  4117 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff609000 size 0x2000
+11-17 16:20:41.893  4117  4117 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:20:41.893  4117  4117 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec26000 size 0x9e5000
+11-17 16:20:42.302  2267  2267 I wpa_supplicant: nl80211: send_and_recv->nl_recvmsgs failed: -33
+11-17 16:20:42.302  1898  2185 D WificondControl: Scan result ready event
+11-17 16:20:42.497  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=444576
+11-17 16:20:43.498  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=488928
+11-17 16:20:44.499  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=533280
+11-17 16:20:45.500  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=577632
+11-17 16:20:46.428  1699  3712 W audio_hw_generic: Hardware backing HAL too slow, could only write 0 of 661 frames
+11-17 16:20:46.501  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=621984
+11-17 16:20:47.503  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=666336
+11-17 16:20:48.504  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=709632
+11-17 16:20:49.505  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=753984
+11-17 16:20:50.507  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=798336
+11-17 16:20:51.508  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=842688
+11-17 16:20:52.509  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=887040
+11-17 16:20:53.510  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=930336
+11-17 16:20:54.368  1756  1756 E netmgr  : Failed to open QEMU pipe 'qemud:network': Invalid argument
+11-17 16:20:54.432  1763  1763 E wifi_forwarder: RemoteConnection failed to initialize: RemoteConnection failed to open pipe
+11-17 16:20:54.511  3687  3687 I FakePlayer: STATUS playing=true volume=1.0 head=974688
+11-17 16:20:55.177  1713  1846 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10371072
+11-17 16:20:55.188  1570  1570 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-17 16:20:55.188  4152  4152 W Gralloc3: mapper 3.x is not supported
+11-17 16:20:55.191  4152  4152 D HostConnection: createUnique: call
+11-17 16:20:55.192  4152  4152 D HostConnection: HostConnection::get() New Host Connection established 0x77a1a63b35a0, tid 4152
+11-17 16:20:55.194  4152  4152 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-17 16:20:55.194  4152  4152 D eglCodecCommon: allocate: Ask for block of size 0x1000
+11-17 16:20:55.194  4152  4152 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3ff609000 size 0x2000
+11-17 16:20:55.207  4152  4152 D eglCodecCommon: allocate: Ask for block of size 0x9e4000
+11-17 16:20:55.208  4152  4152 D eglCodecCommon: allocate: ioctl allocate returned offset 0x3fec26000 size 0x9e5000
