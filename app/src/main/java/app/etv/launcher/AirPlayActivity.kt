@@ -30,7 +30,8 @@ import com.flymop.airplaytv.service.AirPlayService
  * ":airplay" process, apart from the home screen.
  *
  * The remote: Back ends a mirrored screen or a video (and hides its bar first); for music Back just
- * goes back, the music carries on (and shows in Now playing on the home screen). OK or Play / Pause
+ * goes back, the music carries on (and shows in Now playing on the home screen). Leaving a
+ * mirrored screen for another one ends it too; videos and music carry on in the background. OK or Play / Pause
  * pauses; Left / Right skip 10 seconds in a video, or to the previous / next song.
  */
 class AirPlayActivity : Activity() {
@@ -90,6 +91,15 @@ class AirPlayActivity : Activity() {
     }
 
     private val hideHint = Runnable { hint.animate().alpha(0f).setDuration(400L).start() }
+
+    /**
+     * Leaving a mirrored screen (Home, another app) ends it after a moment: the phone's screen
+     * isn't something to keep hearing in the background. Not when the athan covers it.
+     */
+    private val leftMirror = Runnable {
+        val s = AirPlay.service ?: return@Runnable
+        if (!visible && mode == Mode.MIRROR && !s.athan && !isFinishing) end()
+    }
 
     // ---------------- set up ----------------
 
@@ -252,6 +262,16 @@ class AirPlayActivity : Activity() {
     }
 
     // ---------------- lifecycle ----------------
+
+    override fun onStart() {
+        super.onStart()
+        handler.removeCallbacks(leftMirror)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (mode == Mode.MIRROR && !isFinishing) handler.postDelayed(leftMirror, 2_000L)
+    }
 
     override fun onResume() {
         super.onResume()

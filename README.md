@@ -156,8 +156,8 @@ press **Back**), you're back where you were. Nothing comes up just because a dev
 | Up / Down | A video: shows its bar (time, how far along) |
 | Stop | Ends it |
 
-Music that's carrying on shows in **Now playing** on the home screen, with play / pause and previous / next,
-and OK on the artwork opens the AirPlay screen again.
+Music, and a video you leave with Home, carry on and show in **Now playing** on the home screen (play / pause,
+previous / next; OK on the artwork opens the AirPlay screen again). A mirrored screen ends when you leave it.
 
 **During the athan** AirPlay is quiet like everything else: a video on the TV pauses, music on the phone pauses,
 a mirrored screen goes silent behind the athan screen, and nothing sent meanwhile is heard or shown. Afterwards

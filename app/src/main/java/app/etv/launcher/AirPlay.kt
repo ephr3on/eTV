@@ -74,9 +74,16 @@ object AirPlay {
 
     // ---------------- the athan ----------------
 
-    /** The athan begins (or is still on): AirPlay goes quiet and what it was playing waits. */
-    fun holdForAthan(ctx: Context) {
-        if (receiverAlive(ctx)) send(ctx, AirPlayService.ACTION_HOLD, foreground = false)
+    /**
+     * The athan begins: AirPlay's screen stays behind it, and with [quiet] AirPlay goes silent and
+     * what it was playing waits.
+     */
+    fun holdForAthan(ctx: Context, quiet: Boolean) {
+        if (receiverAlive(ctx)) {
+            send(ctx, AirPlayService.ACTION_HOLD, foreground = false) {
+                putExtra(AirPlayService.EXTRA_QUIET, quiet)
+            }
+        }
     }
 
     /** The athan is over: AirPlay's sound comes back, and with [resume] what was playing carries on. */

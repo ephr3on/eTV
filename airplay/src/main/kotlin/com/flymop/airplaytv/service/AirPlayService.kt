@@ -378,14 +378,18 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
             }
             ACTION_HOLD -> {
                 // Only meaningful while the receiver runs; never starts it.
-                if (_serverState.value == ServerState.RUNNING) holdForAthan(true) else stopSelf(startId)
+                if (_serverState.value == ServerState.RUNNING) {
+                    holdForAthan(true, quiet = intent.getBooleanExtra(EXTRA_QUIET, true))
+                } else {
+                    stopSelf(startId)
+                }
             }
             ACTION_RELEASE -> {
                 if (_serverState.value == ServerState.RUNNING) {
-                    val wasHeld = held
+                    val wasOn = athan
                     holdForAthan(false, intent.getBooleanExtra(EXTRA_RESUME, true))
                     // Something was sent during the athan: show it now.
-                    if (wasHeld && (_mirroringActive.value || _videoLocation.value != null || _audioOnly.value)) launchScreen()
+                    if (wasOn && (_mirroringActive.value || _videoLocation.value != null || _audioOnly.value)) launchScreen()
                 } else {
                     stopSelf(startId)
                 }
@@ -1195,7 +1199,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
      */
     fun launchScreen() {
         _mainHandler.post {
-            if (held) return@post
+            if (athan) return@post
             val launchIntent = Intent(ACTION_SHOW).setPackage(packageName)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             try {
@@ -1282,7 +1286,10 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
 
     // ---------------- eTV: quiet during the athan ----------------
 
-    /** True while the athan plays: AirPlay is silent, videos and music wait. */
+    /** True while the athan is on: its screen covers the TV, so AirPlay's doesn't come up. */
+    @Volatile var athan = false
+        private set
+    /** True while the athan plays and things are paused for it: AirPlay is silent, videos and music wait. */
     @Volatile var held = false
         private set
     private var _heldVideo = false
@@ -1291,12 +1298,14 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     @Volatile private var _audioOpen = false
 
     /**
-     * [on]: silences AirPlay and pauses what can be paused (a video on the TV, music on the
-     * phone), remembering what was playing. Off: the sound comes back, and with [resume] what was
-     * playing carries on. Main thread.
+     * [on]: the athan begins. With [quiet], silences AirPlay and pauses what can be paused (a video
+     * on the TV, music on the phone), remembering what was playing. Off: the athan is over; the
+     * sound comes back, and with [resume] what was playing carries on. Main thread.
      */
-    fun holdForAthan(on: Boolean, resume: Boolean = true) {
+    fun holdForAthan(on: Boolean, resume: Boolean = true, quiet: Boolean = true) {
         if (on) {
+            athan = true
+            if (!quiet) return
             if (!held) {
                 held = true
                 _heldVideo = _videoPlaybackActive.value && _videoPlaybackInfo.value.playing
@@ -1311,6 +1320,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
             audioRenderer.stop()
             return
         }
+        athan = false
         if (!held) return
         held = false
         if (_audioOpen && _connectionCount.value > 0) audioRenderer.start()
@@ -1364,6 +1374,8 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
         /** The athan is over: sound back; with [EXTRA_RESUME] what was playing carries on. */
         const val ACTION_RELEASE = "com.flymop.airplaytv.RELEASE"
         const val EXTRA_RESUME = "resume"
+        /** With [ACTION_HOLD]: also silence and pause (false: the athan only covers the screen). */
+        const val EXTRA_QUIET = "quiet"
         /** In filesDir: the receiver's state for the app's settings. */
         const val STATUS_FILE = "airplay-status"
         private const val TAG = "AirPlayService"
