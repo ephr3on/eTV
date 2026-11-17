@@ -18,6 +18,7 @@ import android.media.session.MediaController
 import android.media.session.MediaSession
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -152,9 +153,20 @@ class NowPlayingWatcher(private val context: Context, private val onChange: (Now
     private fun setControllers(list: List<MediaController>) {
         controllers.forEach { try { it.unregisterCallback(callback) } catch (_: Exception) {} }
         // Other apps; and from eTV itself only AirPlay (music from an iPhone, say), never the athan.
-        controllers = list.filter { it.packageName != context.packageName || it.tag == AirPlayService.SESSION_TAG }
+        controllers = list.filter { it.packageName != context.packageName || isAirPlay(it) }
         controllers.forEach { it.registerCallback(callback, handler) }
         evaluate()
+    }
+
+    /**
+     * eTV's own session that is AirPlay's, not the athan's. A session's tag can only be read from
+     * Android 11; before that, the athan's is the one that names eTV as its artist.
+     */
+    private fun isAirPlay(c: MediaController): Boolean = try {
+        if (Build.VERSION.SDK_INT >= 30) c.tag == AirPlayService.SESSION_TAG
+        else c.metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST) != "eTV"
+    } catch (_: Exception) {
+        false
     }
 
     private fun lastActive(c: MediaController, now: Long): Long {
