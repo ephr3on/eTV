@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- AirPlay: answering iPhones, iPads and Macs on the home network, and playing what they send. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Hearing Bonjour (how Apple devices find the TV) on Wi-Fi. -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <application>
+        <!-- The AirPlay receiver: always listening while AirPlay is on. In a process of its own, so
+             the app around it (eTV, a launcher) never depends on the native engine. -->
+        <service
+            android:name="com.flymop.airplaytv.service.AirPlayService"
+            android:exported="false"
+            android:process=":airplay"
+            android:foregroundServiceType="connectedDevice|mediaPlayback" />
+    </application>
+</manifest>

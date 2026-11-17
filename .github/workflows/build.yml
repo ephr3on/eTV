@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The AirPlay receiver's sources: UxPlay, libplist, openssl-cmake, FFmpeg.
+          submodules: recursive
 
       - uses: actions/setup-java@v6
         with:
@@ -20,6 +23,12 @@ jobs:
           java-version: 17
 
       - uses: gradle/actions/setup-gradle@v6
+
+      # The AirPlay receiver's native code (airplay/): the NDK and CMake it's built with.
+      - name: Android NDK and CMake
+        run: |
+          yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
+          "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --install "ndk;27.0.12077973" "cmake;3.22.1" > /dev/null
 
       - name: Build release APK
         id: build

@@ -189,6 +189,7 @@ check "still playing a while later" film_playing
 shot 15-film-again
 
 # =====================================================================
+adb logcat -d > "$OUT/logcat-1.txt"
 say ""
 say "== 2. The whole athan and dua, untouched"
 adb logcat -c

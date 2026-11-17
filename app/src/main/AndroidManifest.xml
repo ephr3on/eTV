@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- AirPlay (the airplay module) needs Android 8; eTV still installs on older TVs and just
+         doesn't offer it there (AirPlay.supported). -->
+    <uses-sdk tools:overrideLibrary="com.flymop.airplaytv" />
 
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
@@ -155,6 +160,25 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <!-- AirPlay: an iPhone's, iPad's or Mac's screen, a video or music on the TV. Its own task, so
+             closing it returns to whatever was on screen; and, with the receiver, its own process, so
+             the home screen never depends on the AirPlay engine. -->
+        <activity
+            android:name=".AirPlayActivity"
+            android:process=":airplay"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|smallestScreenSize|uiMode|density"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:taskAffinity="app.etv.launcher.airplay"
+            android:theme="@style/Theme.ETV">
+            <intent-filter>
+                <action android:name="com.flymop.airplaytv.SHOW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <!-- Hears back from Android's installer during an update. -->
         <receiver

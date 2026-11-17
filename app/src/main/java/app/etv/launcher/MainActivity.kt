@@ -238,6 +238,9 @@ class MainActivity : EtvActivity() {
         AthanScheduler.checkDue(this)
         AthanSounds.ensureChosen(this)
 
+        // AirPlay: always listening for Apple devices (while it's on in Customise).
+        AirPlay.ensureRunning(this)
+
         // First run: offer the Home button setup once, only if Home doesn't reach eTV yet.
         if (!prefs.setupShown) {
             prefs.setupShown = true

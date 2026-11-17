@@ -352,6 +352,9 @@ class AthanService : Service() {
         // 1. Stop whatever is playing: through its own media controls, or (for anything eTV can't
         // see) the remote's Pause key; and the audio focus, which makes the rest pause too. Then
         // cover the screen.
+        // AirPlay (part of eTV, so pauseOthers skips it): its screen stays behind the athan's, and
+        // when things pause it goes quiet too, with anything sent meanwhile, until the athan is over.
+        AirPlay.holdForAthan(this, quiet = p.athanPause)
         if (p.athanPause) {
             val soundBefore = audio().isMusicActive
             pauseOthers()
@@ -709,7 +712,10 @@ class AthanService : Service() {
         paused = ArrayList()
         pausedPackages.clear()
         pausedByKey = false
-        if (Prefs(this).athanResume) resumeOthers(packages, was, byKey)
+        val resume = Prefs(this).athanResume
+        if (resume) resumeOthers(packages, was, byKey)
+        // After the athan screen has gone, so AirPlay's screen can come back over it.
+        AirPlay.releaseAfterAthan(this, resume)
         started = false
         try { wake?.release() } catch (_: Exception) {}
         wake = null

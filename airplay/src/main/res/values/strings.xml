@@ -1,0 +1,7 @@
+<resources>
+    <string name="notification_channel">AirPlay</string>
+    <string name="notification_title">AirPlay is on</string>
+    <string name="notification_text">Your iPhone, iPad or Mac can play on this TV</string>
+    <string name="notification_pin_title">AirPlay code</string>
+    <string name="notification_pin_text">Type %1$s on your device</string>
+</resources>

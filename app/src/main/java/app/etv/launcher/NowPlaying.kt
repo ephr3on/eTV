@@ -18,6 +18,7 @@ import android.media.session.MediaController
 import android.media.session.MediaSession
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -29,6 +30,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.flymop.airplaytv.service.AirPlayService
 
 /**
  * Android only shows other apps' media sessions (what's playing, and its controls) to apps that
@@ -150,9 +152,21 @@ class NowPlayingWatcher(private val context: Context, private val onChange: (Now
 
     private fun setControllers(list: List<MediaController>) {
         controllers.forEach { try { it.unregisterCallback(callback) } catch (_: Exception) {} }
-        controllers = list.filter { it.packageName != context.packageName }
+        // Other apps; and from eTV itself only AirPlay (music from an iPhone, say), never the athan.
+        controllers = list.filter { it.packageName != context.packageName || isAirPlay(it) }
         controllers.forEach { it.registerCallback(callback, handler) }
         evaluate()
+    }
+
+    /**
+     * eTV's own session that is AirPlay's, not the athan's. A session's tag can only be read from
+     * Android 11; before that, the athan's is the one that names eTV as its artist.
+     */
+    private fun isAirPlay(c: MediaController): Boolean = try {
+        if (Build.VERSION.SDK_INT >= 30) c.tag == AirPlayService.SESSION_TAG
+        else c.metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST) != "eTV"
+    } catch (_: Exception) {
+        false
     }
 
     private fun lastActive(c: MediaController, now: Long): Long {
@@ -188,7 +202,7 @@ class NowPlayingWatcher(private val context: Context, private val onChange: (Now
         val md = c.metadata
         val st = c.playbackState
         val pkg = c.packageName
-        val (app, icon) = appCache.getOrPut(pkg) {
+        val (app, icon) = if (pkg == context.packageName) "AirPlay" to null else appCache.getOrPut(pkg) {
             val pm = context.packageManager
             try {
                 val ai = pm.getApplicationInfo(pkg, 0)

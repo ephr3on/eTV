@@ -2,6 +2,7 @@ name: Athan rehearsal
 
 # The athan on an Android emulator, with a stand-in film playing: does the film stop, does
 # nothing but the code get out of the athan, and does the film carry on with its sound afterwards?
+# Then AirPlay (scripts/airplay-e2e.sh): the receiver starts, answers and survives on its own.
 # Runs for branches named e2e*, and by hand; the report goes to the branch e2e-out.
 on:
   push:
@@ -21,6 +22,9 @@ jobs:
         api: [29, 33]
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The AirPlay receiver's sources: UxPlay, libplist, openssl-cmake, FFmpeg.
+          submodules: recursive
 
       - uses: actions/setup-java@v6
         with:
@@ -28,6 +32,12 @@ jobs:
           java-version: 17
 
       - uses: gradle/actions/setup-gradle@v6
+
+      # The AirPlay receiver's native code (airplay/): the NDK and CMake it's built with.
+      - name: Android NDK and CMake
+        run: |
+          yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
+          "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --install "ndk;27.0.12077973" "cmake;3.22.1" > /dev/null
 
       - name: Build eTV and the stand-in film app
         env:
@@ -54,7 +64,7 @@ jobs:
           disable-animations: true
           # Not -no-audio: the emulator needs its sound card for the film and the athan to play.
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-boot-anim -camera-back none
-          script: bash scripts/athan-e2e.sh out/api${{ matrix.api }} || touch out/api${{ matrix.api }}/FAILED
+          script: bash scripts/athan-e2e.sh out/api${{ matrix.api }} || touch out/api${{ matrix.api }}/FAILED; bash scripts/airplay-e2e.sh out/api${{ matrix.api }}/airplay || touch out/api${{ matrix.api }}/AIRPLAY-FAILED
 
       - name: Keep the report
         if: always()

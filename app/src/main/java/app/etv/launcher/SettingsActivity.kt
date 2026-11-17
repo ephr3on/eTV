@@ -37,6 +37,7 @@ class SettingsActivity : EtvActivity() {
         Category("Look", "The theme, its colours and its background."),
         Category("Home screen", "What the home screen shows, and how the apps look on it."),
         Category("Athan", "Prayer times on the home screen, and the call to prayer when each one comes."),
+        Category("AirPlay", "Your iPhone, iPad or Mac on the TV: its screen, videos, photos and music."),
         Category("Apps", "Hidden apps and your home row."),
         Category("Home button", "Making the remote's Home button open eTV."),
         Category("Updates", "New versions of eTV, straight from GitHub."),
@@ -277,6 +278,7 @@ class SettingsActivity : EtvActivity() {
             "Look" -> lookPane()
             "Home screen" -> homeScreenPane()
             "Athan" -> athanPane()
+            "AirPlay" -> airplayPane()
             "Apps" -> appsPane()
             "Home button" -> homeButtonPane()
             "Updates" -> updatesPane()
