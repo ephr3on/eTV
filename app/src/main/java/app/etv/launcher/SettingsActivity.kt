@@ -575,7 +575,14 @@ class SettingsActivity : EtvActivity() {
                         inPane(f) -> pane
                         else -> null
                     }
-                    if (group != null && f != null && FocusFinder.getInstance().findNextFocus(group, f, dir) == null) return true
+                    if (group != null && f != null && FocusFinder.getInstance().findNextFocus(group, f, dir) == null) {
+                        // Past the last option: show the notes under it (they can't be selected,
+                        // so without this a page's closing lines could never be scrolled into view).
+                        if (group === pane && dir == View.FOCUS_DOWN) {
+                            paneScroll.smoothScrollTo(0, pane.height - paneScroll.height)
+                        }
+                        return true
+                    }
                 }
             }
         }
