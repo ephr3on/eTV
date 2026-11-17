@@ -1,0 +1,17 @@
+== AirPlay
+  PASS  the receiver is running
+  PASS  in its own process, apart from the home screen
+  PASS  the AirPlay server started
+  PASS  it announced itself over Bonjour
+      answer: RTSP/1.0 200 OK (1045 bytes)
+  PASS  it answers an iPhone's first request (GET /info)
+  PASS  the AirPlay screen didn't open just for that
+  -- Customise -> AirPlay
+  PASS  Customise shows AirPlay as ready
+  -- the receiver dies: the home screen stays
+  PASS  the home screen's process is untouched
+  PASS  Home brings the receiver back
+      answer: RTSP/1.0 200 OK (1045 bytes)
+  PASS  and it answers again
+
+== 10 passed, 0 failed

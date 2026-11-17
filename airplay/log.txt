@@ -1,0 +1,12 @@
+Performing Streamed Install
+Success
+Starting: Intent { cmp=app.etv.launcher/.MainActivity }
+Status: ok
+LaunchState: WARM
+Activity: app.etv.launcher/.MainActivity
+TotalTime: 2563
+WaitTime: 2566
+Complete
+17000
+kill: unknown pid '7804'
+/system/bin/sh: kill: 7804: Operation not permitted
