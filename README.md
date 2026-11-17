@@ -1,9 +1,10 @@
 # eTV — a calm Sidi Bou Said launcher for Android TV
 
 A home screen with arched-door app tiles, a quiet clock and greeting, today's prayer times, and nothing that
-moves on its own. No libraries, no ads, no autoplaying previews. It connects to this repository on GitHub to look
-for a new version of itself (you can switch that off), and, for the athan, to the prayer-time source you choose
-and the Internet Archive for the recordings you pick.
+moves on its own. No ads, no autoplaying previews, and no libraries in the launcher itself. It connects to this
+repository on GitHub to look for a new version of itself (you can switch that off), and, for the athan, to the
+prayer-time source you choose and the Internet Archive for the recordings you pick. It's also an AirPlay
+receiver: your iPhone, iPad or Mac can show its screen, a video or music on the TV whenever you like.
 
 ## Themes
 
@@ -133,6 +134,44 @@ permission as *Now playing*; to bring the athan screen up over any app it uses t
 adb shell appops set app.etv.launcher SYSTEM_ALERT_WINDOW allow
 ```
 
+## AirPlay
+
+eTV is always ready for AirPlay, like an Apple TV: an iPhone, iPad or Mac on the same Wi-Fi sees the TV as
+**eTV** (you can rename it) and can play on it at any time, whatever is on screen.
+
+- **Your whole screen:** Control Centre → Screen Mirroring → eTV.
+- **A video** (Photos, Safari, YouTube and other apps with the AirPlay icon): the AirPlay icon → eTV. The TV
+  plays the video itself, so your phone stays free.
+- **Music and podcasts:** the AirPlay icon in Music, Spotify, Podcasts → eTV. The artwork shows in an arched
+  window, with the song and how far along it is.
+
+When something starts, the AirPlay screen comes up by itself over whatever was on; when it ends (or you
+press **Back**), you're back where you were. Nothing comes up just because a device looked at the TV.
+
+| On the AirPlay screen | What it does |
+|---|---|
+| Back | Ends a mirrored screen or a video (the video's bar goes first). With music: back to where you were, and the music carries on |
+| OK, Play / Pause | Pause / play |
+| Left / Right | A video: 10 seconds back / on. Music: the previous / next song |
+| Up / Down | A video: shows its bar (time, how far along) |
+| Stop | Ends it |
+
+Music that's carrying on shows in **Now playing** on the home screen, with play / pause and previous / next,
+and OK on the artwork opens the AirPlay screen again.
+
+**During the athan** AirPlay is quiet like everything else: a video on the TV pauses, music on the phone pauses,
+a mirrored screen goes silent behind the athan screen, and nothing sent meanwhile is heard or shown. Afterwards
+the sound comes back and what was playing carries on (if *What's playing on the TV* is set to carry on).
+
+**Customise → AirPlay**: on / off, the name your devices see, *Ask for a code* (the TV shows a code to type
+on a device before it can play; off by default, so anyone on your Wi-Fi can play), the largest size for
+mirrored screens, and H.265 (switch it off if a mirrored screen stays black).
+
+The receiver is [flymop/airplay-tv](https://github.com/flymop/airplay-tv)'s engine (UxPlay, OpenSSL, FFmpeg's
+ALAC decoder, Oboe, Media3), in `airplay/`. It runs in a process of its own, so nothing in it can take the home
+screen down; if it ever stops, going Home starts it again. It keeps the TV awake only while a device is
+connected. It needs Android 8 or newer (older TVs still run eTV, without AirPlay). See `airplay/NOTICE.md`.
+
 ## Making the Home button open eTV
 
 Philips and many other TVs open their own home screen when you press Home, even after you choose another
@@ -177,7 +216,10 @@ Every push to `main` builds eTV and, once the signing key below is set up, publi
 (see *Updates*). Builds of other branches are under the **Actions** tab, as the **eTV-apk** artifact.
 
 Or open this folder in Android Studio and run `./gradlew assembleRelease`
-(the APK is in `app/build/outputs/apk/release/`).
+(the APK is in `app/build/outputs/apk/release/`). AirPlay's native sources are git submodules, so clone with
+`git clone --recursive` (or run `git submodule update --init --recursive`), and the build needs the NDK
+(27.0.12077973) and CMake 3.22.1 from Android Studio's SDK Manager. `ETV_ABIS=arm64-v8a ./gradlew assembleRelease`
+builds the AirPlay engine for one processor only, which is quicker.
 
 ### The signing key
 
@@ -252,6 +294,9 @@ app/src/main/java/app/etv/launcher/
   AthanService.kt       the athan alarm, and playing the athan and dua while pausing the rest of the TV
   AthanActivity.kt      the athan screen
   AthanSettings.kt      Customise → Athan
+  AirPlay.kt            AirPlay on eTV's side: starting the receiver, the athan, its status
+  AirPlayActivity.kt    the AirPlay screen: a mirrored screen, a video and its bar, music, the code
+  AirPlaySettings.kt    Customise → AirPlay
 fakeplayer/                  a stand-in film app, only for the athan rehearsal on an emulator
 scripts/athan-e2e.sh         that rehearsal (.github/workflows/e2e.yml, for branches e2e*)
   BootReceiver.kt       opens eTV when the TV starts
@@ -266,6 +311,16 @@ app/src/test/                HomeShots: pictures of the home screen in every the
 scripts/check-sounds.sh      fetches every downloadable recording and says what it is
 .github/workflows/shots.yml  runs both for branches named shots*, and puts the results on the branch shots-out
 install.sh, make-default.sh  one-command install and Home setup from a Mac
+scripts/airplay-e2e.sh       AirPlay on the emulator: starts, answers, announces, survives (after the athan rehearsal)
+airplay/                     the AirPlay receiver (GPLv3, from flymop/airplay-tv; see airplay/NOTICE.md)
+  src/main/kotlin/           the service, the native bridge, video and sound, Bonjour, the sender's remote control
+  src/main/cpp/              the JNI bridge and sound engine; third_party/ (submodules) and patches/ for them
 ```
 
-minSdk 21 (Android TV 5.0+), targetSdk 35.
+minSdk 21 (Android TV 5.0+; AirPlay from Android 8), targetSdk 35.
+
+## Licence
+
+eTV includes the AirPlay receiver from flymop/airplay-tv, which is under the GNU General Public License v3.0,
+so eTV is distributed under the GPLv3 too: see [LICENSE](LICENSE). The fonts keep their own SIL Open Font
+License, and the athan recordings are public domain (see their CREDITS.txt).

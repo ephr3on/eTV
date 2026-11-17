@@ -13,7 +13,7 @@ android {
         targetSdk = 35
         // GitHub sets ETV_VERSION_CODE (100 + the build number) so every build counts as newer.
         versionCode = System.getenv("ETV_VERSION_CODE")?.toIntOrNull() ?: 6
-        versionName = "1.9.1"
+        versionName = "2.0.0"
     }
 
     // One fixed key, so every new build installs over the previous one.
@@ -79,9 +79,11 @@ android {
     }
 }
 
-// No libraries on purpose: plain Android Views keep the launcher tiny and quick to start.
-// (The two below are only for the screenshot test; they never go into the APK.)
+// No libraries on purpose for the launcher itself: plain Android Views keep it tiny and quick to
+// start. The one exception is AirPlay (the airplay module), which needs a real media engine.
+// (junit and robolectric are only for the screenshot test; they never go into the APK.)
 dependencies {
+    implementation(project(":airplay"))
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.14.1")
 }

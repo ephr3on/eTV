@@ -4,9 +4,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 
-/** Opens eTV when the TV finishes starting up, and again right after eTV updates itself. */
+/**
+ * Opens eTV when the TV finishes starting up, and again right after eTV updates itself; and starts
+ * AirPlay either way, so Apple devices can find the TV without eTV being opened first.
+ */
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED || intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
+            AirPlay.ensureRunning(context)
+        }
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED -> Unit
             // Only after an update eTV installed itself (eTV clears the flag once it's back on screen).

@@ -29,6 +29,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.flymop.airplaytv.service.AirPlayService
 
 /**
  * Android only shows other apps' media sessions (what's playing, and its controls) to apps that
@@ -150,7 +151,8 @@ class NowPlayingWatcher(private val context: Context, private val onChange: (Now
 
     private fun setControllers(list: List<MediaController>) {
         controllers.forEach { try { it.unregisterCallback(callback) } catch (_: Exception) {} }
-        controllers = list.filter { it.packageName != context.packageName }
+        // Other apps; and from eTV itself only AirPlay (music from an iPhone, say), never the athan.
+        controllers = list.filter { it.packageName != context.packageName || it.tag == AirPlayService.SESSION_TAG }
         controllers.forEach { it.registerCallback(callback, handler) }
         evaluate()
     }
@@ -188,7 +190,7 @@ class NowPlayingWatcher(private val context: Context, private val onChange: (Now
         val md = c.metadata
         val st = c.playbackState
         val pkg = c.packageName
-        val (app, icon) = appCache.getOrPut(pkg) {
+        val (app, icon) = if (pkg == context.packageName) "AirPlay" to null else appCache.getOrPut(pkg) {
             val pm = context.packageManager
             try {
                 val ai = pm.getApplicationInfo(pkg, 0)
