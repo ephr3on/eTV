@@ -700,10 +700,12 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     }
 
     override fun onVideoSessionPoll() {
+        clearPin()
         _lastVideoPollAt = SystemClock.elapsedRealtime()
     }
 
     override fun onVideoPlay(location: String, startPositionSeconds: Float) {
+        clearPin()
         _videoLocation.value = location
         _videoPlaySeq.value++
         _videoPollSuppressed = false
@@ -768,6 +770,8 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     }
 
     override fun onVolumeChange(volume: Float) {
+        // A device only sends its volume once the code was accepted: the code screen can go.
+        clearPin()
         val frac = if (volume <= -144f) 0f else ((volume + 30f) / 30f).coerceIn(0f, 1f)
         _senderFrac = frac
         Log.d(TAG, "volume ${volume}dB, frac $frac")
@@ -788,6 +792,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     }
 
     override fun onClientVolume(): Float {
+        clearPin()
         val max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         val vol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         val db = if (vol == 0) -144f else -30f + 30f * vol / max
@@ -879,6 +884,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     }
 
     override fun onMetadata(data: ByteArray) {
+        clearPin()
         val map = DmapParser.parse(data)
         val info = TrackInfo.fromDmap(map, _trackInfo.value.coverArt)
         _trackInfo.value = info
@@ -917,6 +923,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     }
 
     override fun onDacpId(dacpId: String, activeRemote: String) {
+        clearPin()
         dacpController?.update(dacpId, activeRemote)
         log("DACP: $dacpId")
     }
@@ -1049,6 +1056,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     }
 
     private fun clearPin() {
+        if (_lastPin == null && _activeRemotePin.value == null) return
         _lastPin = null
         _activeRemotePin.value = null
         pinCallback?.invoke(null)

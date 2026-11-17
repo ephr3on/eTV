@@ -1,0 +1,89 @@
+--- a/lib/http_handlers.h	2026-11-17 09:11:01.406618155 +0100
++++ b/lib/http_handlers.h	2026-11-17 09:11:12.936283305 +0100
+@@ -139,7 +139,7 @@
+         float value = strtof(rate, &end);
+         if (end && end != rate) {
+             rate_value =  value;
+-            logger_log(raop->logger, LOGGER_DEBUG, "http_handler_rate: got rate = %.6f", rate_value);
++            logger_log(raop->logger, LOGGER_INFO, "http_handler_rate: got rate = %.6f", rate_value);
+         }
+     }
+     raop->callbacks.on_video_rate(raop->callbacks.cls, rate_value);
+@@ -405,15 +405,17 @@
+     int fcup_response_statuscode = 0;
+     char *type = NULL;
+     bool logger_debug = (logger_get_level(raop->logger) >= LOGGER_DEBUG);
+-    if (!airplay_video) goto post_action_error;
++    /* eTV: only the FCUP response (unhandledURLResponse) needs the current HLS video; queue requests
++       (playlistRemove / playlistInsert) arrive with none too, e.g. YouTube after its item was removed,
++       and answering them 400 makes the sender pause and stall */
+ 
+     const char* session_id = http_request_get_header(request, "X-Apple-Session-ID");
+     if (!session_id) {
+         logger_log(raop->logger, LOGGER_ERR, "Play request had no X-Apple-Session-ID");
+         goto post_action_error;
+     }    
+-    const char *apple_session_id = get_apple_session_id(airplay_video);
+-    if (strcmp(session_id, apple_session_id)){
++    const char *apple_session_id = airplay_video ? get_apple_session_id(airplay_video) : NULL;
++    if (apple_session_id && strcmp(session_id, apple_session_id)){
+         logger_log(raop->logger, LOGGER_ERR, "X-Apple-Session-ID has changed:\n  was:\"%s\"\n  now:\"%s\"",
+                    apple_session_id, session_id);
+         goto post_action_error;
+@@ -454,7 +456,7 @@
+     if (!type) {
+         goto post_action_error;
+     }
+-    logger_log(raop->logger, LOGGER_DEBUG, "action type is %s", type);
++    logger_log(raop->logger, LOGGER_INFO, "action type is %s (current_video %d)", type, raop->current_video);
+     /* check that plist structure is as expected*/
+     plist_t req_params_node = NULL;
+     if (PLIST_IS_DICT (req_root_node)) {
+@@ -471,16 +473,15 @@
+         plist_t req_params_item_uuid_node = plist_dict_get_item(req_params_item_node, "uuid");
+         char* remove_uuid = NULL;
+         plist_get_string_val(req_params_item_uuid_node, &remove_uuid);
+-        assert(remove_uuid);
+-        int id  =  get_playlist_by_uuid(raop, remove_uuid);
+-        if (id == raop->current_video) {
++        int id  =  remove_uuid ? get_playlist_by_uuid(raop, remove_uuid) : -1;
++        if (id >= 0 && id == raop->current_video && airplay_video) {
+             raop->current_video = -1;
+             float position = raop->callbacks.on_video_playlist_remove(raop->callbacks.cls);
+             /* keep the playlist (until space is needed for another one) in case its playback_uuid is re-requested
+                the video will then be restarted at its previous position */
+             set_resume_position_seconds(airplay_video, position);
+         } else {
+-            logger_log(raop->logger, LOGGER_WARNING, "playlistRemove uuid %s does not match current_video\n", remove_uuid);
++            logger_log(raop->logger, LOGGER_INFO, "playlistRemove uuid %s is not the current video (acknowledged)", remove_uuid ? remove_uuid : "(none)");
+         }
+         plist_mem_free (remove_uuid);
+ 
+@@ -507,10 +508,11 @@
+             printf("playlistInsert parameter item list is:\n%s", plist_xml);
+             plist_mem_free(plist_xml);
+         }
+-        logger_log(raop->logger, LOGGER_ERR, "FIXME: playlistInsert is not yet implemented");
++        logger_log(raop->logger, LOGGER_INFO, "playlistInsert acknowledged (the sender sends /play when it wants the item played)");
+ 
+     } else if (!strcmp(type, "unhandledURLResponse")) {   
+         /* handling type "unhandledURLResponse" */
++        if (!airplay_video) goto post_action_error;
+         uint_val = 0;
+         int fcup_response_datalen = 0;
+ 
+@@ -797,6 +799,14 @@
+         raop_destroy_airplay_video(raop, id);
+         id = -1;
+     }
++    /* eTV: an HLS entry whose playlists never finished downloading can't be played again from
++       memory (the player would get an empty master playlist): fetch it afresh */
++    if (id >= 0 && strstr(get_playback_location(raop->airplay_video[id]), "/master.m3u8") &&
++        !get_initial_fetch_complete(raop->airplay_video[id])) {
++        logger_log(raop->logger, LOGGER_INFO, "stored playlist %s was never complete: fetching again", playback_uuid);
++        raop_destroy_airplay_video(raop, id);
++        id = -1;
++    }
+ 
+     /* check if playlist is already downloaded and stored (may have been interrupted by advertisements ) */
+     if (id >= 0) {
