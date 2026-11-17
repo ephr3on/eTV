@@ -31,6 +31,10 @@ class DecoderSelector(private val ctx: Context) {
             Build.MANUFACTURER.equals("Amazon", ignoreCase = true)
     }
 
+    private val tv by lazy {
+        ctx.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_LEANBACK)
+    }
+
     private val blacklist by lazy {
         buildList {
             if (!emulator) {
@@ -57,6 +61,9 @@ class DecoderSelector(private val ctx: Context) {
             if (adreno >= 400) addAll(qti)
             if (fireOs) { add("omx.mtk"); add("omx.amlogic") }
             if ("powervr" in glRenderer) add("omx.mtk")
+            // eTV: a TV's MediaTek decoders play H.265 broadcasts and 4K apps every day (Philips, TCL,
+            // Hisense...): sharper mirroring at the same bitrate. Customise → AirPlay can switch it off.
+            if (tv) { add("omx.mtk"); add("c2.mtk") }
         }
     }
 

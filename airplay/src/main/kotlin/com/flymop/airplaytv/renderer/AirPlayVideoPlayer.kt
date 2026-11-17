@@ -6,7 +6,8 @@
  *
  * Licensed under the GNU General Public License v3.0 (GPLv3).
  *
- * Changed for eTV (2026): draws on a plain Surface (eTV has its own controls), no PlayerView.
+ * Changed for eTV (2026): draws on a plain Surface (eTV has its own controls), no PlayerView; starts
+ * at high quality (bandwidth estimate, the TV's real screen size) and steps down if it must.
  */
 
 package com.flymop.airplaytv.renderer
@@ -121,9 +122,25 @@ class AirPlayVideoPlayer(private val context: Context) {
             .setEnableDecoderFallback(true)
             .setAllowedVideoJoiningTimeMs(0)
 
+        // eTV: start high (a TV on home Wi-Fi or a cable, not a phone on mobile data) and step down
+        // only if the network can't keep up, instead of starting blurry and climbing slowly
+        val bandwidthMeter = androidx.media3.exoplayer.upstream.DefaultBandwidthMeter.Builder(context)
+            .setInitialBitrateEstimate(INITIAL_BITRATE_BPS)
+            .build()
+        val trackSelector = androidx.media3.exoplayer.trackselection.DefaultTrackSelector(context).apply {
+            setParameters(
+                buildUponParameters()
+                    // pick by the TV's real screen, not its 1080p interface
+                    .setViewportSizeToPhysicalDisplaySize(this@AirPlayVideoPlayer.context, true)
+                    .setExceedRendererCapabilitiesIfNecessary(false),
+            )
+        }
+
         return ExoPlayer.Builder(context, renderersFactory)
             .setMediaSourceFactory(mediaSourceFactory)
             .setLoadControl(loadControl)
+            .setBandwidthMeter(bandwidthMeter)
+            .setTrackSelector(trackSelector)
             .setSeekParameters(SeekParameters.CLOSEST_SYNC)
             .build()
     }
@@ -245,5 +262,6 @@ class AirPlayVideoPlayer(private val context: Context) {
     companion object {
         private const val TAG = "AirPlayVideoPlayer"
         private const val REPORT_INTERVAL_MS = 100L
+        private const val INITIAL_BITRATE_BPS = 20_000_000L
     }
 }

@@ -544,6 +544,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
         }
         nsdManager?.release()
         nsdManager = null
+        _holdWifi(false)
         wakeLock?.release()
         wakeLock = null
         _serverState.value = ServerState.ERROR
@@ -570,6 +571,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
         dacpController?.reset()
         nsdManager?.release()
         nsdManager = null
+        _holdWifi(false)
         wakeLock?.release()
         wakeLock = null
         videoRenderer.release()
@@ -1227,7 +1229,31 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
 
     // ---------------- eTV: keeping the CPU awake only while a device is connected ----------------
 
+    // eTV: Wi-Fi power saving bunches packets up (stutter, lag spikes): off while a device is connected
+    private var _wifiLock: android.net.wifi.WifiManager.WifiLock? = null
+
+    private fun _holdWifi(on: Boolean) {
+        try {
+            if (on) {
+                if (_wifiLock?.isHeld == true) return
+                val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as? android.net.wifi.WifiManager ?: return
+                @Suppress("DEPRECATION")
+                val mode = if (Build.VERSION.SDK_INT >= 29) android.net.wifi.WifiManager.WIFI_MODE_FULL_LOW_LATENCY
+                else android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF
+                _wifiLock = wm.createWifiLock(mode, "eTV:airplay").apply {
+                    setReferenceCounted(false)
+                    acquire()
+                }
+            } else {
+                _wifiLock?.takeIf { it.isHeld }?.release()
+                _wifiLock = null
+            }
+        } catch (_: Exception) {
+        }
+    }
+
     private fun _holdAwake(on: Boolean) {
+        _holdWifi(on)
         if (on) {
             if (wakeLock?.isHeld == true) return
             try {

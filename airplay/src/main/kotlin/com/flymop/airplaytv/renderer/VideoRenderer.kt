@@ -8,6 +8,15 @@ import android.util.Log
 import android.view.Surface
 import com.flymop.airplaytv.renderer.DecoderSelector.Companion.videoCaps
 
+/*
+ * From flymop/airplay-tv (GPLv3). Changed for eTV (2026), for less delay and a better picture:
+ *  - a frame is shown the moment the decoder finishes it, by a thread of its own (before, it waited
+ *    in the decoder until the next frame arrived: one frame late always, and a still screen's last
+ *    change could stay hidden);
+ *  - the decoder draws straight onto the screen's surface, so the picture goes through the TV's own
+ *    video scaler instead of an extra OpenGL copy; the OpenGL path stays as the fallback, and
+ *    carries the picture while no screen is showing.
+ */
 class VideoRenderer(ctx: Context) {
 
     private val lock = Object()
@@ -22,6 +31,12 @@ class VideoRenderer(ctx: Context) {
     private var videoWidth = 0
     private var videoHeight = 0
     private var firstFrameQueued = false
+    // eTV: false once the decoder has refused to draw on the screen's surface; then the OpenGL path
+    @Volatile private var directOk = true
+    // eTV: the decoder currently draws straight onto displaySurface
+    private var direct = false
+    @Volatile private var drainRunning = false
+    private var drainThread: Thread? = null
 
     // stats
     @Volatile var fps = 0; private set
@@ -55,13 +70,44 @@ class VideoRenderer(ctx: Context) {
 
     // doesn't restart codec; decoder renders into pipeline's own persistent surface
     fun setSurface(surface: Surface) = synchronized(lock) {
+        if (displaySurface === surface && (direct || !directOk)) return@synchronized
         displaySurface = surface
+        val c = codec
+        if (directOk && c != null) {
+            // point the running decoder at the screen
+            try {
+                c.setOutputSurface(surface)
+                runCatching { c.setVideoScalingMode(MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT) }
+                direct = true
+                return@synchronized
+            } catch (e: Exception) {
+                Log.w(TAG, "decoder can't draw on the screen directly; using OpenGL", e)
+                directOk = false
+            }
+        }
+        if (directOk) return@synchronized // the decoder starts on it (startCodec)
         pipeline.setDisplaySurface(surface)
     }
 
     fun clearSurface(surface: Surface) = synchronized(lock) {
         if (displaySurface !== surface) return@synchronized
         displaySurface = null
+        if (direct) {
+            // the screen is going away: keep decoding into the OpenGL path, so the picture can come back
+            direct = false
+            val c = codec
+            val back = pipeline.inputSurface
+            if (c != null) {
+                try {
+                    if (back == null) error("no OpenGL surface")
+                    c.setOutputSurface(back)
+                } catch (e: Exception) {
+                    Log.w(TAG, "couldn't move the decoder off the screen; restarting it", e)
+                    stopCodec()
+                }
+            }
+            return@synchronized
+        }
         pipeline.setDisplaySurface(null)
     }
 
@@ -135,7 +181,6 @@ class VideoRenderer(ctx: Context) {
             try {
                 if (codec == null) startCodec(isH265)
                 _feedToCodec(data, ntpTimeNs)
-                drainOutput()
             } catch (e: Exception) {
                 Log.w(TAG, "Codec error, resetting", e)
                 stopCodec()
@@ -157,7 +202,6 @@ class VideoRenderer(ctx: Context) {
                 firstFrameQueued = true
                 return
             }
-            drainOutput()
         }
         droppedFrames++
         Log.w(TAG, "Decoder input queue full; dropping frame. drops=$droppedFrames")
@@ -194,21 +238,78 @@ class VideoRenderer(ctx: Context) {
     private fun startCodec(h265: Boolean) {
         pipeline.start()
         pipeline.setVideoSize(videoWidth, videoHeight)
-        val s = pipeline.inputSurface ?: return
+        val glSurface = pipeline.inputSurface ?: return
         currentH265 = h265
         val mime = if (h265) DecoderSelector.HEVC else DecoderSelector.AVC
         val info = (if (h265) hevcDecoder else avcDecoder) ?: error("no decoder selected for $mime")
 
         firstFrameQueued = false
+        // eTV: straight onto the screen when there is one, else into the OpenGL path
+        val screen = displaySurface?.takeIf { directOk && it.isValid }
+        val s = screen ?: glSurface
         try {
-            _startWithLadder(info, mime, s, h265)
+            try {
+                _startWithLadder(info, mime, s, h265)
+            } catch (e: Exception) {
+                // strict hw decoders reject configs beyond their real limits
+                val sw = selector.software(mime, videoWidth, videoHeight) ?: throw e
+                Log.w(TAG, "Hardware decoder failed, trying software fallback", e)
+                _startWithLadder(sw, mime, s, h265)
+            }
         } catch (e: Exception) {
-            // strict hw decoders reject configs beyond their real limits
-            val sw = selector.software(mime, videoWidth, videoHeight) ?: throw e
-            Log.w(TAG, "Hardware decoder failed, trying software fallback", e)
-            _startWithLadder(sw, mime, s, h265)
+            if (screen == null) throw e
+            Log.w(TAG, "decoder can't start on the screen directly; using OpenGL", e)
+            directOk = false
+            pipeline.setDisplaySurface(screen)
+            _startWithLadder(info, mime, glSurface, h265)
         }
-        Log.i(TAG, "Video codec started: $mime ${videoWidth}x${videoHeight} ($codecName)")
+        direct = codec != null && s === screen
+        if (direct) runCatching { codec?.setVideoScalingMode(MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT) }
+        _startDrain()
+        Log.i(TAG, "Video codec started: $mime ${videoWidth}x${videoHeight} ($codecName) ${if (direct) "on the screen" else "via OpenGL"}")
+    }
+
+    /** eTV: shows each frame as soon as the decoder has it, on a thread of its own. */
+    private fun _startDrain() {
+        val c = codec ?: return
+        drainRunning = true
+        drainThread = Thread({
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY)
+            val info = MediaCodec.BufferInfo()
+            while (drainRunning) {
+                try {
+                    val idx = c.dequeueOutputBuffer(info, DRAIN_WAIT_US)
+                    if (idx >= 0) _release(c, idx, info)
+                } catch (e: IllegalStateException) {
+                    if (drainRunning) Log.w(TAG, "decoder output stopped", e)
+                    break
+                }
+            }
+        }, "VideoDrain").also { it.start() }
+    }
+
+    private fun _stopDrain() {
+        drainRunning = false
+        val t = drainThread ?: return
+        drainThread = null
+        if (t !== Thread.currentThread()) {
+            try { t.join(500) } catch (_: InterruptedException) {}
+        }
+    }
+
+    private fun _release(c: MediaCodec, idx: Int, info: MediaCodec.BufferInfo) {
+        _recordOutputFrameTime()
+        if (scheduledOutputBufferRelease) {
+            // schedule frame at VSYNC matching its NTP presentation time
+            val ptsUs = info.presentationTimeUs
+            if (_ptsBaseUs == Long.MIN_VALUE) {
+                _ptsBaseUs = ptsUs
+                _wallBaseNs = System.nanoTime()
+            }
+            c.releaseOutputBuffer(idx, _wallBaseNs + (ptsUs - _ptsBaseUs) * 1000L)
+        } else {
+            c.releaseOutputBuffer(idx, true)
+        }
     }
 
     private fun _startWithLadder(info: MediaCodecInfo, mime: String, s: Surface, h265: Boolean) {
@@ -257,6 +358,8 @@ class VideoRenderer(ctx: Context) {
     }
 
     private fun stopCodec() {
+        _stopDrain()
+        direct = false
         _frameIntervalIdx = 0
         _frameIntervalCount = 0
         _lastOutputFrameNs = 0L
@@ -269,27 +372,6 @@ class VideoRenderer(ctx: Context) {
             } catch (_: Exception) {}
         }
         codec = null
-    }
-
-    private fun drainOutput() {
-        val c = codec ?: return
-        val info = MediaCodec.BufferInfo()
-        while (true) {
-            val idx = c.dequeueOutputBuffer(info, 0)
-            if (idx < 0) break
-            _recordOutputFrameTime()
-            if (scheduledOutputBufferRelease) {
-                // schedule frame at VSYNC matching its NTP presentation time
-                val ptsUs = info.presentationTimeUs
-                if (_ptsBaseUs == Long.MIN_VALUE) {
-                    _ptsBaseUs = ptsUs
-                    _wallBaseNs = System.nanoTime()
-                }
-                c.releaseOutputBuffer(idx, _wallBaseNs + (ptsUs - _ptsBaseUs) * 1000L)
-            } else {
-                c.releaseOutputBuffer(idx, true)
-            }
-        }
     }
 
     fun release() = synchronized(lock) {
@@ -328,6 +410,7 @@ class VideoRenderer(ctx: Context) {
         private const val TAG = "VideoRenderer"
         private const val BENCH_TAG = "BENCHMARK"
         private const val FEED_WAIT_US = 20_000L
+        private const val DRAIN_WAIT_US = 10_000L
         private const val FEED_RETRIES = 10
         private const val FIRST_FEED_RETRIES = 50
     }
