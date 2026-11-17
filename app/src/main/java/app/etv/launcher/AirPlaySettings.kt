@@ -70,6 +70,17 @@ internal fun SettingsActivity.airplayPane() {
         AirPlay.restart(this)
     }
 
+    val direct = ap.getBoolean(AirPrefs.DIRECT_VIDEO, AirPrefs.DEF_DIRECT_VIDEO)
+    row(
+        "airplay_direct", "Through the TV's picture processing",
+        detail = if (direct) "Sharper scaling; the sound can drop out for a moment when a mirrored video changes shape"
+        else "Off: the sound carries straight on from one video to the next",
+        toggle = direct,
+    ) {
+        ap.edit().putBoolean(AirPrefs.DIRECT_VIDEO, !direct).commit()
+        AirPlay.restart(this)
+    }
+
     group("How to")
     val name = AirPlay.name(this)
     val where = AirPlay.address()?.let { "  The TV is at $it." } ?: ""

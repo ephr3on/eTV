@@ -13,7 +13,7 @@ android {
         targetSdk = 35
         // GitHub sets ETV_VERSION_CODE (100 + the build number) so every build counts as newer.
         versionCode = System.getenv("ETV_VERSION_CODE")?.toIntOrNull() ?: 6
-        versionName = "2.1.2"
+        versionName = "2.1.3"
     }
 
     // One fixed key, so every new build installs over the previous one.

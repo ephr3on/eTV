@@ -436,6 +436,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
         val audioLatencyMs = prefs.getInt(Prefs.AUDIO_LATENCY_MS, Prefs.DEF_AUDIO_LATENCY_MS)
         val (reqW, reqH) = _displaySize(clamp = false)
         val h265 = videoRenderer.selectDecoders(reqW, reqH, maxFps, prefs.getBoolean(Prefs.H265_ENABLED, Prefs.DEF_H265_ENABLED))
+        videoRenderer.setDirect(prefs.getBoolean(Prefs.DIRECT_VIDEO, Prefs.DEF_DIRECT_VIDEO))
         val alac = prefs.getBoolean(Prefs.ALAC_ENABLED, Prefs.DEF_ALAC_ENABLED)
         val aac = prefs.getBoolean(Prefs.AAC_ENABLED, Prefs.DEF_AAC_ENABLED)
 

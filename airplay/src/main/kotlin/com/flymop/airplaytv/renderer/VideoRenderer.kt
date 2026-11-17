@@ -31,8 +31,15 @@ class VideoRenderer(ctx: Context) {
     private var videoWidth = 0
     private var videoHeight = 0
     private var firstFrameQueued = false
-    // eTV: false once the decoder has refused to draw on the screen's surface; then the OpenGL path
-    @Volatile private var directOk = true
+    // eTV: false when switched off (Customise → AirPlay), or once the decoder has refused to draw on
+    // the screen's surface; then the OpenGL path
+    @Volatile private var directOk = false
+    @Volatile private var directRefused = false
+
+    /** eTV: draw straight onto the screen (the TV's video processing) when the decoder can. */
+    fun setDirect(on: Boolean) = synchronized(lock) {
+        directOk = on && !directRefused
+    }
     // eTV: the decoder currently draws straight onto displaySurface
     private var direct = false
     @Volatile private var drainRunning = false
@@ -70,7 +77,7 @@ class VideoRenderer(ctx: Context) {
 
     // doesn't restart codec; decoder renders into pipeline's own persistent surface
     fun setSurface(surface: Surface) = synchronized(lock) {
-        if (displaySurface === surface && (direct || !directOk)) return@synchronized
+        if (displaySurface === surface && direct) return@synchronized
         displaySurface = surface
         val c = codec
         if (directOk && c != null) {
@@ -83,6 +90,7 @@ class VideoRenderer(ctx: Context) {
             } catch (e: Exception) {
                 Log.w(TAG, "decoder can't draw on the screen directly; using OpenGL", e)
                 directOk = false
+                directRefused = true
             }
         }
         if (directOk) return@synchronized // the decoder starts on it (startCodec)
@@ -275,6 +283,7 @@ class VideoRenderer(ctx: Context) {
             if (screen == null) throw e
             Log.w(TAG, "decoder can't start on the screen directly; using OpenGL", e)
             directOk = false
+            directRefused = true
             pipeline.setDisplaySurface(screen)
             _startWithLadder(info, mime, glSurface, h265)
         }
