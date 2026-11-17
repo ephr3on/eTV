@@ -764,6 +764,7 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
             videoRenderer.setResolution(w.toInt(), h.toInt())
             val starting = !_mirroringActive.value
             _mirroringActive.value = true
+            mirrorStarting = false
             if (starting) launchScreen()
         }
         log("Video size: ${srcW}x${srcH} -> ${w}x${h}")
@@ -924,12 +925,24 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     }
 
     override fun onMirrorRunning(running: Boolean) {
-        if (running) videoRenderer.startSession() else {
+        if (running) {
+            videoRenderer.startSession()
+            // eTV: this comes at the stream's setup, before its first frame: get the picture path
+            // and the AirPlay screen ready now, while the device is still finishing the handshake
+            mirrorStarting = true
+            videoRenderer.warmUp()
+            launchScreen()
+        } else {
+            mirrorStarting = false
             videoRenderer.stopSession()
             _mirroringActive.value = false
         }
         _setAudioOnly(!running)
     }
+
+    /** eTV: a mirrored screen is being set up; its first frame is on the way. */
+    @Volatile var mirrorStarting = false
+        private set
 
     private fun _setAudioOnly(audioOnly: Boolean) {
         val prev = _audioOnly.value
@@ -1202,8 +1215,9 @@ class AirPlayService : LifecycleService(), RaopCallbackHandler, LogListener {
     fun launchScreen() {
         _mainHandler.post {
             if (athan) return@post
+            // no opening animation: the picture should be there the moment it arrives
             val launchIntent = Intent(ACTION_SHOW).setPackage(packageName)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
             try {
                 startActivity(launchIntent)
             } catch (e: Exception) {

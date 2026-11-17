@@ -129,7 +129,22 @@ class VideoRenderer(ctx: Context) {
             .reduceOrNull { (w1, h1), (w2, h2) -> maxOf(w1, w2) to maxOf(h1, h2) } ?: (1920 to 1080)
 
     // codec per mirror session; pipeline persists across sessions
-    fun startSession() = synchronized(lock) { _resetStats() }
+    fun startSession() = synchronized(lock) {
+        _resetStats()
+        _sessionStartNs = System.nanoTime()
+        _firstShown = false
+    }
+
+    // eTV: how long from the stream's setup to its first picture (in the log)
+    @Volatile private var _sessionStartNs = 0L
+    @Volatile private var _firstShown = true
+
+    /** eTV: starts the OpenGL path in the background, so the first frame doesn't wait for it. */
+    fun warmUp() {
+        Thread({
+            try { pipeline.start() } catch (e: Exception) { Log.w(TAG, "warm-up failed", e) }
+        }, "VideoWarmUp").start()
+    }
 
     fun stopSession() = synchronized(lock) { stopCodec() }
 
@@ -299,6 +314,10 @@ class VideoRenderer(ctx: Context) {
 
     private fun _release(c: MediaCodec, idx: Int, info: MediaCodec.BufferInfo) {
         _recordOutputFrameTime()
+        if (!_firstShown) {
+            _firstShown = true
+            Log.i(TAG, "first frame on screen ${(System.nanoTime() - _sessionStartNs) / 1_000_000} ms after the stream was set up (${if (direct) "direct" else "OpenGL"})")
+        }
         if (scheduledOutputBufferRelease) {
             // schedule frame at VSYNC matching its NTP presentation time
             val ptsUs = info.presentationTimeUs

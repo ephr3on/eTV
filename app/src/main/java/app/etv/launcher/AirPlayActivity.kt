@@ -296,7 +296,7 @@ class AirPlayActivity : Activity() {
     private fun currentMode(s: AirPlayService): Mode? = when {
         s.activeRemotePin.value != null -> Mode.CODE
         s.videoLocation.value != null -> Mode.VIDEO
-        s.mirroringActive.value -> Mode.MIRROR
+        s.mirroringActive.value || s.mirrorStarting -> Mode.MIRROR
         s.audioOnly.value && s.connectionCount.value > 0 -> Mode.MUSIC
         else -> null
     }

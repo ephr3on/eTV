@@ -101,7 +101,7 @@ class AirPlayVideoPlayer(private val context: Context) {
             .setBufferDurationsMs(
                 /* minBufferMs = */ 15_000,
                 /* maxBufferMs = */ 30_000,
-                /* bufferForPlaybackMs = */ 400,
+                /* bufferForPlaybackMs = */ 250,
                 /* bufferForPlaybackAfterRebufferMs = */ 1000
             )
             .setPrioritizeTimeOverSizeThresholds(true)
@@ -147,12 +147,15 @@ class AirPlayVideoPlayer(private val context: Context) {
 
     fun play(location: String, startPositionSeconds: Float) = mainHandler.post {
         // recycling must not report the stopped sentinel: senders poll right after /play
-        _stopInternal(reportStopped = false)
-        val p = createFastStartExoPlayer().also {
+        mainHandler.removeCallbacks(_reportTick)
+        // eTV: one player for the whole session. The next video (the next reel, say) replaces the
+        // current one in it, so its decoders and sound output carry on instead of being torn down
+        // and built again: the new video's sound starts with its picture
+        val p = player ?: createFastStartExoPlayer().also {
             it.addListener(_listener)
             pendingSurface?.let { s -> it.setVideoSurface(s) }
+            player = it
         }
-        player = p
         p.setMediaItem(MediaItem.fromUri(location), (startPositionSeconds * 1000).toLong())
         p.playWhenReady = true
         p.prepare()
