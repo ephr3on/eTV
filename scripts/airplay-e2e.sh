@@ -79,15 +79,20 @@ sleep 3
 check "the AirPlay screen didn't open just for that" bash -c "! adb shell dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity' | grep -q AirPlayActivity"
 
 say "  -- Customise -> AirPlay"
+ui_has() { adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb shell cat /sdcard/ui.xml | grep -q "$1"; }
 adb shell input keyevent KEYCODE_PROG_BLUE
 sleep 3
-adb shell input keyevent KEYCODE_DPAD_DOWN KEYCODE_DPAD_DOWN KEYCODE_DPAD_DOWN
-sleep 2
+# Down through the categories until AirPlay's options show (where focus starts can vary).
+for i in 1 2 3 4 5 6 7; do
+  ui_has 'Ready: your Apple devices see\|Name on your devices' && break
+  adb shell input keyevent KEYCODE_DPAD_DOWN
+  sleep 1.5
+done
 shot 10-customise-airplay
+check "Customise shows AirPlay as ready" ui_has 'Ready: your Apple devices see'
 adb shell input keyevent KEYCODE_DPAD_RIGHT
 sleep 1
 shot 11-customise-airplay-options
-check "Customise shows AirPlay as ready" bash -c "adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb shell cat /sdcard/ui.xml | grep -q 'Ready: your Apple devices see'"
 adb shell input keyevent KEYCODE_BACK KEYCODE_BACK
 sleep 2
 
