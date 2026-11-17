@@ -6,8 +6,7 @@
  *
  * Licensed under the GNU General Public License v3.0 (GPLv3).
  *
- * Changed for eTV (2026): draws on a plain Surface (eTV has its own controls), no PlayerView; starts
- * at high quality (bandwidth estimate, the TV's real screen size) and steps down if it must.
+ * Changed for eTV (2026): draws on a plain Surface (eTV has its own controls), no PlayerView.
  */
 
 package com.flymop.airplaytv.renderer
@@ -101,7 +100,7 @@ class AirPlayVideoPlayer(private val context: Context) {
             .setBufferDurationsMs(
                 /* minBufferMs = */ 15_000,
                 /* maxBufferMs = */ 30_000,
-                /* bufferForPlaybackMs = */ 250,
+                /* bufferForPlaybackMs = */ 400,
                 /* bufferForPlaybackAfterRebufferMs = */ 1000
             )
             .setPrioritizeTimeOverSizeThresholds(true)
@@ -122,40 +121,21 @@ class AirPlayVideoPlayer(private val context: Context) {
             .setEnableDecoderFallback(true)
             .setAllowedVideoJoiningTimeMs(0)
 
-        // eTV: start high (a TV on home Wi-Fi or a cable, not a phone on mobile data) and step down
-        // only if the network can't keep up, instead of starting blurry and climbing slowly
-        val bandwidthMeter = androidx.media3.exoplayer.upstream.DefaultBandwidthMeter.Builder(context)
-            .setInitialBitrateEstimate(INITIAL_BITRATE_BPS)
-            .build()
-        val trackSelector = androidx.media3.exoplayer.trackselection.DefaultTrackSelector(context).apply {
-            setParameters(
-                buildUponParameters()
-                    // pick by the TV's real screen, not its 1080p interface
-                    .setViewportSizeToPhysicalDisplaySize(this@AirPlayVideoPlayer.context, true)
-                    .setExceedRendererCapabilitiesIfNecessary(false),
-            )
-        }
-
         return ExoPlayer.Builder(context, renderersFactory)
             .setMediaSourceFactory(mediaSourceFactory)
             .setLoadControl(loadControl)
-            .setBandwidthMeter(bandwidthMeter)
-            .setTrackSelector(trackSelector)
             .setSeekParameters(SeekParameters.CLOSEST_SYNC)
             .build()
     }
 
     fun play(location: String, startPositionSeconds: Float) = mainHandler.post {
         // recycling must not report the stopped sentinel: senders poll right after /play
-        mainHandler.removeCallbacks(_reportTick)
-        // eTV: one player for the whole session. The next video (the next reel, say) replaces the
-        // current one in it, so its decoders and sound output carry on instead of being torn down
-        // and built again: the new video's sound starts with its picture
-        val p = player ?: createFastStartExoPlayer().also {
+        _stopInternal(reportStopped = false)
+        val p = createFastStartExoPlayer().also {
             it.addListener(_listener)
             pendingSurface?.let { s -> it.setVideoSurface(s) }
-            player = it
         }
+        player = p
         p.setMediaItem(MediaItem.fromUri(location), (startPositionSeconds * 1000).toLong())
         p.playWhenReady = true
         p.prepare()
@@ -265,6 +245,5 @@ class AirPlayVideoPlayer(private val context: Context) {
     companion object {
         private const val TAG = "AirPlayVideoPlayer"
         private const val REPORT_INTERVAL_MS = 100L
-        private const val INITIAL_BITRATE_BPS = 20_000_000L
     }
 }
